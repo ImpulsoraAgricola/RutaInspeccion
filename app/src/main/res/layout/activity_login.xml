@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondo"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/login_padding_right"
+    android:paddingRight="@dimen/login_padding_right"
+    android:paddingTop="@dimen/login_vertical_margin"
+    tools:context=".Login">
+
+    <LinearLayout
+        android:id="@+id/login_lUsuario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/login_txtUsuario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/activity_login_tvusuario"
+            android:inputType="textCapCharacters"
+            android:text="CALC900728LT9"
+            android:typeface="sans">
+        </EditText>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/login_lPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/login_txtPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="8"
+            android:hint="@string/activity_login_tvpassword"
+            android:inputType="textPassword"
+            android:text="hola1234"
+            android:typeface="sans">
+        </EditText>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/login_lIngresar"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <Button
+            android:id="@+id/login_btnIngresar"
+            android:layout_width="150dp"
+            android:layout_height="90dp"
+            android:text="@string/activity_login_btnLogin"
+            android:typeface="sans"
+            android:layout_gravity="center"
+            android:drawableTop="@mipmap/login"/>
+        <Button
+            android:id="@+id/login_btnCancelar"
+            android:layout_width="150dp"
+            android:layout_height="90dp"
+            android:text="@string/activity_login_btnCancelar"
+            android:typeface="sans"
+            android:layout_gravity="center"
+            android:drawableTop="@mipmap/cancel"/>
+
+    </LinearLayout>
+</LinearLayout>
