@@ -1,5 +1,10 @@
 package com.iasacv.impulsora.rutainspeccion;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.Fragment;
@@ -9,16 +14,19 @@ import android.content.res.TypedArray;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.iasacv.impulsora.rutainspeccion.Adaptador.NavDrawerListAdapter;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.NavDrawerItem;
 import com.iasacv.impulsora.rutainspeccion.Negocios.CicloBP;
+import com.iasacv.impulsora.rutainspeccion.Negocios.WebServiceBP;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +35,9 @@ import java.util.List;
  * Created by Administrator on 28/06/2015.
  */
 public class MenuPrincipal extends Activity {
+
+    //Variables
+    WebServiceBP _objWebServiceBP;
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -49,6 +60,8 @@ public class MenuPrincipal extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
+        _objWebServiceBP = new WebServiceBP(this);
 
         mTitle = mDrawerTitle = getTitle();
 
@@ -118,20 +131,22 @@ public class MenuPrincipal extends Activity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_login, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //  title/icon
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        // Handle action bar actions click
         switch (item.getItemId()) {
             case R.id.menu_login_actualizar:
+                /*//Revisar conexion a Internet
+                if (ConexionInternet()) {
+                    getCatalogos tarea = new getCatalogos();
+                    tarea.execute();
+                } else
+                    Mensaje("Error: Se debe contar con una conexi\u00F3n a Internet");*/
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -189,5 +204,17 @@ public class MenuPrincipal extends Activity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    private boolean ConexionInternet() {
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        return isConnected;
+    }
+
+    private void Mensaje(String mensaje) {
+        Toast toastCorrecto = Toast.makeText(getApplicationContext(),mensaje, Toast.LENGTH_LONG);
+        toastCorrecto.show();
     }
 }

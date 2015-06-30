@@ -3,6 +3,7 @@ package com.iasacv.impulsora.rutainspeccion.Negocios;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteException;
+import android.widget.Toast;
 
 import com.iasacv.impulsora.rutainspeccion.Conexion.Crypt;
 import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
@@ -49,5 +50,10 @@ public class ComunBP {
 
     public String Encrypt(String plainText) throws UnsupportedEncodingException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
         return _objComunDA.Encrypt(plainText);
+    }
+
+    public void Mensaje(String mensaje, Context context) {
+        Toast toastCorrecto = Toast.makeText(context,mensaje, Toast.LENGTH_LONG);
+        toastCorrecto.show();
     }
 }
