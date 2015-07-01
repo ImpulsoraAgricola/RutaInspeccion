@@ -9,5 +9,5 @@
     <item
         android:id="@+id/menu_administrador_salir"
         android:title="@string/menu_administrador_salir"
-        android:icon="@mipmap/logout" />
+        android:icon="@mipmap/cancel" />
 </menu>

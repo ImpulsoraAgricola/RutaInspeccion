@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -19,7 +21,9 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.iasacv.impulsora.rutainspeccion.Adaptadores.GridViewCustomAdapter;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
+import com.iasacv.impulsora.rutainspeccion.Modelo.Item;
 import com.iasacv.impulsora.rutainspeccion.Negocios.CicloBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.ComunBP;
 
@@ -67,7 +71,15 @@ public class Administrador extends ActionBarActivity {
         });
 
         //Llnenar grid
-        getCiclos();
+        //getCiclos();
+
+        //set grid view item
+        ArrayList<Ciclo> gridArray = new ArrayList<Ciclo>();
+        GridViewCustomAdapter customGridAdapter;
+        Bitmap userIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.icon_home);
+
+        customGridAdapter = new GridViewCustomAdapter(this, R.layout.activity_gridrow, gridArray);
+        gridView.setAdapter(customGridAdapter);
     }
 
     @Override

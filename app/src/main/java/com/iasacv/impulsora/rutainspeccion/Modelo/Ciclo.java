@@ -1,5 +1,7 @@
 package com.iasacv.impulsora.rutainspeccion.Modelo;
 
+import android.graphics.Bitmap;
+
 import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.PropertyInfo;
 
@@ -10,6 +12,7 @@ import java.util.Hashtable;
  */
 public class Ciclo implements KvmSerializable {
 
+    public Bitmap Imagen;
     public int Clave;
     public String Nombre;
     public String FechaInicio;
@@ -18,6 +21,16 @@ public class Ciclo implements KvmSerializable {
     public String Estatus;
     public String Uso;
 
+    public Ciclo(Bitmap imagen, int clave, String fechaInicio, String fechaFin, String nombreAbreviado, String estatus, String uso) {
+        super();
+        this.Imagen = imagen;
+        this.Clave = clave;
+        this.FechaInicio =fechaInicio;
+        this.FechaFin = fechaFin;
+        this.NombreAbreviado = nombreAbreviado;
+        this.Estatus = estatus;
+        this.Uso = uso;
+    }
     @Override
     public Object getProperty(int arg0) {
         switch(arg0)
