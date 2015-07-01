@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Usuario;
-import com.iasacv.impulsora.rutainspeccion.Negocios.CicloBP;
+import com.iasacv.impulsora.rutainspeccion.Negocios.CatalogosBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.WebServiceBP;
 
 import java.util.Calendar;
@@ -38,7 +38,7 @@ public class RutaInspeccion extends Activity {
 
     //Variables
     WebServiceBP _objWebServiceBP;
-    CicloBP _objCicloBP;
+    CatalogosBP _objCicloBP;
     Usuario objUsuario = new Usuario();
     Ciclo objCiclo = new Ciclo();
     com.iasacv.impulsora.rutainspeccion.Modelo.RutaInspeccion objRutaInspeccion = new com.iasacv.impulsora.rutainspeccion.Modelo.RutaInspeccion();
@@ -55,7 +55,7 @@ public class RutaInspeccion extends Activity {
 
         //Pasar contexto a las demas instancias
         _objWebServiceBP = new WebServiceBP(this);
-        _objCicloBP = new CicloBP(this);
+        _objCicloBP = new CatalogosBP(this);
 
         //Recuperamos las preferencias
         SharedPreferences prefs = getSharedPreferences("RutaInspeccion", Context.MODE_PRIVATE);

@@ -11,12 +11,12 @@ import java.util.List;
 /**
  * Created by Administrator on 26/06/2015.
  */
-public class CicloBP {
+public class CatalogosBP {
 
     //Variables
     private CicloDA _objCicloDA;
 
-    public CicloBP(Context context) {
+    public CatalogosBP(Context context) {
         _objCicloDA = new CicloDA(context);
     }
 

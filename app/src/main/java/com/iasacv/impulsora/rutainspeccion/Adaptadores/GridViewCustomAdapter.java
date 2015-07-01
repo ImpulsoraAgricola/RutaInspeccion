@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class GridViewCustomAdapter extends ArrayAdapter<Item> {
     Context context;
     int layoutResourceId;
-    ArrayList<Ciclo> data = new ArrayList<Item>();
+    ArrayList<Item> data = new ArrayList<Item>();
 
     public GridViewCustomAdapter(Context context, int layoutResourceId,
                                  ArrayList<Item> data) {

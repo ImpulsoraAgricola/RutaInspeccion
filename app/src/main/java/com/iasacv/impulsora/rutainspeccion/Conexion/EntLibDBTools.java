@@ -15,20 +15,6 @@ import android.database.sqlite.SQLiteStatement;
  */
 public class EntLibDBTools extends SQLiteOpenHelper {
 
-    //Sentencia SQL para crear la tabla de Usuarios
-    private static String sqlISMUSUAR = "CREATE TABLE [ISMUSUAR] (\n" +
-            "[USUARCVE] INTEGER  NOT NULL PRIMARY KEY,\n" +
-            "[USUARNOC] VARCHAR(50)  NULL,\n" +
-            "[USUARRFC] VARCHAR(15)  NULL,\n" +
-            "[USUARPWD] VARCHAR(100)  NULL,\n" +
-            "[ROLESCVE] INTEGER  NULL,\n" +
-            "[USUARFVP] DATE  NULL,\n" +
-            "[USUARFAL] DATE  NULL,\n" +
-            "[USUAREML] VARCHAR(200)  NULL,\n" +
-            "[USUARSTS] VARCHAR(1)  NULL,\n" +
-            "[USUARUSO] VARCHAR(1)  NULL\n" +
-            ");";
-
     //Sentencia SQL para crear la tabla de Ciclos
     private static String sqlIGMCICLO = "CREATE TABLE [IGMCICLO] (" +
             "[CICLOCVE] INTEGER  NOT NULL PRIMARY KEY," +
@@ -39,15 +25,54 @@ public class EntLibDBTools extends SQLiteOpenHelper {
             "[CICLOSTS] VARCHAR(1)  NULL," +
             "[CICLOUSO] VARCHAR(1)  NULL);";
 
-    //Sentencia SQL para crear la tabla de Ruta de inspeccion cabecero
-    private static String sqlBRTINSCA = "CREATE TABLE [BRTINSCA] (" +
-            "[USUARCVE] INTEGER  NOT NULL," +
-            "[INSCAFCH] DATE  NULL," +
-            "[CICLOCVE] INTEGER  NOT NULL," +
-            "[INSCASTS] VARCHAR(1)  NULL," +
-            "[INSCAUSO] VARCHAR(1)  NULL," +
-            "PRIMARY KEY ([USUARCVE],[INSCAFCH],[CICLOCVE])" +
-            ");";
+    //Sentencia SQL para crear la tabla de Tipo de articulo
+    private static String sqlBACTIART = "CREATE TABLE [BACTIART] (" +
+            "[TIARTCVE] INTEGER  NOT NULL PRIMARY KEY," +
+            "[TIARTNOM] VARCHAR(50)  NOT NULL," +
+            "[TIARTSTS] CHAR(1)  NOT NULL," +
+            "[TIARTUSO] CHAR(1)  NOT NULL);";
+
+    //Sentencia SQL para crear la tabla de Tipo de inspeccion
+    private static String sqlBACTIINS = "CREATE TABLE [BACTIINS] (" +
+            "[TIINSCVE] INTEGER  NOT NULL PRIMARY KEY," +
+            "[TIINSNOM] VARCHAR(50)  NOT NULL," +
+            "[TIINSSTS] CHAR(1)  NOT NULL," +
+            "[TIINSUSO] CHAR(1)  NOT NULL);";
+
+    //Sentencia SQL para crear la tabla de Etapa fenologica
+    private static String sqlBACETAFE = "CREATE TABLE [BACETAFE] (" +
+            "[ETAFECVE] INTEGER  NOT NULL PRIMARY KEY," +
+            "[ETAFENOM] VARCHAR(50)  NOT NULL," +
+            "[ETAFESTS] CHAR(1)  NOT NULL," +
+            "[ETAFEUSO] CHAR(1)  NOT NULL);";
+
+    //Sentencia SQL para crear la tabla de Potencial de rendimiento
+    private static String sqlBACPOTRE = "CREATE TABLE [BACPOTRE] (" +
+            "[POTRECVE] INTEGER  NOT NULL PRIMARY KEY," +
+            "[POTRENOM] VARCHAR(50)  NOT NULL," +
+            "[POTRESTS] CHAR(1)  NOT NULL," +
+            "[POTREUSO] CHAR(1)  NOT NULL);";
+
+    //Sentencia SQL para crear la tabla de Estado maleza
+    private static String sqlBACESTMA = "CREATE TABLE [BACESTMA] (" +
+            "[ESTMACVE] INTEGER  NOT NULL PRIMARY KEY," +
+            "[ESTMANOM] VARCHAR(50)  NOT NULL," +
+            "[ESTMASTS] CHAR(1)  NOT NULL," +
+            "[ESTMAUSO] CHAR(1)  NOT NULL);";
+
+    //Sentencia SQL para crear la tabla de Estado plaga
+    private static String sqlBACESTPL = "CREATE TABLE [BACESTPL] (" +
+            "[ESTPLCVE] INTEGER  NOT NULL PRIMARY KEY," +
+            "[ESTPLNOM] VARCHAR(50)  NOT NULL," +
+            "[ESTPLSTS] CHAR(1)  NOT NULL," +
+            "[ESTPLUSO] CHAR(1)  NOT NULL);";
+
+    //Sentencia SQL para crear la tabla de Estado enfermedad
+    private static String sqlBACESTEN = "CREATE TABLE [BACESTEN] (" +
+            "[ESTENCVE] INTEGER  NOT NULL PRIMARY KEY," +
+            "[ESTENNOM] VARCHAR(50)  NOT NULL," +
+            "[ESTENSTS] CHAR(1)  NOT NULL," +
+            "[ESTENUSO] CHAR(1)  NOT NULL);";
 
     //Direccion de la base de datos
     private static String DB_PATH = "/data/data/com.iasacv.impulsora.rutainspeccion/databases/";
@@ -97,33 +122,43 @@ public class EntLibDBTools extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //Se ejecuta la sentencia SQL de creacion de las tablas
-        db.execSQL(sqlISMUSUAR);
         db.execSQL(sqlIGMCICLO);
-        db.execSQL(sqlBRTINSCA);
+        db.execSQL(sqlBACTIART);
+        db.execSQL(sqlBACTIINS);
+        db.execSQL(sqlBACETAFE);
+        db.execSQL(sqlBACPOTRE);
+        db.execSQL(sqlBACESTMA);
+        db.execSQL(sqlBACESTPL);
+        db.execSQL(sqlBACESTEN);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        //Se elimina la version anterior de las tablas
-        db.execSQL("DROP TABLE IF EXISTS ISMUSUAR");
-        db.execSQL("DROP TABLE IF EXISTS IGMCICLO");
-        db.execSQL("DROP TABLE IF EXISTS BRTINSCA");
-        //Se crea la nueva version de la tabla
-        db.execSQL(sqlISMUSUAR);
-        db.execSQL(sqlIGMCICLO);
-        db.execSQL(sqlBRTINSCA);
+        dropTable();
     }
 
     public void dropTable(){
         myDataBase = this.getReadableDatabase();
         //Se elimina la version anterior de las tablas
-        myDataBase.execSQL("DROP TABLE IF EXISTS ISMUSUAR");
         myDataBase.execSQL("DROP TABLE IF EXISTS IGMCICLO");
-        myDataBase.execSQL("DROP TABLE IF EXISTS BRTINSCA");
+        myDataBase.execSQL("DROP TABLE IF EXISTS BACTIART");
+        myDataBase.execSQL("DROP TABLE IF EXISTS BACTIINS");
+        myDataBase.execSQL("DROP TABLE IF EXISTS BACETAFE");
+        myDataBase.execSQL("DROP TABLE IF EXISTS BACPOTRE");
+        myDataBase.execSQL("DROP TABLE IF EXISTS BACESTMA");
+        myDataBase.execSQL("DROP TABLE IF EXISTS BACESTPL");
+        myDataBase.execSQL("DROP TABLE IF EXISTS BACESTEN");
+
         //Se crea la nueva version de las tabla
-        myDataBase.execSQL(sqlISMUSUAR);
         myDataBase.execSQL(sqlIGMCICLO);
-        myDataBase.execSQL(sqlBRTINSCA);
+        myDataBase.execSQL(sqlBACTIART);
+        myDataBase.execSQL(sqlBACTIINS);
+        myDataBase.execSQL(sqlBACETAFE);
+        myDataBase.execSQL(sqlBACPOTRE);
+        myDataBase.execSQL(sqlBACESTMA);
+        myDataBase.execSQL(sqlBACESTPL);
+        myDataBase.execSQL(sqlBACESTEN);
     }
 
     public Cursor executeCursor(String query) {

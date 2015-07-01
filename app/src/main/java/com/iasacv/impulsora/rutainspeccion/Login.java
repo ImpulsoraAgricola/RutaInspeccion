@@ -41,7 +41,7 @@ public class Login extends Activity {
     //Variables objetos
     ComunBP _objComunBP;
     WebServiceBP _objWebServiceBP;
-    Usuario objUsuario = new Usuario();
+    Usuario objUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,16 +72,12 @@ public class Login extends Activity {
                 public void onClick(View v) {
                     if (Validar()) {
                         if (ConexionInternet()) {
+                            objUsuario = new Usuario();
                             objUsuario.RFC = txtUsuario.getText().toString();
                             try {
                                 objUsuario.Password = _objComunBP.Encrypt(txtPassword.getText().toString());
                                 getLogin jobGetLogin = new getLogin();
                                 jobGetLogin.execute();
-                                SharedPreferences prefs = getSharedPreferences("RutaInspeccion", Context.MODE_PRIVATE);
-                                if (prefs.getString("Clave", "") != "") {
-                                    getCatalogos jobGetCatalogos = new getCatalogos();
-                                    jobGetCatalogos.execute();
-                                }
                             } catch (NoSuchPaddingException e) {
                                 e.printStackTrace();
                             } catch (InvalidAlgorithmParameterException e) {
@@ -125,8 +121,12 @@ public class Login extends Activity {
             boolean result = true;
             try {
                 objUsuario = _objWebServiceBP.getLogin(objUsuario);
+                if(objUsuario.Clave != 0)
+                    result = _objWebServiceBP.getCatalogos(objUsuario.RFC);
+                else
+                    result = false;
             } catch (Exception e) {
-                throw new Error("Error: No se pudo realizar la conexion con el servidor");
+                _objComunBP.Mensaje(e.toString(), getApplicationContext());
             }
             return result;
         }
@@ -218,33 +218,5 @@ public class Login extends Activity {
                     }
                 });
         alert.show();
-    }
-
-    private class getCatalogos extends AsyncTask<String, Integer, Boolean> {
-        //Variables
-        ProgressDialog loadProgressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            loadProgressDialog = ProgressDialog.show(Login.this, "", "Actualizando informaci\u00F3n...", true, false);
-        }
-
-        protected Boolean doInBackground(String... params) {
-            boolean result = true;
-            try {
-                result = _objWebServiceBP.getCatalogos();
-            } catch (Exception e) {
-                throw new Error("Error: No se pudo realizar la conexion con el servidor");
-            }
-            return result;
-        }
-
-        protected void onPostExecute(Boolean result) {
-            if (result)
-                _objComunBP.Mensaje("La informaci\u00F3n se actualizo correctamente!!", getApplicationContext());
-            else
-                _objComunBP.Mensaje("Error: Se produjo un error al actualizar la informaci\u00F3n", getApplicationContext());
-            loadProgressDialog.dismiss();
-        }
     }
 }

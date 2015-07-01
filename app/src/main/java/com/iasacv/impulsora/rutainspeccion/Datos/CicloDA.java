@@ -7,6 +7,7 @@ import android.database.SQLException;
 import com.iasacv.impulsora.rutainspeccion.Administrador;
 import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
+import com.iasacv.impulsora.rutainspeccion.Modelo.TipoArticulo;
 
 import java.util.ArrayList;
 import java.util.List;

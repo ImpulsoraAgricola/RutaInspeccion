@@ -22,9 +22,9 @@ public class WebServiceBP {
         _objWebServiceDA = new WebServiceDA(context);
     }
 
-    public boolean getCatalogos() throws IOException, XmlPullParserException {
+    public boolean getCatalogos(String usuario) throws IOException, XmlPullParserException {
         try {
-            boolean resul = _objWebServiceDA.getCatalogos();
+            boolean resul = _objWebServiceDA.getCatalogos(usuario);
             return resul;
         } catch (Exception e) {
             throw e;

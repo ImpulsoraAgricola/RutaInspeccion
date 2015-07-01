@@ -1,6 +1,5 @@
 package com.iasacv.impulsora.rutainspeccion;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,7 +10,6 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +22,7 @@ import android.widget.TextView;
 import com.iasacv.impulsora.rutainspeccion.Adaptadores.GridViewCustomAdapter;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Item;
-import com.iasacv.impulsora.rutainspeccion.Negocios.CicloBP;
+import com.iasacv.impulsora.rutainspeccion.Negocios.CatalogosBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.ComunBP;
 
 import java.util.ArrayList;
@@ -35,7 +33,7 @@ import java.util.List;
  */
 public class Administrador extends ActionBarActivity {
 
-    CicloBP objCicloBP;
+    CatalogosBP objCatalogosBP;
     ComunBP _objComunBP;
     private GridView gridView;
     public static ArrayList<String> ArrayofName;
@@ -44,7 +42,7 @@ public class Administrador extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        objCicloBP = new CicloBP(this);
+        objCatalogosBP = new CatalogosBP(this);
         _objComunBP = new ComunBP(this);
         setContentView(R.layout.activity_administrador);
         gridView = (GridView) findViewById(R.id.gridView);
@@ -74,7 +72,7 @@ public class Administrador extends ActionBarActivity {
         //getCiclos();
 
         //set grid view item
-        ArrayList<Ciclo> gridArray = new ArrayList<Ciclo>();
+        ArrayList<Item> gridArray = new ArrayList<Item>();
         GridViewCustomAdapter customGridAdapter;
         Bitmap userIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.icon_home);
 
@@ -145,7 +143,7 @@ public class Administrador extends ActionBarActivity {
     private void getCiclos() {
         ArrayofName = new ArrayList<String>();
         List<Ciclo> listaCiclos = new ArrayList<Ciclo>();
-        listaCiclos = objCicloBP.GetAllCiclosList();
+        listaCiclos = objCatalogosBP.GetAllCiclosList();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, ArrayofName);
         gridView.setAdapter(adapter);
     }
