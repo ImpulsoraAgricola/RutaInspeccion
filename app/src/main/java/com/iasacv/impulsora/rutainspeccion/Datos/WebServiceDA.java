@@ -78,7 +78,6 @@ public class WebServiceDA extends Activity {
 
     public Usuario getLogin(Usuario objUsuario) throws IOException, XmlPullParserException {
         //Variables
-        boolean resul = true;
         Usuario _objUsuario = new Usuario();
 
         String METHOD_NAME = "GetLogin";

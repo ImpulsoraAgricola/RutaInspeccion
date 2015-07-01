@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 
-import com.iasacv.impulsora.rutainspeccion.Admin;
+import com.iasacv.impulsora.rutainspeccion.Administrador;
 import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
 
@@ -69,7 +69,7 @@ public class CicloDA{
                 objCiclo.Estatus = objCursor.getString(5);
                 objCiclo.Uso = objCursor.getString(6);
                 String name = objCursor.getString(1) +"\n"+ objCursor.getString(2);
-                Admin.ArrayofName.add(name);
+                Administrador.ArrayofName.add(name);
                 listaCiclos.add(objCiclo);
             }
             return listaCiclos;

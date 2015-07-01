@@ -11,15 +11,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.ContextThemeWrapper;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -37,13 +32,13 @@ import javax.crypto.NoSuchPaddingException;
 
 public class Login extends Activity {
 
-    //Variable controles
+    //Variables controles
     private EditText txtUsuario;
     private EditText txtPassword;
     private Button btnIngresar;
     private Button btnCancelar;
 
-    //Variables
+    //Variables objetos
     ComunBP _objComunBP;
     WebServiceBP _objWebServiceBP;
     Usuario objUsuario = new Usuario();
@@ -51,63 +46,70 @@ public class Login extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        //Pasar contexto a las demas instancias
-        _objComunBP = new ComunBP(this);
-        _objWebServiceBP = new WebServiceBP(this);
 
         //Revisar las preferencias
         SharedPreferences prefs = getSharedPreferences("RutaInspeccion", Context.MODE_PRIVATE);
-        if(prefs!=null) {
+        if (prefs.getString("Clave", "") != "") {
             //Creamos el nuevo formulario
-            Intent i = new Intent(Login.this, MenuPrincipal.class);
+            Intent i = new Intent(Login.this, Administrador.class);
             startActivity(i);
             finish();
-        }
-        //Obtener controles
-        GetControles();
+        } else {
+            setContentView(R.layout.activity_login);
 
-        //Revisar si existe la base de datos
-        StatusDB();
+            //Pasar contexto a las demas instancias
+            _objComunBP = new ComunBP(this);
+            _objWebServiceBP = new WebServiceBP(this);
 
-        btnIngresar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Validar()) {
-                    if (ConexionInternet()) {
-                        objUsuario.RFC = txtUsuario.getText().toString();
-                        try {
-                            objUsuario.Password = _objComunBP.Encrypt(txtPassword.getText().toString());
-                            getLogin tarea = new getLogin();
-                            tarea.execute();
-                        } catch (NoSuchPaddingException e) {
-                            e.printStackTrace();
-                        } catch (InvalidAlgorithmParameterException e) {
-                            e.printStackTrace();
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        } catch (IllegalBlockSizeException e) {
-                            e.printStackTrace();
-                        } catch (BadPaddingException e) {
-                            e.printStackTrace();
-                        } catch (NoSuchAlgorithmException e) {
-                            e.printStackTrace();
-                        } catch (InvalidKeyException e) {
-                            e.printStackTrace();
-                        }
-                    } else
-                        _objComunBP.Mensaje("Error: Se debe contar con una conexi\u00F3n a Internet",getApplicationContext());
+            //Obtener controles
+            GetControles();
+
+            //Revisar si existe la base de datos
+            StatusDB();
+
+            btnIngresar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Validar()) {
+                        if (ConexionInternet()) {
+                            objUsuario.RFC = txtUsuario.getText().toString();
+                            try {
+                                objUsuario.Password = _objComunBP.Encrypt(txtPassword.getText().toString());
+                                getLogin jobGetLogin = new getLogin();
+                                jobGetLogin.execute();
+                                SharedPreferences prefs = getSharedPreferences("RutaInspeccion", Context.MODE_PRIVATE);
+                                if (prefs.getString("Clave", "") != "") {
+                                    getCatalogos jobGetCatalogos = new getCatalogos();
+                                    jobGetCatalogos.execute();
+                                }
+                            } catch (NoSuchPaddingException e) {
+                                e.printStackTrace();
+                            } catch (InvalidAlgorithmParameterException e) {
+                                e.printStackTrace();
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            } catch (IllegalBlockSizeException e) {
+                                e.printStackTrace();
+                            } catch (BadPaddingException e) {
+                                e.printStackTrace();
+                            } catch (NoSuchAlgorithmException e) {
+                                e.printStackTrace();
+                            } catch (InvalidKeyException e) {
+                                e.printStackTrace();
+                            }
+                        } else
+                            _objComunBP.Mensaje("Error: Se debe contar con una conexi\u00F3n a Internet", getApplicationContext());
+                    }
                 }
-            }
-        });
+            });
 
-        btnCancelar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirmDialog();
-            }
-        });
+            btnCancelar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    confirmDialog();
+                }
+            });
+        }
     }
 
     private class getLogin extends AsyncTask<String, Integer, Boolean> {
@@ -124,16 +126,13 @@ public class Login extends Activity {
             try {
                 objUsuario = _objWebServiceBP.getLogin(objUsuario);
             } catch (Exception e) {
-                e.printStackTrace();
-                result = false;
+                throw new Error("Error: No se pudo realizar la conexion con el servidor");
             }
             return result;
         }
 
         protected void onPostExecute(Boolean result) {
             if (result) {
-                getCatalogos tarea = new getCatalogos();
-                tarea.execute();
                 //Guardamos las preferencias
                 SharedPreferences prefs = getSharedPreferences("RutaInspeccion", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = prefs.edit();
@@ -143,8 +142,9 @@ public class Login extends Activity {
                 editor.putString("Email", String.valueOf(objUsuario.Email));
                 editor.commit();
                 //Creamos el nuevo formulario
-                Intent i = new Intent(Login.this, MenuPrincipal.class);
+                Intent i = new Intent(Login.this, Administrador.class);
                 startActivity(i);
+                finish();
             } else {
                 _objComunBP.Mensaje("Error: Usuario incorrecto",getApplicationContext());
             }
@@ -234,8 +234,7 @@ public class Login extends Activity {
             try {
                 result = _objWebServiceBP.getCatalogos();
             } catch (Exception e) {
-                e.printStackTrace();
-                result = false;
+                throw new Error("Error: No se pudo realizar la conexion con el servidor");
             }
             return result;
         }
