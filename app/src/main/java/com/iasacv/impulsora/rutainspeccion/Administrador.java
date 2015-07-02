@@ -1,12 +1,14 @@
 package com.iasacv.impulsora.rutainspeccion;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -19,13 +21,21 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
-import com.iasacv.impulsora.rutainspeccion.Adaptadores.GridViewCustomAdapter;
+import com.iasacv.impulsora.rutainspeccion.Adaptador.GridViewAdapter;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
-import com.iasacv.impulsora.rutainspeccion.Modelo.Item;
+import com.iasacv.impulsora.rutainspeccion.Modelo.ImageItem;
+import com.iasacv.impulsora.rutainspeccion.Modelo.Usuario;
 import com.iasacv.impulsora.rutainspeccion.Negocios.CatalogosBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.ComunBP;
+import com.iasacv.impulsora.rutainspeccion.Negocios.RutaInspeccionBP;
+import com.iasacv.impulsora.rutainspeccion.Negocios.WebServiceBP;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,26 +45,28 @@ public class Administrador extends ActionBarActivity {
 
     CatalogosBP objCatalogosBP;
     ComunBP _objComunBP;
+    RutaInspeccionBP _objRutaInspeccionBP;
+    WebServiceBP _objWebServiceBP;
+    Usuario _objUsuario;
+
     private GridView gridView;
     public static ArrayList<String> ArrayofName;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    String currentDateandTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         objCatalogosBP = new CatalogosBP(this);
         _objComunBP = new ComunBP(this);
+        _objRutaInspeccionBP = new RutaInspeccionBP(this);
+        _objWebServiceBP = new WebServiceBP(this);
+
         setContentView(R.layout.activity_administrador);
         gridView = (GridView) findViewById(R.id.gridView);
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View v,
-                                    int position, long id) {
-                _objComunBP.Mensaje(((TextView) v).getText().toString(), getApplicationContext());
-                Intent i = new Intent(getApplicationContext(), RutaInspeccion.class);
-                startActivity(i);
-            }
-        });
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        currentDateandTime = sdf.format(new Date());
 
         //Crear el refrescar al momento de deslizar
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
@@ -68,16 +80,13 @@ public class Administrador extends ActionBarActivity {
             }
         });
 
-        //Llnenar grid
-        //getCiclos();
+        SharedPreferences prefs = getSharedPreferences("RutaInspeccion", Context.MODE_PRIVATE);
+        _objUsuario = new Usuario();
+        _objUsuario.RFC = prefs.getString("RFC", "");
+        _objUsuario.Clave = Integer.valueOf(prefs.getString("Clave", ""));
 
-        //set grid view item
-        ArrayList<Item> gridArray = new ArrayList<Item>();
-        GridViewCustomAdapter customGridAdapter;
-        Bitmap userIcon = BitmapFactory.decodeResource(this.getResources(), R.drawable.icon_home);
-
-        customGridAdapter = new GridViewCustomAdapter(this, R.layout.activity_gridrow, gridArray);
-        gridView.setAdapter(customGridAdapter);
+        //Llenar grid
+        getCiclos();
     }
 
     @Override
@@ -141,10 +150,47 @@ public class Administrador extends ActionBarActivity {
     }
 
     private void getCiclos() {
-        ArrayofName = new ArrayList<String>();
-        List<Ciclo> listaCiclos = new ArrayList<Ciclo>();
-        listaCiclos = objCatalogosBP.GetAllCiclosList();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, ArrayofName);
-        gridView.setAdapter(adapter);
+        getPlaneacionRuta jobGetPlaneacionRuta = new getPlaneacionRuta();
+        jobGetPlaneacionRuta.execute();
+
+        ArrayList<ImageItem> listaRutaInspeccion = _objRutaInspeccionBP.GetAllPlaneacionRutaImage();
+        GridViewAdapter customGridAdapter;
+        customGridAdapter = new GridViewAdapter(this, R.layout.activity_gridrow, listaRutaInspeccion);
+        gridView.setAdapter(customGridAdapter);
+    }
+
+    private class getPlaneacionRuta extends AsyncTask<String, Integer, Boolean> {
+        //Variables
+        ProgressDialog loadProgressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            loadProgressDialog = ProgressDialog.show(Administrador.this, "", "Comprobando informaci\u00F3n...", true, false);
+        }
+
+        protected Boolean doInBackground(String... params) {
+            boolean result = true;
+            try {
+                try {
+                    result = _objWebServiceBP.getPlaneacionRuta(_objUsuario.RFC,_objUsuario.Clave,currentDateandTime);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (XmlPullParserException e) {
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                _objComunBP.Mensaje(e.toString(), getApplicationContext());
+            }
+            return result;
+        }
+
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                _objComunBP.Mensaje("Exito",getApplicationContext());
+            } else {
+                _objComunBP.Mensaje("Error: Usuario incorrecto",getApplicationContext());
+            }
+            loadProgressDialog.dismiss();
+        }
     }
 }

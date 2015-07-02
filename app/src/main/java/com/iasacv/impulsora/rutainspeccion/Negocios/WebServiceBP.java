@@ -31,6 +31,15 @@ public class WebServiceBP {
         }
     }
 
+    public boolean getPlaneacionRuta(String usuario, int usuarioCve, String fecha) throws IOException, XmlPullParserException {
+        try {
+            boolean resul = _objWebServiceDA.getPlaneacionRuta(usuario, usuarioCve, fecha);
+            return resul;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
     public Usuario getLogin(Usuario objUsuario) throws IOException, XmlPullParserException {
         try {
             Usuario resul = _objWebServiceDA.getLogin(objUsuario);

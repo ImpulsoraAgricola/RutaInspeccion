@@ -1,19 +1,21 @@
 package com.iasacv.impulsora.rutainspeccion.Modelo;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 
 /**
- * Created by Administrator on 30/06/2015.
+ * Created by Administrator on 01/07/2015.
  */
-public class Item {
-    Bitmap image;
-    String title;
+public class ImageItem {
+    private Bitmap image;
+    private String title;
 
-    public Item(Bitmap image, String title) {
+    public ImageItem(Bitmap image, String title) {
         super();
         this.image = image;
         this.title = title;
     }
+
     public Bitmap getImage() {
         return image;
     }

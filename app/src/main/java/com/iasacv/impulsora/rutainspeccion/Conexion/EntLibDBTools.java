@@ -74,6 +74,36 @@ public class EntLibDBTools extends SQLiteOpenHelper {
             "[ESTENSTS] CHAR(1)  NOT NULL," +
             "[ESTENUSO] CHAR(1)  NOT NULL);";
 
+    //Sentencia SQL para crear la tabla de Planeacion detalle
+    private static String sqlBATPLADE = "CREATE TABLE [BATPLADE] (" +
+            "[USUARCVE] INTEGER  NOT NULL," +
+            "[USUARNOM] VARCHAR(150)  NOT NULL," +
+            "[CICLOCVE] INTEGER  NOT NULL," +
+            "[PLANEFEC] DATE  NOT NULL," +
+            "[PLADEFOL] INTEGER  NOT NULL," +
+            "[TIINSCVE] INTEGER  NOT NULL," +
+            "[TIARTCVE] INTEGER  NOT NULL," +
+            "[PERSOCVE] INTEGER  NOT NULL," +
+            "[PERSONOM] VARCHAR(250)  NOT NULL," +
+            "[PRODUCVE] INTEGER  NOT NULL," +
+            "[PRODUNOM] VARCHAR(250)  NOT NULL," +
+            "[PREDICVE] INTEGER  NOT NULL," +
+            "[PREDINOM] VARCHAR(50)  NOT NULL," +
+            "[PREDILAT] FLOAT  NOT NULL," +
+            "[PREDILON] FLOAT  NOT NULL," +
+            "[LOTESCVE] INTEGER  NOT NULL," +
+            "[LOTESNOM] VARCHAR(50)  NOT NULL," +
+            "[LOTESLAT] FLOAT  NOT NULL," +
+            "[LOTESLON] FLOAT  NOT NULL," +
+            "[PLADEASE] INTEGER  NOT NULL," +
+            "[ARTICNOC] VARCHAR(50)  NOT NULL," +
+            "[PLADEACO] INTEGER  NOT NULL," +
+            "[ARTICNOS] VARCHAR(50)  NOT NULL," +
+            "[PLADESTS] VARCHAR(1)  NOT NULL," +
+            "[PLADEUSO] VARCHAR(1)  NOT NULL,\n" +
+            "PRIMARY KEY ([USUARCVE],[CICLOCVE],[PLANEFEC],[PLADEFOL]));";
+
+
     //Direccion de la base de datos
     private static String DB_PATH = "/data/data/com.iasacv.impulsora.rutainspeccion/databases/";
     private static String DB_NAME = "COSECHAS";
@@ -130,7 +160,7 @@ public class EntLibDBTools extends SQLiteOpenHelper {
         db.execSQL(sqlBACESTMA);
         db.execSQL(sqlBACESTPL);
         db.execSQL(sqlBACESTEN);
-
+        db.execSQL(sqlBATPLADE);
     }
 
     @Override
@@ -149,6 +179,7 @@ public class EntLibDBTools extends SQLiteOpenHelper {
         myDataBase.execSQL("DROP TABLE IF EXISTS BACESTMA");
         myDataBase.execSQL("DROP TABLE IF EXISTS BACESTPL");
         myDataBase.execSQL("DROP TABLE IF EXISTS BACESTEN");
+        myDataBase.execSQL("DROP TABLE IF EXISTS BATPLADE");
 
         //Se crea la nueva version de las tabla
         myDataBase.execSQL(sqlIGMCICLO);
@@ -159,6 +190,7 @@ public class EntLibDBTools extends SQLiteOpenHelper {
         myDataBase.execSQL(sqlBACESTMA);
         myDataBase.execSQL(sqlBACESTPL);
         myDataBase.execSQL(sqlBACESTEN);
+        myDataBase.execSQL(sqlBATPLADE);
     }
 
     public Cursor executeCursor(String query) {
