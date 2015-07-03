@@ -12,6 +12,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.ContextThemeWrapper;
@@ -21,7 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.iasacv.impulsora.rutainspeccion.Adaptador.CustomGridViewAdapter;
 import com.iasacv.impulsora.rutainspeccion.Broadcast.AlarmReceiver;
@@ -30,6 +31,7 @@ import com.iasacv.impulsora.rutainspeccion.Negocios.CatalogosBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.ComunBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.RutaInspeccionBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.WebServiceBP;
+import com.iasacv.impulsora.rutainspeccion.Servicios.WebService;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -54,16 +56,14 @@ public class Administrador extends ActionBarActivity {
     ArrayList<Item> listaRutaInspeccion;
     CustomGridViewAdapter customGridAdapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
-    String currentDateandTime;
 
-    LayoutInflater inflater;
+    Intent intent;
+    MyResultReceiver resultReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_administrador);
-
-        inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE); // correct
 
         objCatalogosBP = new CatalogosBP(this);
         _objComunBP = new ComunBP(this);
@@ -71,9 +71,6 @@ public class Administrador extends ActionBarActivity {
         _objWebServiceBP = new WebServiceBP(this);
 
         gridView = (GridView) findViewById(R.id.gridView);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        currentDateandTime = sdf.format(new Date());
 
         //Obtener usuario
         getPreferences();
@@ -87,7 +84,7 @@ public class Administrador extends ActionBarActivity {
             @Override
             public void onRefresh() {
                 listaRutaInspeccion = _objRutaInspeccionBP.GetAllPlaneacionRutaImage();
-                refresh(listaRutaInspeccion,Administrador.this);
+                refresh(listaRutaInspeccion, Administrador.this);
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -105,7 +102,9 @@ public class Administrador extends ActionBarActivity {
             }
         });
 
-        callWebServiceBackground();
+        //Iniciar servicio
+        callService();
+
     }
 
     @Override
@@ -182,6 +181,8 @@ public class Administrador extends ActionBarActivity {
     private class getPlaneacionRuta extends AsyncTask<String, Integer, Boolean> {
         //Variables
         ProgressDialog loadProgressDialog;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String currentDateandTime = sdf.format(new Date());
 
         @Override
         protected void onPreExecute() {
@@ -209,7 +210,6 @@ public class Administrador extends ActionBarActivity {
                 _objComunBP.Mensaje("Error: La informaci\u00F3n no se pudo actualizar",getApplicationContext());
             }
             else {
-                listaRutaInspeccion = _objRutaInspeccionBP.GetAllPlaneacionRutaImage();
                 refresh(listaRutaInspeccion,Administrador.this);
             }
             loadProgressDialog.dismiss();
@@ -230,28 +230,52 @@ public class Administrador extends ActionBarActivity {
         return isConnected;
     }
 
-    private void callWebServiceBackground(){
-        Date when = new Date(System.currentTimeMillis() + 2*60*1000);
-        try{
-            Intent i = new Intent(Administrador.this,AlarmReceiver.class);
-            i.putExtra("Clave", _objUsuario.Clave);
-            i.putExtra("RFC", _objUsuario.RFC);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,i,PendingIntent.FLAG_CANCEL_CURRENT);
-            AlarmManager alarms = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-            //alarms.setRepeating(AlarmManager.RTC_WAKEUP,when.getTime(),AlarmManager.INTERVAL_FIFTEEN_MINUTES,pendingIntent);
-            alarms.setRepeating(AlarmManager.RTC_WAKEUP,when.getTime(),2*60*1000,pendingIntent);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-
     public void refresh(ArrayList<Item> objlistaRutaInspeccion, Context objContext) {
         try {
+            listaRutaInspeccion = _objRutaInspeccionBP.GetAllPlaneacionRutaImage();
             customGridAdapter = new CustomGridViewAdapter(objContext, R.layout.activity_gridrow, objlistaRutaInspeccion);
             gridView = (GridView) findViewById(R.id.gridView);
             gridView.setAdapter(customGridAdapter);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void callService(){
+        resultReceiver = new MyResultReceiver(null);
+        intent = new Intent(this, WebService.class);
+        intent.putExtra("receiver", resultReceiver);
+        intent.putExtra("Clave", _objUsuario.Clave);
+        intent.putExtra("RFC", _objUsuario.RFC);
+        startService(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(intent);
+    }
+
+    class UpdateUI implements Runnable
+    {
+        public UpdateUI() {
+            refresh(listaRutaInspeccion,Administrador.this);
+        }
+        public void run() {
+        }
+    }
+
+    class MyResultReceiver extends ResultReceiver
+    {
+        public MyResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            if(resultCode == 0){
+                runOnUiThread(new UpdateUI());
+            }
         }
     }
 }

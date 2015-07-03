@@ -29,19 +29,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".RutaInspeccion"
-            android:label="@string/title_activity_rutainspeccion">
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </activity>
-        <!-- Will not be called unless the application explicitly enables it -->
-        <receiver android:name="com.iasacv.impulsora.rutainspeccion.Broadcast.AlarmReceiver"
-            android:enabled="true"
-            android:exported="true">
-        </receiver>
+        <service android:name=".Servicios.WebService"></service>
     </application>
 
 </manifest>

@@ -292,9 +292,6 @@ public class WebServiceDA extends Activity {
         //Variables
         boolean resul = true;
 
-        //Se elimina la version anterior de las tablas
-        _objEntLibTools.executeQuery("DELETE FROM BATPLADE WHERE PLADESTS!=\"I\"");
-
         //Actualizar tabla de planeacion de ruta de inspeccion
         PlaneacionRuta[] listaPlaneacionRuta;
         String METHOD_NAME = "GetAllPlaneacionRuta";
@@ -316,6 +313,8 @@ public class WebServiceDA extends Activity {
                 if(Integer.parseInt(ic.getProperty(0).toString())== -1)
                     resul = false;
                 else {
+                    //Se elimina la version anterior de las tablas
+                    _objEntLibTools.executeQuery("DELETE FROM BATPLADE WHERE PLADESTS!=\"I\"");
                     PlaneacionRuta objPlaneacionRuta = new PlaneacionRuta();
                     objPlaneacionRuta.UsuarioClave = Integer.parseInt(ic.getProperty(0).toString());
                     objPlaneacionRuta.UsuarioNombre = ic.getProperty(1).toString();
