@@ -64,6 +64,9 @@ public class RutaInspeccion extends Activity {
         objUsuario.RFC = prefs.getString("RFC", "");
         objUsuario.Email = prefs.getString("Email", "");
 
+        Bundle b = getIntent().getExtras();
+        int Folio = b.getInt("Folio");
+
         setContentView(R.layout.activity_rutainspeccion);
         administrador_tvUsuario = (TextView)findViewById(R.id.administrador_tvUsuario);
         administrador_tvUsuario.setText("Bienvenido: "+objUsuario.Nombre.toString().replace('#',' '));

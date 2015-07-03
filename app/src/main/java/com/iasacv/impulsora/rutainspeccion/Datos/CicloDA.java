@@ -69,8 +69,6 @@ public class CicloDA{
                 objCiclo.NombreAbreviado = objCursor.getString(4);
                 objCiclo.Estatus = objCursor.getString(5);
                 objCiclo.Uso = objCursor.getString(6);
-                String name = objCursor.getString(1) +"\n"+ objCursor.getString(2);
-                Administrador.ArrayofName.add(name);
                 listaCiclos.add(objCiclo);
             }
             return listaCiclos;

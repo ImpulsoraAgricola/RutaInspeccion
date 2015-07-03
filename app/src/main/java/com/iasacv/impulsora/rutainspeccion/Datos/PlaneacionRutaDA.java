@@ -1,18 +1,13 @@
 package com.iasacv.impulsora.rutainspeccion.Datos;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 
-import com.iasacv.impulsora.rutainspeccion.Administrador;
 import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
-import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
-import com.iasacv.impulsora.rutainspeccion.Modelo.EstadoMPE;
-import com.iasacv.impulsora.rutainspeccion.Modelo.ImageItem;
+import com.iasacv.impulsora.rutainspeccion.Modelo.Item;
 import com.iasacv.impulsora.rutainspeccion.Modelo.PlaneacionRuta;
 import com.iasacv.impulsora.rutainspeccion.R;
 
@@ -25,11 +20,13 @@ import java.util.List;
 public class PlaneacionRutaDA {
     //Variables
     private EntLibDBTools objEntLibTools;
-    Bitmap objBit;
+    Bitmap objInspection;
+    Bitmap objSurvey;
 
     public PlaneacionRutaDA(Context context) {
         objEntLibTools = new EntLibDBTools(context);
-        objBit=BitmapFactory.decodeResource(context.getResources(), R.drawable.icon_home);
+        objInspection=BitmapFactory.decodeResource(context.getResources(), R.drawable.inspection);
+        objSurvey=BitmapFactory.decodeResource(context.getResources(), R.drawable.survey);
     }
 
     public List<PlaneacionRuta> GetAllPlaneacionRutaList() {
@@ -52,12 +49,17 @@ public class PlaneacionRutaDA {
         }
     }
 
-    public ArrayList<ImageItem> GetAllPlaneacionRutaImage() {
+    public ArrayList<Item> GetAllPlaneacionRutaImage() {
         try {
-            Cursor objCursor = objEntLibTools.executeCursor("SELECT PLADEFOL,PERSONOM,PRODUNOM,PREDINOM,LOTESNOM,PLADESTS FROM BATPLADE");
-            ArrayList<ImageItem> listaPlaneacionRuta = new ArrayList<ImageItem>();
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT PLADEFOL,PERSONOM,PRODUNOM,PREDINOM,LOTESNOM,PLADESTS FROM BATPLADE  ORDER BY PLADEFOL");
+            ArrayList<Item> listaPlaneacionRuta = new ArrayList<Item>();
             while (objCursor.moveToNext()) {
-                listaPlaneacionRuta.add(new ImageItem(objBit,objCursor.getString(0)+" "+objCursor.getString(1)));
+                if(objCursor.getString(5).toString().equals("I"))
+                    listaPlaneacionRuta.add(new Item(Integer.parseInt(objCursor.getString(0)),objInspection,"Folio: "+objCursor.getString(0)+"\nCliente: "+objCursor.getString(1)+"\nProductor: "+
+                            objCursor.getString(2)+"\nPredio: "+objCursor.getString(3)+"\nLote: "+objCursor.getString(4)));
+                else
+                    listaPlaneacionRuta.add(new Item(Integer.parseInt(objCursor.getString(0)),objSurvey,"Folio: "+objCursor.getString(0)+"\nCliente: "+objCursor.getString(1)+"\nProductor: "+
+                            objCursor.getString(2)+"\nPredio: "+objCursor.getString(3)+"\nLote: "+objCursor.getString(4)));
             }
             return listaPlaneacionRuta;
         } catch (SQLException e) {

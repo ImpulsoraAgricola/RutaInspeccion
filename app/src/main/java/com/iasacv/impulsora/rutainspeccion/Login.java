@@ -114,7 +114,7 @@ public class Login extends Activity {
 
         @Override
         protected void onPreExecute() {
-            loadProgressDialog = ProgressDialog.show(Login.this, "", "Comprobando informaci\u00F3n...", true, false);
+            loadProgressDialog = ProgressDialog.show(Login.this, "Rutas de Inspecci\u00F3n", "Comprobando informaci\u00F3n...", true, false);
         }
 
         protected Boolean doInBackground(String... params) {

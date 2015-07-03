@@ -204,6 +204,17 @@ public class EntLibDBTools extends SQLiteOpenHelper {
         return  cursor;
     }
 
+    public Cursor executeQuery(String query) {
+        Cursor cursor = null;
+        try {
+            myDataBase = this.getWritableDatabase();
+            myDataBase.execSQL(query);
+        } catch (Exception e) {
+            throw e;
+        }
+        return  cursor;
+    }
+
     public void insert(String query) {
         try {
             myDataBase = this.getWritableDatabase();

@@ -1,13 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Login">
+    tools:context=".Administrador" >
     <item
         android:id="@+id/menu_administrador_actualizar"
+        android:showAsAction="ifRoom"
         android:title="@string/menu_administrador_actualizar"
-        android:icon="@mipmap/update" />
+        android:icon="@drawable/update" />
     <item
         android:id="@+id/menu_administrador_salir"
+        android:showAsAction="ifRoom"
         android:title="@string/menu_administrador_salir"
-        android:icon="@mipmap/cancel" />
+        android:icon="@drawable/cancel" />
 </menu>

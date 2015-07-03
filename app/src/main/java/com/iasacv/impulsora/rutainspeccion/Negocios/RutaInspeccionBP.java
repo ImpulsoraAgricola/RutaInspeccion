@@ -3,14 +3,10 @@ package com.iasacv.impulsora.rutainspeccion.Negocios;
 import android.content.Context;
 import android.database.SQLException;
 
-import com.iasacv.impulsora.rutainspeccion.Datos.CicloDA;
 import com.iasacv.impulsora.rutainspeccion.Datos.PlaneacionRutaDA;
-import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
-import com.iasacv.impulsora.rutainspeccion.Modelo.ImageItem;
-import com.iasacv.impulsora.rutainspeccion.Modelo.PlaneacionRuta;
+import com.iasacv.impulsora.rutainspeccion.Modelo.Item;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Administrator on 01/07/2015.
@@ -24,9 +20,9 @@ public class RutaInspeccionBP {
         _objPlaneacionRutaDA = new PlaneacionRutaDA(context);
     }
 
-    public ArrayList<ImageItem> GetAllPlaneacionRutaImage() {
+    public ArrayList<Item> GetAllPlaneacionRutaImage() {
         try {
-            ArrayList<ImageItem> listaPlaneacionRuta = _objPlaneacionRutaDA.GetAllPlaneacionRutaImage();
+            ArrayList<Item> listaPlaneacionRuta = _objPlaneacionRutaDA.GetAllPlaneacionRutaImage();
             return listaPlaneacionRuta;
         } catch (SQLException e) {
             throw e;
