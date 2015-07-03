@@ -1,5 +1,6 @@
 package com.iasacv.impulsora.rutainspeccion.Broadcast;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -106,6 +107,6 @@ public class AlarmReceiver extends BroadcastReceiver{
     private void llenarGrid(){
         listaRutaInspeccion = _objRutaInspeccionBP.GetAllPlaneacionRutaImage();
         Administrador objAdmin = new Administrador();
-        objAdmin.refresh(listaRutaInspeccion);
+        objAdmin.refresh(listaRutaInspeccion,_objContext);
     }
 }

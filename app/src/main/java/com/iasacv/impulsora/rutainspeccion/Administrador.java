@@ -86,7 +86,8 @@ public class Administrador extends ActionBarActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getPlaneacionRuta();
+                listaRutaInspeccion = _objRutaInspeccionBP.GetAllPlaneacionRutaImage();
+                refresh(listaRutaInspeccion,Administrador.this);
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -209,7 +210,7 @@ public class Administrador extends ActionBarActivity {
             }
             else {
                 listaRutaInspeccion = _objRutaInspeccionBP.GetAllPlaneacionRutaImage();
-                refresh(listaRutaInspeccion);
+                refresh(listaRutaInspeccion,Administrador.this);
             }
             loadProgressDialog.dismiss();
         }
@@ -230,9 +231,9 @@ public class Administrador extends ActionBarActivity {
     }
 
     private void callWebServiceBackground(){
-        Date when = new Date(System.currentTimeMillis());
+        Date when = new Date(System.currentTimeMillis() + 2*60*1000);
         try{
-            Intent i = new Intent(this,AlarmReceiver.class);
+            Intent i = new Intent(Administrador.this,AlarmReceiver.class);
             i.putExtra("Clave", _objUsuario.Clave);
             i.putExtra("RFC", _objUsuario.RFC);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,i,PendingIntent.FLAG_CANCEL_CURRENT);
@@ -244,8 +245,13 @@ public class Administrador extends ActionBarActivity {
         }
     }
 
-    public void refresh(ArrayList<Item> objlistaRutaInspeccion) {
-        customGridAdapter = new CustomGridViewAdapter(Administrador.this, R.layout.activity_gridrow, objlistaRutaInspeccion);
-        gridView.setAdapter(customGridAdapter);
+    public void refresh(ArrayList<Item> objlistaRutaInspeccion, Context objContext) {
+        try {
+            customGridAdapter = new CustomGridViewAdapter(objContext, R.layout.activity_gridrow, objlistaRutaInspeccion);
+            gridView = (GridView) findViewById(R.id.gridView);
+            gridView.setAdapter(customGridAdapter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
