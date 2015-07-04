@@ -49,9 +49,9 @@ public class PlaneacionRutaDA {
         }
     }
 
-    public ArrayList<Item> GetAllPlaneacionRutaImage() {
+    public ArrayList<Item> GetAllPlaneacionRutaImage(int usuarioClave, String fecha) {
         try {
-            Cursor objCursor = objEntLibTools.executeCursor("SELECT PLADEFOL,PERSONOM,PRODUNOM,PREDINOM,LOTESNOM,PLADESTS FROM BATPLADE  ORDER BY PLADEFOL");
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT PLADEFOL,PERSONOM,PRODUNOM,PREDINOM,LOTESNOM,PLADESTS FROM BATPLADE WHERE USUARCVE="+usuarioClave+" AND PLANEFEC='"+fecha+"' ORDER BY PLADEFOL");
             ArrayList<Item> listaPlaneacionRuta = new ArrayList<Item>();
             while (objCursor.moveToNext()) {
                 if(objCursor.getString(5).toString().equals("I"))

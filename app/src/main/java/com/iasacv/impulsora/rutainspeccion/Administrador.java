@@ -1,8 +1,8 @@
 package com.iasacv.impulsora.rutainspeccion;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,15 +17,14 @@ import android.os.ResultReceiver;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.ContextThemeWrapper;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.GridView;
 
 import com.iasacv.impulsora.rutainspeccion.Adaptador.CustomGridViewAdapter;
-import com.iasacv.impulsora.rutainspeccion.Broadcast.AlarmReceiver;
 import com.iasacv.impulsora.rutainspeccion.Modelo.*;
 import com.iasacv.impulsora.rutainspeccion.Negocios.CatalogosBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.ComunBP;
@@ -38,6 +37,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -56,9 +56,16 @@ public class Administrador extends ActionBarActivity {
     ArrayList<Item> listaRutaInspeccion;
     CustomGridViewAdapter customGridAdapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
+    SimpleDateFormat formatFecha;
+    String currentDate;
 
     Intent intent;
     MyResultReceiver resultReceiver;
+
+    private String mYear;
+    private String mMonth;
+    private String mDay;
+    static final int DATE_DIALOG_ID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,21 +77,20 @@ public class Administrador extends ActionBarActivity {
         _objRutaInspeccionBP = new RutaInspeccionBP(this);
         _objWebServiceBP = new WebServiceBP(this);
 
+        formatFecha = new SimpleDateFormat("yyyy-MM-dd");
+        currentDate = formatFecha.format(new Date());
+
         gridView = (GridView) findViewById(R.id.gridView);
 
         //Obtener usuario
         getPreferences();
-
-        //Llenar grid
-        getPlaneacionRuta();
 
         //Crear el refrescar al momento de deslizar
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                listaRutaInspeccion = _objRutaInspeccionBP.GetAllPlaneacionRutaImage();
-                refresh(listaRutaInspeccion, Administrador.this);
+                getPlaneacionRuta();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -102,9 +108,11 @@ public class Administrador extends ActionBarActivity {
             }
         });
 
+        //Llenar grid
+        getPlaneacionRuta();
+
         //Iniciar servicio
         callService();
-
     }
 
     @Override
@@ -122,6 +130,9 @@ public class Administrador extends ActionBarActivity {
                 return true;
             case R.id.menu_administrador_salir:
                 confirmDialog();
+                return true;
+            case R.id.search:
+                showDialog(DATE_DIALOG_ID);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -168,10 +179,10 @@ public class Administrador extends ActionBarActivity {
                 getPlaneacionRuta jobGetPlaneacionRuta = new getPlaneacionRuta();
                 jobGetPlaneacionRuta.execute();
             } else {
-                listaRutaInspeccion = _objRutaInspeccionBP.GetAllPlaneacionRutaImage();
-                customGridAdapter = new CustomGridViewAdapter(Administrador.this, R.layout.activity_gridrow, listaRutaInspeccion);
-                gridView.setAdapter(customGridAdapter);
-                _objComunBP.Mensaje("Error: Se debe contar con una conexi\u00F3n a Internet", getApplicationContext());
+                formatFecha = new SimpleDateFormat("yyyy-MM-dd");
+                currentDate = formatFecha.format(new Date());
+                refresh(currentDate);
+                _objComunBP.Mensaje("Se debe contar con una conexi\u00F3n a Internet", getApplicationContext());
             }
         } catch (Exception e) {
             _objComunBP.Mensaje(e.toString(), getApplicationContext());
@@ -210,7 +221,9 @@ public class Administrador extends ActionBarActivity {
                 _objComunBP.Mensaje("Error: La informaci\u00F3n no se pudo actualizar",getApplicationContext());
             }
             else {
-                refresh(listaRutaInspeccion,Administrador.this);
+                formatFecha = new SimpleDateFormat("yyyy-MM-dd");
+                currentDate = formatFecha.format(new Date());
+                refresh(currentDate);
             }
             loadProgressDialog.dismiss();
         }
@@ -230,10 +243,10 @@ public class Administrador extends ActionBarActivity {
         return isConnected;
     }
 
-    public void refresh(ArrayList<Item> objlistaRutaInspeccion, Context objContext) {
+    public void refresh(String fecha) {
         try {
-            listaRutaInspeccion = _objRutaInspeccionBP.GetAllPlaneacionRutaImage();
-            customGridAdapter = new CustomGridViewAdapter(objContext, R.layout.activity_gridrow, objlistaRutaInspeccion);
+            listaRutaInspeccion = _objRutaInspeccionBP.GetAllPlaneacionRutaImage(_objUsuario.Clave, fecha);
+            customGridAdapter = new CustomGridViewAdapter(this, R.layout.activity_gridrow, listaRutaInspeccion);
             gridView = (GridView) findViewById(R.id.gridView);
             gridView.setAdapter(customGridAdapter);
         } catch (Exception e) {
@@ -259,7 +272,9 @@ public class Administrador extends ActionBarActivity {
     class UpdateUI implements Runnable
     {
         public UpdateUI() {
-            refresh(listaRutaInspeccion,Administrador.this);
+            formatFecha = new SimpleDateFormat("yyyy-MM-dd");
+            currentDate = formatFecha.format(new Date());
+            refresh(currentDate);
         }
         public void run() {
         }
@@ -277,5 +292,41 @@ public class Administrador extends ActionBarActivity {
                 runOnUiThread(new UpdateUI());
             }
         }
+    }
+
+    //Eventos de calendario
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    private void updateDisplay() {
+        refresh(mYear + "-" + (mMonth) + "-" + mDay);
+    }
+
+    private DatePickerDialog.OnDateSetListener mDateSetListener =
+            new DatePickerDialog.OnDateSetListener() {
+                public void onDateSet(DatePicker view, int year,
+                                      int monthOfYear, int dayOfMonth) {
+                    mYear = String.valueOf(year);
+                    mMonth = String.format("%02d",monthOfYear+1);
+                    mDay = String.format("%02d",dayOfMonth);
+                    updateDisplay();
+                }
+            };
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case DATE_DIALOG_ID:
+                final Calendar c = Calendar.getInstance();
+                mYear = String.valueOf(c.get(Calendar.YEAR));
+                mMonth = String.valueOf(c.get(Calendar.MONTH));
+                mDay = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
+                return new DatePickerDialog(this,
+                        mDateSetListener,
+                        Integer.parseInt(mYear), Integer.parseInt(mMonth),Integer.parseInt(mDay));
+        }
+        return null;
     }
 }

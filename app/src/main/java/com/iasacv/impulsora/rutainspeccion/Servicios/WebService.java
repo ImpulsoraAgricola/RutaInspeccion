@@ -7,7 +7,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -35,7 +38,7 @@ public class WebService extends Service{
         resultReceiver = intent.getParcelableExtra("receiver");
         getValues(intent);
         timerTask = new MyTimerTask();
-        timer.scheduleAtFixedRate(timerTask, 0, 15*60*1000);
+        timer.scheduleAtFixedRate(timerTask, 15*60*1000, 15*60*1000);
         return START_STICKY;
     }
     @Override
@@ -61,10 +64,10 @@ public class WebService extends Service{
         }
         @Override
         public void run() {
-            //if(ConexionInternet()) {
+            if(ConexionInternet()) {
                 getPlaneacionRuta jobGetPlaneacionRuta = new getPlaneacionRuta();
                 jobGetPlaneacionRuta.execute();
-            //}
+            }
         }
 
         private class getPlaneacionRuta extends AsyncTask<String, Integer, Boolean> {
@@ -92,7 +95,12 @@ public class WebService extends Service{
                 }
             }
         }
+    }
 
-
+    private boolean ConexionInternet() {
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        return isConnected;
     }
 }

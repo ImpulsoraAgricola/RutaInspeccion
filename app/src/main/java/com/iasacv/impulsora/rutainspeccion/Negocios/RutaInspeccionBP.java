@@ -20,9 +20,9 @@ public class RutaInspeccionBP {
         _objPlaneacionRutaDA = new PlaneacionRutaDA(context);
     }
 
-    public ArrayList<Item> GetAllPlaneacionRutaImage() {
+    public ArrayList<Item> GetAllPlaneacionRutaImage(int usuarioClave, String fecha) {
         try {
-            ArrayList<Item> listaPlaneacionRuta = _objPlaneacionRutaDA.GetAllPlaneacionRutaImage();
+            ArrayList<Item> listaPlaneacionRuta = _objPlaneacionRutaDA.GetAllPlaneacionRutaImage(usuarioClave,fecha);
             return listaPlaneacionRuta;
         } catch (SQLException e) {
             throw e;

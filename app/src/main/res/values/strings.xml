@@ -5,6 +5,9 @@
     <string name="menu_administrador_actualizar">Actualizar</string>
     <string name="menu_administrador_salir">Salir</string>
 
+    <!-- Menu Login. -->
+    <string name="menu_login_salir">Salir</string>
+
     <!-- Login. -->
     <string name="title_activity_login">Inicio de sesión</string>
     <string name="activity_login_tvusuario">Nombre de usuario</string>
@@ -21,4 +24,9 @@
 
     <!-- Captura de ruta de inspección. -->
     <string name="title_activity_rutainspeccion">Captura de ruta de inspección</string>
+    <string name="title_activity_rutainspeccion">Captura de ruta de inspección</string>
+
+    <!-- Menu buscar. -->
+    <string name="enter" >yyyy-MM-dd</string>
+    <string name="search" >Filtrar</string>
 </resources>

@@ -12,9 +12,12 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -35,8 +38,7 @@ public class Login extends Activity {
     //Variables controles
     private EditText txtUsuario;
     private EditText txtPassword;
-    private Button btnIngresar;
-    private Button btnCancelar;
+    private ImageButton btnIngresar;
 
     //Variables objetos
     ComunBP _objComunBP;
@@ -99,12 +101,12 @@ public class Login extends Activity {
                 }
             });
 
-            btnCancelar.setOnClickListener(new View.OnClickListener() {
+            /*btnCancelar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     confirmDialog();
                 }
-            });
+            });*/
         }
     }
 
@@ -155,8 +157,7 @@ public class Login extends Activity {
     private void GetControles() {
         txtUsuario = (EditText) findViewById(R.id.login_txtUsuario);
         txtPassword = (EditText) findViewById(R.id.login_txtPassword);
-        btnIngresar = (Button) findViewById(R.id.login_btnIngresar);
-        btnCancelar = (Button) findViewById(R.id.login_btnCancelar);
+        btnIngresar = (ImageButton) findViewById(R.id.login_btnIngresar);
     }
 
     private void StatusDB() {
@@ -218,5 +219,23 @@ public class Login extends Activity {
                     }
                 });
         alert.show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_login, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_login_salir:
+                confirmDialog();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

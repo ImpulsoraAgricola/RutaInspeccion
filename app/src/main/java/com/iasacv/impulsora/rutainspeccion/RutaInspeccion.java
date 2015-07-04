@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.DatePicker;
@@ -30,18 +31,17 @@ import java.util.Calendar;
 public class RutaInspeccion extends Activity {
 
     //Variables para controles
-    private TextView administrador_tvUsuario;
     private Spinner administrador_sCiclo;
     private Button administrador_btnGuardar;
     private TextView administrador_txtFecha;
-    private Button administrador_btnFecha;
+    private ImageButton administrador_btnFecha;
 
     //Variables
     WebServiceBP _objWebServiceBP;
     CatalogosBP _objCicloBP;
-    Usuario objUsuario = new Usuario();
-    Ciclo objCiclo = new Ciclo();
-    com.iasacv.impulsora.rutainspeccion.Modelo.RutaInspeccion objRutaInspeccion = new com.iasacv.impulsora.rutainspeccion.Modelo.RutaInspeccion();
+    Usuario _objUsuario;
+    Ciclo _objCiclo;
+    RutaInspeccion _objRutaInspeccion;
     private Ciclo[] listaCiclos;
     private int mYear;
     private int mMonth;
@@ -56,27 +56,17 @@ public class RutaInspeccion extends Activity {
         //Pasar contexto a las demas instancias
         _objWebServiceBP = new WebServiceBP(this);
         _objCicloBP = new CatalogosBP(this);
-
-        //Recuperamos las preferencias
-        SharedPreferences prefs = getSharedPreferences("RutaInspeccion", Context.MODE_PRIVATE);
-        objUsuario.Clave = Integer.valueOf(prefs.getString("Clave", ""));
-        objUsuario.Nombre = prefs.getString("Nombre", "");
-        objUsuario.RFC = prefs.getString("RFC", "");
-        objUsuario.Email = prefs.getString("Email", "");
+        _objUsuario = new Usuario();
+        _objCiclo = new Ciclo();
+        _objRutaInspeccion = new RutaInspeccion();
 
         Bundle b = getIntent().getExtras();
         int Folio = b.getInt("Folio");
 
         setContentView(R.layout.activity_rutainspeccion);
-        administrador_tvUsuario = (TextView)findViewById(R.id.administrador_tvUsuario);
-        administrador_tvUsuario.setText("Bienvenido: "+objUsuario.Nombre.toString().replace('#',' '));
 
-        //Fecha de inspeccion
-        administrador_txtFecha = (TextView)findViewById(R.id.administrador_txtFecha);
-        administrador_btnFecha = (Button)findViewById(R.id.administrador_btnFecha);
-
-        //Guardar registro
-        administrador_btnGuardar = (Button)findViewById(R.id.administrador_btnGuardar);
+        //Recuperar valores
+        getPreferences();
 
         administrador_btnFecha.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -94,7 +84,7 @@ public class RutaInspeccion extends Activity {
         administrador_btnGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                objRutaInspeccion = creaObjeto();
+                _objRutaInspeccion = creaObjeto();
                 insertRutaInspeccion tarea = new insertRutaInspeccion();
                 tarea.execute();
             }
@@ -116,7 +106,7 @@ public class RutaInspeccion extends Activity {
             boolean result = true;
             try
             {
-                result = _objWebServiceBP.insertRutaInspeccion(objRutaInspeccion);
+                result = _objWebServiceBP.insertRutaInspeccion(_objRutaInspeccion);
             }
             catch (Exception e)
             {
@@ -179,11 +169,11 @@ public class RutaInspeccion extends Activity {
     }
 
     //Llenar objetos
-    public com.iasacv.impulsora.rutainspeccion.Modelo.RutaInspeccion creaObjeto() {
-        com.iasacv.impulsora.rutainspeccion.Modelo.RutaInspeccion objRutaInspeccion = new com.iasacv.impulsora.rutainspeccion.Modelo.RutaInspeccion();
-        objRutaInspeccion.UsuarioClave = objUsuario.Clave;
+    public RutaInspeccion creaObjeto() {
+        RutaInspeccion objRutaInspeccion = new RutaInspeccion();
+        objRutaInspeccion.UsuarioClave = _objUsuario.Clave;
         objRutaInspeccion.Fecha = this.administrador_txtFecha.getText().toString();
-        objRutaInspeccion.CicloClave = objCiclo.Clave;
+        objRutaInspeccion.CicloClave = _objCiclo.Clave;
         return objRutaInspeccion;
     }
 
@@ -204,13 +194,26 @@ public class RutaInspeccion extends Activity {
                     public void onItemSelected(AdapterView<?> parent,
                                                android.view.View v, int position, long id) {
                         parent.getItemAtPosition(position);
-                        objCiclo = listaCiclos[position];
+                        _objCiclo = listaCiclos[position];
                     }
 
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
-                        objCiclo = null;
+                        _objCiclo = null;
                     }
                 });
+    }
+
+    private void getPreferences() {
+        SharedPreferences prefs = getSharedPreferences("RutaInspeccion", Context.MODE_PRIVATE);
+        _objUsuario = new Usuario();
+        _objUsuario.RFC = prefs.getString("RFC", "");
+        _objUsuario.Clave = Integer.valueOf(prefs.getString("Clave", ""));
+    }
+
+    private void getControles(){
+        administrador_txtFecha = (TextView)findViewById(R.id.administrador_txtFecha);
+        administrador_btnFecha = (ImageButton)findViewById(R.id.administrador_btnFecha);
+        administrador_btnGuardar = (Button)findViewById(R.id.administrador_btnGuardar);
     }
 }

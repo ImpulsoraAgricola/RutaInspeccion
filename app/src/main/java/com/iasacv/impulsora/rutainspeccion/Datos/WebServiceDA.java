@@ -307,6 +307,7 @@ public class WebServiceDA extends Activity {
         try {
             transporte.call(SOAP_ACTION, envelope);
             SoapObject resSoap = (SoapObject) envelope.getResponse();
+            _objEntLibTools.executeQuery("DELETE FROM BATPLADE WHERE PLADESTS!=\"I\"");
             listaPlaneacionRuta = new PlaneacionRuta[resSoap.getPropertyCount()];
             for (int i = 0; i < listaPlaneacionRuta.length; i++) {
                 SoapObject ic = (SoapObject) resSoap.getProperty(i);
@@ -314,7 +315,6 @@ public class WebServiceDA extends Activity {
                     resul = false;
                 else {
                     //Se elimina la version anterior de las tablas
-                    _objEntLibTools.executeQuery("DELETE FROM BATPLADE WHERE PLADESTS!=\"I\"");
                     PlaneacionRuta objPlaneacionRuta = new PlaneacionRuta();
                     objPlaneacionRuta.UsuarioClave = Integer.parseInt(ic.getProperty(0).toString());
                     objPlaneacionRuta.UsuarioNombre = ic.getProperty(1).toString();
