@@ -24,7 +24,6 @@
 
     <!-- Captura de ruta de inspección. -->
     <string name="title_activity_rutainspeccion">Captura de ruta de inspección</string>
-    <string name="title_activity_rutainspeccion">Captura de ruta de inspección</string>
 
     <!-- Menu buscar. -->
     <string name="enter" >yyyy-MM-dd</string>

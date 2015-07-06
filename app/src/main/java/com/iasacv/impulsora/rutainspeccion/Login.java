@@ -128,7 +128,7 @@ public class Login extends Activity {
                 else
                     result = false;
             } catch (Exception e) {
-                _objComunBP.Mensaje(e.toString(), getApplicationContext());
+                e.printStackTrace();
             }
             return result;
         }

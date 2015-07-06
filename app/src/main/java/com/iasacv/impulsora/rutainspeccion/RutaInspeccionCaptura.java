@@ -19,6 +19,7 @@ import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
+import com.iasacv.impulsora.rutainspeccion.Modelo.RutaInspeccion;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Usuario;
 import com.iasacv.impulsora.rutainspeccion.Negocios.CatalogosBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.WebServiceBP;
@@ -28,7 +29,8 @@ import java.util.Calendar;
 /**
  * Created by Administrator on 19/06/2015.
  */
-public class RutaInspeccion extends Activity {
+
+public class RutaInspeccionCaptura extends Activity {
 
     //Variables para controles
     private Spinner administrador_sCiclo;
@@ -52,6 +54,7 @@ public class RutaInspeccion extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_rutainspeccion);
 
         //Pasar contexto a las demas instancias
         _objWebServiceBP = new WebServiceBP(this);
@@ -60,13 +63,11 @@ public class RutaInspeccion extends Activity {
         _objCiclo = new Ciclo();
         _objRutaInspeccion = new RutaInspeccion();
 
-        Bundle b = getIntent().getExtras();
-        int Folio = b.getInt("Folio");
-
-        setContentView(R.layout.activity_rutainspeccion);
-
         //Recuperar valores
         getPreferences();
+
+        //Obtener controles
+        getControles();
 
         administrador_btnFecha.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -99,7 +100,7 @@ public class RutaInspeccion extends Activity {
 
         @Override
         protected void onPreExecute() {
-            loadProgressDialog = ProgressDialog.show(RutaInspeccion.this, "", "Insertando informacion...", true, false);
+            loadProgressDialog = ProgressDialog.show(RutaInspeccionCaptura.this, "", "Insertando informacion...", true, false);
         }
 
         protected Boolean doInBackground(String... params) {
@@ -184,7 +185,7 @@ public class RutaInspeccion extends Activity {
         String[] ciclos = new String[listaCiclos.length];
         for(int i=0; i<listaCiclos.length; i++)
             ciclos[i] = listaCiclos[i].Nombre;
-        ArrayAdapter<String> adaptador = new ArrayAdapter<String>(RutaInspeccion.this, android.R.layout.simple_list_item_1, ciclos);
+        ArrayAdapter<String> adaptador = new ArrayAdapter<String>(RutaInspeccionCaptura.this, android.R.layout.simple_list_item_1, ciclos);
         administrador_sCiclo = (Spinner)findViewById(R.id.administrador_sCiclo);
         administrador_sCiclo.setAdapter(adaptador);
 
@@ -209,6 +210,9 @@ public class RutaInspeccion extends Activity {
         _objUsuario = new Usuario();
         _objUsuario.RFC = prefs.getString("RFC", "");
         _objUsuario.Clave = Integer.valueOf(prefs.getString("Clave", ""));
+        Bundle b = getIntent().getExtras();
+        int Folio = b.getInt("Folio");
+        String Date = b.getString("Fecha");
     }
 
     private void getControles(){

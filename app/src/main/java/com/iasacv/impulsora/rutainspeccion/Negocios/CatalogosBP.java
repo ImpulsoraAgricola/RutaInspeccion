@@ -61,8 +61,8 @@ public class CatalogosBP {
     //Estado enfermedad
     public EstadoMPE[] GetAllEstadoEnfermedad() {
         try {
-            EstadoMPE[] listaEstadoEnfermedad = _objEstadoEnfermedadDA.get;
-            return listaCiclos;
+            EstadoMPE[] listaEstadoEnfermedad = _objEstadoEnfermedadDA.GetAllEstadoEnfermedad();
+            return listaEstadoEnfermedad;
         } catch (SQLException e) {
             throw e;
         }

@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RutaInspeccion"
+            android:name=".RutaInspeccionCaptura"
             android:label="@string/title_activity_rutainspeccion">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />

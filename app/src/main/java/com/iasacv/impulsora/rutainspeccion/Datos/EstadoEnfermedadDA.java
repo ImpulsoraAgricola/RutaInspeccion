@@ -20,24 +20,21 @@ public class EstadoEnfermedadDA {
         objEntLibTools = new EntLibDBTools(context);
     }
 
-    public Ciclo[] GetAllEstadoEnfermedad() {
+    public EstadoMPE[] GetAllEstadoEnfermedad() {
         try {
-            Cursor objCursor = objEntLibTools.executeCursor("SELECT * FROM BACESTEN WHERE ");
-            Ciclo[] listaCiclos = new Ciclo[objCursor.getCount()];
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT * FROM BACESTEN WHERE ESTENSTS!=\"A\"");
+            EstadoMPE[] listaEstadoEnfermedad = new EstadoMPE[objCursor.getCount()];
             int i = 0;
             while (objCursor.moveToNext()) {
-                Ciclo objCiclo = new Ciclo();
-                objCiclo.Clave = Integer.parseInt(objCursor.getString(0));
-                objCiclo.Nombre = objCursor.getString(1);
-                objCiclo.FechaInicio = objCursor.getString(2);
-                objCiclo.FechaFin = objCursor.getString(3);
-                objCiclo.NombreAbreviado = objCursor.getString(4);
-                objCiclo.Estatus = objCursor.getString(5);
-                objCiclo.Uso = objCursor.getString(6);
-                listaCiclos[i] = objCiclo;
+                EstadoMPE objEstadoMPE = new EstadoMPE();
+                objEstadoMPE.Clave = Integer.parseInt(objCursor.getString(0));
+                objEstadoMPE.Nombre = objCursor.getString(1);
+                objEstadoMPE.Estatus = objCursor.getString(2);
+                objEstadoMPE.Uso = objCursor.getString(3);
+                listaEstadoEnfermedad[i] = objEstadoMPE;
                 i++;
             }
-            return listaCiclos;
+            return listaEstadoEnfermedad;
         } catch (SQLException e) {
             throw e;
         }

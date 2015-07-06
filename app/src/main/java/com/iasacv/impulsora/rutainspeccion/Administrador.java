@@ -99,12 +99,8 @@ public class Administrador extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                parent.getItemAtPosition(position);
                 Item objItem = listaRutaInspeccion.get(position);
-                //Creamos el nuevo formulario
-                Intent i = new Intent(Administrador.this, RutaInspeccion.class);
-                i.putExtra("Folio", objItem.getFolio());
-                startActivity(i);
+                confirmDialogStart(objItem);
             }
         });
 
@@ -129,7 +125,7 @@ public class Administrador extends ActionBarActivity {
                 getPlaneacionRuta();
                 return true;
             case R.id.menu_administrador_salir:
-                confirmDialog();
+                confirmDialogExit();
                 return true;
             case R.id.search:
                 showDialog(DATE_DIALOG_ID);
@@ -144,7 +140,7 @@ public class Administrador extends ActionBarActivity {
         prefs.edit().clear().commit();
     }
 
-    private void confirmDialog() {
+    private void confirmDialogExit() {
         final AlertDialog alert = new AlertDialog.Builder(
                 new ContextThemeWrapper(this, android.R.style.Theme_Dialog))
                 .create();
@@ -323,10 +319,44 @@ public class Administrador extends ActionBarActivity {
                 mYear = String.valueOf(c.get(Calendar.YEAR));
                 mMonth = String.valueOf(c.get(Calendar.MONTH));
                 mDay = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
-                return new DatePickerDialog(this,
-                        mDateSetListener,
-                        Integer.parseInt(mYear), Integer.parseInt(mMonth),Integer.parseInt(mDay));
+                DatePickerDialog dialog =new DatePickerDialog(this,mDateSetListener,Integer.parseInt(mYear), Integer.parseInt(mMonth),Integer.parseInt(mDay));
+                DatePicker datePicker = dialog.getDatePicker();
+                datePicker.setMinDate(c.getTimeInMillis());
+                c.add(Calendar.DAY_OF_YEAR,1);
+                datePicker.setMaxDate(c.getTimeInMillis());
+                return dialog;
         }
         return null;
+    }
+
+    private void confirmDialogStart(final Item objItem) {
+        final AlertDialog alert = new AlertDialog.Builder(
+                new ContextThemeWrapper(this, android.R.style.Theme_Dialog))
+                .create();
+        alert.setTitle("Mensaje");
+        alert.setMessage("\u00BFDeseas iniciar la captura de la ruta de inpecci\u00F3n?");
+        alert.setCancelable(false);
+        alert.setIcon(R.drawable.info);
+        alert.setCanceledOnTouchOutside(false);
+        alert.setButton(DialogInterface.BUTTON_POSITIVE, "Si",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        alert.dismiss();
+                        formatFecha = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        currentDate = formatFecha.format(new Date());
+                        //Creamos el nuevo formulario
+                        Intent i = new Intent(Administrador.this, RutaInspeccionCaptura.class);
+                        i.putExtra("Folio", objItem.getFolio());
+                        i.putExtra("Fecha", currentDate);
+                        startActivity(i);
+                    }
+                });
+        alert.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        alert.dismiss();
+                    }
+                });
+        alert.show();
     }
 }

@@ -5,5 +5,5 @@
         android:id="@+id/menu_login_salir"
         android:showAsAction="ifRoom"
         android:title="@string/menu_administrador_salir"
-        android:icon="@drawable/cancel" />
+        android:icon="@mipmap/cancel" />
 </menu>
