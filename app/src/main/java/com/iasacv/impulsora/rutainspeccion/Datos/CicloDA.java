@@ -3,10 +3,12 @@ package com.iasacv.impulsora.rutainspeccion.Datos;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.widget.Spinner;
 
 import com.iasacv.impulsora.rutainspeccion.Administrador;
 import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
+import com.iasacv.impulsora.rutainspeccion.Modelo.Combo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.TipoArticulo;
 
 import java.util.ArrayList;
@@ -56,20 +58,12 @@ public class CicloDA{
         }
     }
 
-    public List<Ciclo> GetAllCiclosList() {
+    public List<Combo> GetAllCiclosList() {
         try {
             Cursor objCursor = objEntLibTools.executeCursor("SELECT * FROM IGMCICLO");
-            List<Ciclo> listaCiclos = new ArrayList<Ciclo>();
+            List<Combo> listaCiclos = new ArrayList<Combo>();
             while (objCursor.moveToNext()) {
-                Ciclo objCiclo = new Ciclo();
-                objCiclo.Clave = Integer.parseInt(objCursor.getString(0));
-                objCiclo.Nombre = objCursor.getString(1);
-                objCiclo.FechaInicio = objCursor.getString(2);
-                objCiclo.FechaFin = objCursor.getString(3);
-                objCiclo.NombreAbreviado = objCursor.getString(4);
-                objCiclo.Estatus = objCursor.getString(5);
-                objCiclo.Uso = objCursor.getString(6);
-                listaCiclos.add(objCiclo);
+                listaCiclos.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }
             return listaCiclos;
         } catch (SQLException e) {

@@ -10,22 +10,29 @@
 
     <!-- Login. -->
     <string name="title_activity_login">Inicio de sesión</string>
-    <string name="activity_login_tvusuario">Nombre de usuario</string>
-    <string name="activity_login_tvpassword">Contraseña</string>
+    <string name="activity_login_txtusuario">Nombre de usuario</string>
+    <string name="activity_login_txtpassword">Contraseña</string>
     <string name="activity_login_btnLogin">Inicio de sesión</string>
     <string name="activity_login_btnCancelar">Cancelar</string>
     <string name="activity_login_btnActualizar">Actualizar</string>
 
     <!-- Administrador. -->
     <string name="title_activity_administrador">Administrador</string>
-    <string name="activity_administrador_tvfecha">Fecha</string>
-    <string name="activity_administrador_tvCiclo">Ciclo</string>
-    <string name="activity_administrador_btnGuardar">Guardar</string>
 
     <!-- Captura de ruta de inspección. -->
     <string name="title_activity_rutainspeccion">Captura de ruta de inspección</string>
+    <string name="activity_rutainspeccion_title_sDatosGenerales">Datos generales</string>
+    <string name="activity_rutainspeccion_txtFolio">Folio:</string>
+    <string name="activity_rutainspeccion_sCiclo">Ciclo:</string>
+    <string name="activity_rutainspeccion_txtCliente">Cliente:</string>
+    <string name="activity_rutainspeccion_txtProductor">Productor:</string>
+    <string name="activity_rutainspeccion_txtPredio">Predio:</string>
+    <string name="activity_rutainspeccion_txtLote">Lote:</string>
+    <string name="activity_rutainspeccion_txtFecha">Fecha:</string>
+    <string name="activity_rutainspeccion_btnGuardar">Guardar</string>
+    <string name="activity_rutainspeccion_sSiembra">Siembra</string>
+    <string name="activity_rutainspeccion_sSistemaProduccion">Sistema de producción:</string>
+    <string name="activity_rutainspeccion_title_sDesarrolo">Desarrollo</string>
+        <string name="activity_rutainspeccion_sDesarrolo">Etapa principal Zadoks:</string>
 
-    <!-- Menu buscar. -->
-    <string name="enter" >yyyy-MM-dd</string>
-    <string name="search" >Filtrar</string>
 </resources>

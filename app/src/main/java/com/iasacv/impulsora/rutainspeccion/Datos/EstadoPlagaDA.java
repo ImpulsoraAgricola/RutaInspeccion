@@ -1,6 +1,7 @@
 package com.iasacv.impulsora.rutainspeccion.Datos;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 
 import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
@@ -16,6 +17,26 @@ public class EstadoPlagaDA {
 
     public EstadoPlagaDA(Context context) {
         objEntLibTools = new EntLibDBTools(context);
+    }
+
+    public EstadoMPE[] GetAllEstadoPlaga() {
+        try {
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT * FROM BACESTPLA WHERE ESTPLSTS!=\"A\"");
+            EstadoMPE[] listaEstadoPlaga = new EstadoMPE[objCursor.getCount()];
+            int i = 0;
+            while (objCursor.moveToNext()) {
+                EstadoMPE objEstadoMPE = new EstadoMPE();
+                objEstadoMPE.Clave = Integer.parseInt(objCursor.getString(0));
+                objEstadoMPE.Nombre = objCursor.getString(1);
+                objEstadoMPE.Estatus = objCursor.getString(2);
+                objEstadoMPE.Uso = objCursor.getString(3);
+                listaEstadoPlaga[i] = objEstadoMPE;
+                i++;
+            }
+            return listaEstadoPlaga;
+        } catch (SQLException e) {
+            throw e;
+        }
     }
 
     public boolean InsertEstadoPlaga(EstadoMPE objEstadoPlaga) {

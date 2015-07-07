@@ -1,5 +1,6 @@
 package com.iasacv.impulsora.rutainspeccion;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -11,10 +12,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -33,7 +36,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-public class Login extends Activity {
+public class Login extends ActionBarActivity {
 
     //Variables controles
     private EditText txtUsuario;
@@ -49,6 +52,10 @@ public class Login extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Pasar contexto a las demas instancias
+        _objComunBP = new ComunBP(this);
+        _objWebServiceBP = new WebServiceBP(this);
+
         //Revisar las preferencias
         SharedPreferences prefs = getSharedPreferences("RutaInspeccion", Context.MODE_PRIVATE);
         if (prefs.getString("Clave", "") != "") {
@@ -58,10 +65,6 @@ public class Login extends Activity {
             finish();
         } else {
             setContentView(R.layout.activity_login);
-
-            //Pasar contexto a las demas instancias
-            _objComunBP = new ComunBP(this);
-            _objWebServiceBP = new WebServiceBP(this);
 
             //Obtener controles
             GetControles();
@@ -100,13 +103,6 @@ public class Login extends Activity {
                     }
                 }
             });
-
-            /*btnCancelar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    confirmDialog();
-                }
-            });*/
         }
     }
 

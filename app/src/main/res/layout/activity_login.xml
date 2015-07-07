@@ -10,7 +10,6 @@
     android:weightSum="1">
 
     <LinearLayout
-        android:id="@+id/login_lUsuario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -19,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="@string/activity_login_tvusuario"
+            android:hint="@string/activity_login_txtusuario"
             android:inputType="textCapCharacters"
             android:text="CALC900728LT9"
             android:typeface="sans">
@@ -27,7 +26,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/login_lPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -36,8 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:ems="8"
-            android:hint="@string/activity_login_tvpassword"
+            android:hint="@string/activity_login_txtpassword"
             android:inputType="textPassword"
             android:text="hola1234"
             android:typeface="sans">
@@ -45,7 +42,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/login_lIngresar"
         android:layout_width="86dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

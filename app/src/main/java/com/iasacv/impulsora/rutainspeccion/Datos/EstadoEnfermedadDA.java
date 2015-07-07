@@ -39,6 +39,7 @@ public class EstadoEnfermedadDA {
             throw e;
         }
     }
+
     public boolean InsertEstadoEnfermedad(EstadoMPE objEstadoEnfermedad) {
         try {
             boolean resul = true;

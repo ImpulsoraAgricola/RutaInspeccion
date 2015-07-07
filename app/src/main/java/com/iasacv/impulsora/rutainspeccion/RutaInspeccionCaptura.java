@@ -8,10 +8,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -19,35 +21,49 @@ import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
+import com.iasacv.impulsora.rutainspeccion.Modelo.Combo;
+import com.iasacv.impulsora.rutainspeccion.Modelo.PlaneacionRuta;
 import com.iasacv.impulsora.rutainspeccion.Modelo.RutaInspeccion;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Usuario;
 import com.iasacv.impulsora.rutainspeccion.Negocios.CatalogosBP;
+import com.iasacv.impulsora.rutainspeccion.Negocios.RutaInspeccionBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.WebServiceBP;
 
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by Administrator on 19/06/2015.
  */
 
-public class RutaInspeccionCaptura extends Activity {
+public class RutaInspeccionCaptura extends ActionBarActivity {
 
     //Variables para controles
-    private Spinner administrador_sCiclo;
-    private Button administrador_btnGuardar;
-    private TextView administrador_txtFecha;
-    private ImageButton administrador_btnFecha;
+    private EditText rutainspeccion_txtFolio;
+    private Spinner rutainspeccion_sCiclo;
+    private EditText rutainspeccion_txtCliente;
+    private EditText rutainspeccion_txtProductor;
+    private EditText rutainspeccion_txtPredio;
+    private EditText rutainspeccion_txtLote;
+    private EditText rutainspeccion_txtFecha;
+    private Button rutainspeccion_btnGuardar;
+    private Spinner rutainspeccion_sSistemaProduccion;
+    private Spinner rutainspeccion_sDesarrollo;
 
     //Variables
     WebServiceBP _objWebServiceBP;
     CatalogosBP _objCicloBP;
+    RutaInspeccionBP _objRutaInspeccionBP;
     Usuario _objUsuario;
     Ciclo _objCiclo;
     RutaInspeccion _objRutaInspeccion;
+    PlaneacionRuta _objPlaneacionRuta;
     private Ciclo[] listaCiclos;
-    private int mYear;
-    private int mMonth;
-    private int mDay;
+
+    int Folio;
+    private String mYear;
+    private String mMonth;
+    private String mDay;
 
     static final int DATE_DIALOG_ID = 0;
 
@@ -59,42 +75,34 @@ public class RutaInspeccionCaptura extends Activity {
         //Pasar contexto a las demas instancias
         _objWebServiceBP = new WebServiceBP(this);
         _objCicloBP = new CatalogosBP(this);
+        _objRutaInspeccionBP = new RutaInspeccionBP(this);
         _objUsuario = new Usuario();
         _objCiclo = new Ciclo();
         _objRutaInspeccion = new RutaInspeccion();
+        _objPlaneacionRuta = new PlaneacionRuta();
 
-        //Recuperar valores
-        getPreferences();
+        try {
+            //Recuperar valores
+            getPreferences();
 
-        //Obtener controles
-        getControles();
+            //Obtener controles
+            getControles();
 
-        administrador_btnFecha.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                showDialog(DATE_DIALOG_ID);
-            }
-        });
+            llenarCombos();
 
-        final Calendar c = Calendar.getInstance();
-        mYear = c.get(Calendar.YEAR);
-        mMonth = c.get(Calendar.MONTH);
-        mDay = c.get(Calendar.DAY_OF_MONTH);
-        updateDisplay();
+            eventosCombo();
 
-        //Guardar registro
-        administrador_btnGuardar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                _objRutaInspeccion = creaObjeto();
-                insertRutaInspeccion tarea = new insertRutaInspeccion();
-                tarea.execute();
-            }
-        });
+            cargarCabecero();
 
-        llenarCombos();
+            //_objRutaInspeccion = creaObjeto();
+            //insertRutaInspeccion tarea = new insertRutaInspeccion();
+            //tarea.execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private class insertRutaInspeccion extends AsyncTask<String,Integer,Boolean> {
+    private class insertRutaInspeccion extends AsyncTask<String, Integer, Boolean> {
 
         ProgressDialog loadProgressDialog;
 
@@ -105,26 +113,20 @@ public class RutaInspeccionCaptura extends Activity {
 
         protected Boolean doInBackground(String... params) {
             boolean result = true;
-            try
-            {
+            try {
                 result = _objWebServiceBP.insertRutaInspeccion(_objRutaInspeccion);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return result;
         }
 
         protected void onPostExecute(Boolean result) {
-            if (result)
-            {
+            if (result) {
                 Toast toastCorrecto = Toast.makeText(getApplicationContext(),
                         "La informacion se inserto correctamente!!", Toast.LENGTH_LONG);
                 toastCorrecto.show();
-            }
-            else
-            {
+            } else {
                 Toast toastError = Toast.makeText(getApplicationContext(),
                         "Error: Se produjo un error al insertar la informacion", Toast.LENGTH_LONG);
                 toastError.show();
@@ -133,76 +135,24 @@ public class RutaInspeccionCaptura extends Activity {
         }
     }
 
-    //Eventos de calendario
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    private void updateDisplay() {
-        this.administrador_txtFecha.setText(
-                new StringBuilder()
-                        .append(mDay).append("-")
-                        .append(mMonth + 1).append("-")
-                        .append(mYear).append(" "));
-    }
-
-    private DatePickerDialog.OnDateSetListener mDateSetListener =
-            new DatePickerDialog.OnDateSetListener() {
-                public void onDateSet(DatePicker view, int year,
-                                      int monthOfYear, int dayOfMonth) {
-                    mYear = year;
-                    mMonth = monthOfYear;
-                    mDay = dayOfMonth;
-                    updateDisplay();
-                }
-            };
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case DATE_DIALOG_ID:
-                return new DatePickerDialog(this,
-                        mDateSetListener,
-                        mYear, mMonth, mDay);
-        }
-        return null;
-    }
-
     //Llenar objetos
     public RutaInspeccion creaObjeto() {
         RutaInspeccion objRutaInspeccion = new RutaInspeccion();
         objRutaInspeccion.UsuarioClave = _objUsuario.Clave;
-        objRutaInspeccion.Fecha = this.administrador_txtFecha.getText().toString();
+        objRutaInspeccion.Fecha = this.rutainspeccion_txtFecha.getText().toString();
         objRutaInspeccion.CicloClave = _objCiclo.Clave;
         return objRutaInspeccion;
     }
 
-    //Rellenamos la lista con los nombres de los ciclos
-    public void llenarCombos(){
-        //Variables
-        listaCiclos = _objCicloBP.GetAllCiclos();
-        String[] ciclos = new String[listaCiclos.length];
-        for(int i=0; i<listaCiclos.length; i++)
-            ciclos[i] = listaCiclos[i].Nombre;
-        ArrayAdapter<String> adaptador = new ArrayAdapter<String>(RutaInspeccionCaptura.this, android.R.layout.simple_list_item_1, ciclos);
-        administrador_sCiclo = (Spinner)findViewById(R.id.administrador_sCiclo);
-        administrador_sCiclo.setAdapter(adaptador);
+    public void llenarCombos() {
+        List<Combo> listaCiclos = _objCicloBP.GetAllCiclosList();
+        ArrayAdapter<Combo> adapterCiclo = new ArrayAdapter<Combo>(RutaInspeccionCaptura.this, android.R.layout.simple_spinner_item, listaCiclos);
+        rutainspeccion_sCiclo.setAdapter(adapterCiclo);
 
-        //Eventos del combo
-        administrador_sCiclo.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    public void onItemSelected(AdapterView<?> parent,
-                                               android.view.View v, int position, long id) {
-                        parent.getItemAtPosition(position);
-                        _objCiclo = listaCiclos[position];
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                        _objCiclo = null;
-                    }
-                });
+        //Desarrolo de cultivo
+        List<Combo> listaEtapaFenologica = _objCicloBP.GetAllEtapaFenologica();
+        ArrayAdapter<Combo> adapterEtapaFenologica = new ArrayAdapter<Combo>(RutaInspeccionCaptura.this, android.R.layout.simple_spinner_item, listaEtapaFenologica);
+        rutainspeccion_sDesarrollo.setAdapter(adapterEtapaFenologica);
     }
 
     private void getPreferences() {
@@ -211,13 +161,60 @@ public class RutaInspeccionCaptura extends Activity {
         _objUsuario.RFC = prefs.getString("RFC", "");
         _objUsuario.Clave = Integer.valueOf(prefs.getString("Clave", ""));
         Bundle b = getIntent().getExtras();
-        int Folio = b.getInt("Folio");
+        Folio = b.getInt("Folio");
         String Date = b.getString("Fecha");
     }
 
-    private void getControles(){
-        administrador_txtFecha = (TextView)findViewById(R.id.administrador_txtFecha);
-        administrador_btnFecha = (ImageButton)findViewById(R.id.administrador_btnFecha);
-        administrador_btnGuardar = (Button)findViewById(R.id.administrador_btnGuardar);
+    private void getControles() {
+        rutainspeccion_txtFolio = (EditText) findViewById(R.id.rutainspeccion_txtFolio);
+        rutainspeccion_sCiclo = (Spinner) findViewById(R.id.rutainspeccion_sCiclo);
+        rutainspeccion_txtCliente = (EditText) findViewById(R.id.rutainspeccion_txtCliente);
+        rutainspeccion_txtProductor = (EditText) findViewById(R.id.rutainspeccion_txtProductor);
+        rutainspeccion_txtPredio = (EditText) findViewById(R.id.rutainspeccion_txtPredio);
+        rutainspeccion_txtLote = (EditText) findViewById(R.id.rutainspeccion_txtLote);
+        rutainspeccion_txtFecha = (EditText) findViewById(R.id.rutainspeccion_txtFecha);
+        rutainspeccion_btnGuardar = (Button) findViewById(R.id.rutainspeccion_btnGuardar);
+        //rutainspeccion_sSistemaProduccion = (Spinner) findViewById(R.id.rutainspeccion_sSistemaProduccion);
+        rutainspeccion_sDesarrollo = (Spinner) findViewById(R.id.rutainspeccion_sDesarrollo);
+    }
+
+    private void cargarCabecero() {
+        PlaneacionRuta objPlaneacionRuta = new PlaneacionRuta();
+        objPlaneacionRuta.Folio = Folio;
+        _objPlaneacionRuta = _objRutaInspeccionBP.GetPlaneacionRuta(objPlaneacionRuta);
+        rutainspeccion_txtFolio.setText(String.valueOf(_objPlaneacionRuta.Folio));
+        seleccionarValor(rutainspeccion_sCiclo, String.valueOf(_objPlaneacionRuta.CicloNombre));
+        rutainspeccion_txtCliente.setText(_objPlaneacionRuta.ClienteNombre);
+        rutainspeccion_txtProductor.setText(_objPlaneacionRuta.ProductorNombre);
+        rutainspeccion_txtPredio.setText(_objPlaneacionRuta.PredioNombre);
+        rutainspeccion_txtLote.setText(_objPlaneacionRuta.LoteNombre);
+        rutainspeccion_txtFecha.setText(_objPlaneacionRuta.Fecha);
+    }
+
+    private void seleccionarValor(Spinner _objSpinner, String valor) {
+        ArrayAdapter<Combo> objArrayAdapter = (ArrayAdapter<Combo>) _objSpinner.getAdapter();
+        for (int i = 0; i < objArrayAdapter.getCount(); i++) {
+            if (((Combo) objArrayAdapter.getItem(i)).getNombre().equals(valor)) {
+                _objSpinner.setSelection(i);
+            }
+        }
+    }
+
+    private void eventosCombo() {
+        //Etapa fenologica
+        rutainspeccion_sDesarrollo.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+                    public void onItemSelected(AdapterView<?> parent,
+                                               android.view.View v, int position, long id) {
+                        Combo objCombo;
+                        if(!(rutainspeccion_sDesarrollo.getSelectedItem() == null))
+                            objCombo = (Combo)rutainspeccion_sDesarrollo.getSelectedItem();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        _objCiclo = null;
+                    }
+                });
     }
 }

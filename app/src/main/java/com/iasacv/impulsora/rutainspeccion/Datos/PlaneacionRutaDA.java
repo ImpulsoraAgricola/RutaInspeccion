@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
+import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Item;
 import com.iasacv.impulsora.rutainspeccion.Modelo.PlaneacionRuta;
 import com.iasacv.impulsora.rutainspeccion.R;
@@ -27,6 +28,78 @@ public class PlaneacionRutaDA {
         objEntLibTools = new EntLibDBTools(context);
         objInspection=BitmapFactory.decodeResource(context.getResources(), R.drawable.inspection);
         objSurvey=BitmapFactory.decodeResource(context.getResources(), R.drawable.survey);
+    }
+
+    public String ArmaFiltro(PlaneacionRuta entidad) {
+        String cadena = "";
+        //--Clave del usuario
+        if (entidad.UsuarioClave != 0) {
+            cadena += "A.USUARCVE=" + entidad.UsuarioClave;
+        }
+        //--Clave del ciclo
+        if (entidad.CicloClave != 0) {
+            if (cadena != "") { cadena += " AND "; }
+            cadena += "A.CICLOCVE=" + entidad.CicloClave;
+        }
+        //--Fecha
+        if (entidad.Fecha != null) {
+            if (cadena != "") { cadena += " AND "; }
+            cadena += "A.PLANEFEC=" + entidad.Fecha;
+        }
+        //--Folio
+        if (entidad.Folio != 0) {
+            if (cadena != "") { cadena += " AND "; }
+            cadena += "A.PLADEFOL=" + entidad.Folio;
+        }
+        return cadena;
+    }
+
+    public PlaneacionRuta GetPlaneacionRuta(PlaneacionRuta objFiltro) {
+        try {
+            String filtro = ArmaFiltro(objFiltro);
+            PlaneacionRuta objPlaneacionRuta = new PlaneacionRuta();
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT USUARCVE,USUARNOM,A.CICLOCVE,CICLONOM,PLANEFEC,PLADEFOL,A.TIINSCVE," +
+                    "TIINSNOM,A.TIARTCVE,TIARTNOM,PERSOCVE,PERSONOM,PRODUCVE,PRODUNOM,PREDICVE,PREDINOM,PREDILAT,PREDILON,LOTESCVE," +
+                    "LOTESNOM,LOTESLAT,LOTESLON,PLADEASE,ARTICNOS,PLADEACO,ARTICNOC,PLADESTS,PLADEUSO " +
+                    "FROM BATPLADE A INNER JOIN IGMCICLO B ON (A.CICLOCVE=B.CICLOCVE) " +
+                    "INNER JOIN BACTIINS C ON (A.TIINSCVE=C.TIINSCVE) " +
+                    "INNER JOIN BACTIART D ON (A.TIARTCVE=D.TIARTCVE) " +
+                    "WHERE " + filtro);
+            while (objCursor.moveToNext()) {
+                objPlaneacionRuta.UsuarioClave = Integer.parseInt(objCursor.getString(0));
+                objPlaneacionRuta.UsuarioNombre = objCursor.getString(1);
+                objPlaneacionRuta.CicloClave = Integer.parseInt(objCursor.getString(2));
+                objPlaneacionRuta.CicloNombre = objCursor.getString(3);
+                objPlaneacionRuta.Fecha = objCursor.getString(4);
+                objPlaneacionRuta.Folio = Integer.parseInt(objCursor.getString(5));
+                objPlaneacionRuta.TipoInspeccionClave = Integer.parseInt(objCursor.getString(6));
+                objPlaneacionRuta.TipoInspeccionNombre = objCursor.getString(7);
+                objPlaneacionRuta.TipoArticuloClave = Integer.parseInt(objCursor.getString(8));
+                objPlaneacionRuta.TipoArticuloNombre = objCursor.getString(9);
+                objPlaneacionRuta.ClienteClave = Integer.parseInt(objCursor.getString(10));
+                objPlaneacionRuta.ClienteNombre = objCursor.getString(11);
+                objPlaneacionRuta.ProductorClave = Integer.parseInt(objCursor.getString(12));
+                objPlaneacionRuta.ProductorNombre = objCursor.getString(13);
+                objPlaneacionRuta.PredioClave = Integer.parseInt(objCursor.getString(14));
+                objPlaneacionRuta.PredioNombre = objCursor.getString(15);
+                objPlaneacionRuta.PredioLatitud = Double.parseDouble(objCursor.getString(16));
+                objPlaneacionRuta.PredioLongitud = Double.parseDouble(objCursor.getString(17));
+                objPlaneacionRuta.LoteClave = Integer.parseInt(objCursor.getString(18));
+                objPlaneacionRuta.LoteNombre = objCursor.getString(19);
+                objPlaneacionRuta.LoteLatitud = Double.parseDouble(objCursor.getString(20));
+                objPlaneacionRuta.LoteLongitud = Double.parseDouble(objCursor.getString(21));
+                objPlaneacionRuta.ArticuloSembrarClave = Integer.parseInt(objCursor.getString(22));
+                objPlaneacionRuta.ArticuloSembrarNombre = objCursor.getString(23);
+                objPlaneacionRuta.ArticuloCosecharClave = Integer.parseInt(objCursor.getString(24));
+                objPlaneacionRuta.ArticuloCosecharNombre = objCursor.getString(25);
+                objPlaneacionRuta.Estatus = objCursor.getString(26);
+                objPlaneacionRuta.Uso = objCursor.getString(27);
+            }
+            objCursor.close();
+            return objPlaneacionRuta;
+        } catch (SQLException e) {
+            throw e;
+        }
     }
 
     public List<PlaneacionRuta> GetAllPlaneacionRutaList() {
