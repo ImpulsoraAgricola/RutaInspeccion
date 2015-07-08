@@ -5,7 +5,11 @@ import android.database.Cursor;
 import android.database.SQLException;
 
 import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
+import com.iasacv.impulsora.rutainspeccion.Modelo.Combo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.EstadoMPE;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 01/07/2015.
@@ -19,21 +23,14 @@ public class EstadoMalezaDA {
         objEntLibTools = new EntLibDBTools(context);
     }
 
-    public EstadoMPE[] GetAllEstadoMaleza() {
+    public List<Combo> GetAllEstadoMalezaCombo() {
         try {
-            Cursor objCursor = objEntLibTools.executeCursor("SELECT * FROM BACESTMA WHERE ESTMASTS!=\"A\"");
-            EstadoMPE[] listaEstadoMaleza = new EstadoMPE[objCursor.getCount()];
-            int i = 0;
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT ESTMACVE,ESTMANOM FROM BACESTMA WHERE ESTMASTS!=\"A\"");
+            List<Combo> listEstadoMaleza = new ArrayList<Combo>();
             while (objCursor.moveToNext()) {
-                EstadoMPE objEstadoMPE = new EstadoMPE();
-                objEstadoMPE.Clave = Integer.parseInt(objCursor.getString(0));
-                objEstadoMPE.Nombre = objCursor.getString(1);
-                objEstadoMPE.Estatus = objCursor.getString(2);
-                objEstadoMPE.Uso = objCursor.getString(3);
-                listaEstadoMaleza[i] = objEstadoMPE;
-                i++;
+                listEstadoMaleza.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }
-            return listaEstadoMaleza;
+            return listEstadoMaleza;
         } catch (SQLException e) {
             throw e;
         }

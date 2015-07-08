@@ -344,11 +344,25 @@ public class Administrador extends ActionBarActivity {
                         alert.dismiss();
                         formatFecha = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         currentDate = formatFecha.format(new Date());
-                        //Creamos el nuevo formulario
-                        Intent i = new Intent(Administrador.this, RutaInspeccionCaptura.class);
-                        i.putExtra("Folio", objItem.getFolio());
-                        i.putExtra("Fecha", currentDate);
-                        startActivity(i);
+                        if (objItem.getTipoInspeccion() == 1) {
+                            //Creamos el nuevo formulario
+                            Intent i = new Intent(Administrador.this, InspeccionCampo.class);
+                            i.putExtra("CicloClave", objItem.getCicloClave());
+                            i.putExtra("UsuarioClave", objItem.getUsuarioClave());
+                            i.putExtra("Folio", objItem.getFolio());
+                            i.putExtra("Fecha", currentDate);
+                            startActivity(i);
+                        }
+                        else
+                        if (objItem.getTipoInspeccion() == 2) {
+                            //Creamos el nuevo formulario
+                            Intent i = new Intent(Administrador.this, DiagnosticoCultivo.class);
+                            i.putExtra("CicloClave", objItem.getCicloClave());
+                            i.putExtra("UsuarioClave", objItem.getUsuarioClave());
+                            i.putExtra("Folio", objItem.getFolio());
+                            i.putExtra("Fecha", currentDate);
+                            startActivity(i);
+                        }
                     }
                 });
         alert.setButton(DialogInterface.BUTTON_NEGATIVE, "No",

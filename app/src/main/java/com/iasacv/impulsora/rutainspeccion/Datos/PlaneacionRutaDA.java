@@ -124,15 +124,20 @@ public class PlaneacionRutaDA {
 
     public ArrayList<Item> GetAllPlaneacionRutaImage(int usuarioClave, String fecha) {
         try {
-            Cursor objCursor = objEntLibTools.executeCursor("SELECT PLADEFOL,PERSONOM,PRODUNOM,PREDINOM,LOTESNOM,PLADESTS FROM BATPLADE WHERE USUARCVE="+usuarioClave+" AND PLANEFEC='"+fecha+"' ORDER BY PLADEFOL");
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT CICLOCVE,USUARCVE,PLADEFOL,A.TIINSCVE,TIINSNOM,PERSONOM,PRODUNOM,PREDINOM,LOTESNOM,PLADESTS " +
+                    "FROM BATPLADE A INNER JOIN BACTIINS B ON (A.TIINSCVE=B.TIINSCVE) WHERE USUARCVE="+usuarioClave+" AND PLANEFEC='"+fecha+"' ORDER BY PLADEFOL");
             ArrayList<Item> listaPlaneacionRuta = new ArrayList<Item>();
             while (objCursor.moveToNext()) {
                 if(objCursor.getString(5).toString().equals("I"))
-                    listaPlaneacionRuta.add(new Item(Integer.parseInt(objCursor.getString(0)),objInspection,"Folio: "+objCursor.getString(0)+"\nCliente: "+objCursor.getString(1)+"\nProductor: "+
-                            objCursor.getString(2)+"\nPredio: "+objCursor.getString(3)+"\nLote: "+objCursor.getString(4)));
+                    listaPlaneacionRuta.add(new Item(Integer.parseInt(objCursor.getString(0)),Integer.parseInt(objCursor.getString(1)),
+                            Integer.parseInt(objCursor.getString(2)),Integer.parseInt(objCursor.getString(3)),objInspection,
+                            "Folio: "+objCursor.getString(2)+"\nCliente: "+objCursor.getString(5)+"\nProductor: "+ objCursor.getString(6)+
+                                    "\nPredio: "+objCursor.getString(7)+"\nLote: "+objCursor.getString(8)+"\nTipo de inspecci\u00F3n: "+objCursor.getString(4)));
                 else
-                    listaPlaneacionRuta.add(new Item(Integer.parseInt(objCursor.getString(0)),objSurvey,"Folio: "+objCursor.getString(0)+"\nCliente: "+objCursor.getString(1)+"\nProductor: "+
-                            objCursor.getString(2)+"\nPredio: "+objCursor.getString(3)+"\nLote: "+objCursor.getString(4)));
+                    listaPlaneacionRuta.add(new Item(Integer.parseInt(objCursor.getString(0)),Integer.parseInt(objCursor.getString(1)),
+                            Integer.parseInt(objCursor.getString(2)),Integer.parseInt(objCursor.getString(3)),objSurvey,
+                            "Folio: "+objCursor.getString(2)+"\nCliente: "+objCursor.getString(5)+"\nProductor: "+ objCursor.getString(6)+
+                                    "\nPredio: "+objCursor.getString(7)+"\nLote: "+objCursor.getString(8)+"\nTipo de inspecci\u00F3n: "+objCursor.getString(4)));
             }
             return listaPlaneacionRuta;
         } catch (SQLException e) {

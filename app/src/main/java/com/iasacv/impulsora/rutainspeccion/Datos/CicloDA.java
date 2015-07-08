@@ -58,14 +58,14 @@ public class CicloDA{
         }
     }
 
-    public List<Combo> GetAllCiclosList() {
+    public List<Combo> GetAllCicloCombo() {
         try {
-            Cursor objCursor = objEntLibTools.executeCursor("SELECT * FROM IGMCICLO");
-            List<Combo> listaCiclos = new ArrayList<Combo>();
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT CICLOCVE,CICLONOM FROM IGMCICLO");
+            List<Combo> listCiclo = new ArrayList<Combo>();
             while (objCursor.moveToNext()) {
-                listaCiclos.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
+                listCiclo.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }
-            return listaCiclos;
+            return listCiclo;
         } catch (SQLException e) {
             throw e;
         }

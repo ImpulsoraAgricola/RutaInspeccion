@@ -74,6 +74,41 @@ public class EntLibDBTools extends SQLiteOpenHelper {
             "[ESTENSTS] CHAR(1)  NOT NULL," +
             "[ESTENUSO] CHAR(1)  NOT NULL);";
 
+    //Sentencia SQL para crear la tabla de Sistema de produccion
+    private static String sqlBACSIPRO = "CREATE TABLE [BACSIPRO] (" +
+            "[SIPROCVE] INTEGER  NOT NULL PRIMARY KEY," +
+            "[SIPRONOM] VARCHAR(50)  NOT NULL," +
+            "[SIPROSTS] CHAR(1)  NOT NULL," +
+            "[SIPROUSO] CHAR(1)  NOT NULL);";
+
+    //Sentencia SQL para crear la tabla de Arreglo topologico
+    private static String sqlBACARTOP = "CREATE TABLE [BACARTOP] (" +
+            "[ARTOPCVE] INTEGER  NOT NULL PRIMARY KEY," +
+            "[ARTOPNOM] VARCHAR(50)  NOT NULL," +
+            "[ARTOPSTS] CHAR(1)  NOT NULL," +
+            "[ARTOPUSO] CHAR(1)  NOT NULL);";
+
+    //Sentencia SQL para crear la tabla de Tipo de riego
+    private static String sqlBACTIRIE = "CREATE TABLE [BACTIRIE] (" +
+            "[TIRIECVE] INTEGER  NOT NULL PRIMARY KEY," +
+            "[TIRIENOM] VARCHAR(50)  NOT NULL," +
+            "[TIRIESTS] CHAR(1)  NOT NULL," +
+            "[TIRIEUSO] CHAR(1)  NOT NULL);";
+
+    //Sentencia SQL para crear la tabla de Condiciones de desarrollo
+    private static String sqlBACCONDI = "CREATE TABLE [BACCONDI] (" +
+            "[CONDICVE] INTEGER  NOT NULL PRIMARY KEY," +
+            "[CONDINOM] VARCHAR(50)  NOT NULL," +
+            "[CONDISTS] CHAR(1)  NOT NULL," +
+            "[CONDIUSO] CHAR(1)  NOT NULL);";
+
+    //Sentencia SQL para crear la tabla de Recomendaciones
+    private static String sqlBACRECOM = "CREATE TABLE [BACRECOM] (" +
+            "[RECOMCVE] INTEGER  NOT NULL PRIMARY KEY," +
+            "[RECOMNOM] VARCHAR(50)  NOT NULL," +
+            "[RECOMSTS] CHAR(1)  NOT NULL," +
+            "[RECOMUSO] CHAR(1)  NOT NULL);";
+
     //Sentencia SQL para crear la tabla de Planeacion detalle
     private static String sqlBATPLADE = "CREATE TABLE [BATPLADE] (" +
             "[USUARCVE] INTEGER  NOT NULL," +
@@ -160,6 +195,11 @@ public class EntLibDBTools extends SQLiteOpenHelper {
         db.execSQL(sqlBACESTMA);
         db.execSQL(sqlBACESTPL);
         db.execSQL(sqlBACESTEN);
+        db.execSQL(sqlBACSIPRO);
+        db.execSQL(sqlBACARTOP);
+        db.execSQL(sqlBACTIRIE);
+        db.execSQL(sqlBACCONDI);
+        db.execSQL(sqlBACRECOM);
         db.execSQL(sqlBATPLADE);
     }
 
@@ -179,6 +219,11 @@ public class EntLibDBTools extends SQLiteOpenHelper {
         myDataBase.execSQL("DROP TABLE IF EXISTS BACESTMA");
         myDataBase.execSQL("DROP TABLE IF EXISTS BACESTPL");
         myDataBase.execSQL("DROP TABLE IF EXISTS BACESTEN");
+        myDataBase.execSQL("DROP TABLE IF EXISTS BACSIPRO");
+        myDataBase.execSQL("DROP TABLE IF EXISTS BACARTOP");
+        myDataBase.execSQL("DROP TABLE IF EXISTS BACTIRIE");
+        myDataBase.execSQL("DROP TABLE IF EXISTS BACCONDI");
+        myDataBase.execSQL("DROP TABLE IF EXISTS BACRECOM");
         myDataBase.execSQL("DROP TABLE IF EXISTS BATPLADE");
 
         //Se crea la nueva version de las tabla
@@ -190,6 +235,11 @@ public class EntLibDBTools extends SQLiteOpenHelper {
         myDataBase.execSQL(sqlBACESTMA);
         myDataBase.execSQL(sqlBACESTPL);
         myDataBase.execSQL(sqlBACESTEN);
+        myDataBase.execSQL(sqlBACSIPRO);
+        myDataBase.execSQL(sqlBACARTOP);
+        myDataBase.execSQL(sqlBACTIRIE);
+        myDataBase.execSQL(sqlBACCONDI);
+        myDataBase.execSQL(sqlBACRECOM);
         myDataBase.execSQL(sqlBATPLADE);
     }
 

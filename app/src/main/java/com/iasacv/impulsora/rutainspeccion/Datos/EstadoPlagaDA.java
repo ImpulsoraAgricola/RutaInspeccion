@@ -5,7 +5,11 @@ import android.database.Cursor;
 import android.database.SQLException;
 
 import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
+import com.iasacv.impulsora.rutainspeccion.Modelo.Combo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.EstadoMPE;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 01/07/2015.
@@ -19,21 +23,14 @@ public class EstadoPlagaDA {
         objEntLibTools = new EntLibDBTools(context);
     }
 
-    public EstadoMPE[] GetAllEstadoPlaga() {
+    public List<Combo> GetAllEstadoPlagaCombo() {
         try {
-            Cursor objCursor = objEntLibTools.executeCursor("SELECT * FROM BACESTPLA WHERE ESTPLSTS!=\"A\"");
-            EstadoMPE[] listaEstadoPlaga = new EstadoMPE[objCursor.getCount()];
-            int i = 0;
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT ESTPLACVE,ESTPLANOM FROM BACESTPLA WHERE ESTPLSTS!=\"A\"");
+            List<Combo> listEstadoPlaga = new ArrayList<Combo>();
             while (objCursor.moveToNext()) {
-                EstadoMPE objEstadoMPE = new EstadoMPE();
-                objEstadoMPE.Clave = Integer.parseInt(objCursor.getString(0));
-                objEstadoMPE.Nombre = objCursor.getString(1);
-                objEstadoMPE.Estatus = objCursor.getString(2);
-                objEstadoMPE.Uso = objCursor.getString(3);
-                listaEstadoPlaga[i] = objEstadoMPE;
-                i++;
+                listEstadoPlaga.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }
-            return listaEstadoPlaga;
+            return listEstadoPlaga;
         } catch (SQLException e) {
             throw e;
         }

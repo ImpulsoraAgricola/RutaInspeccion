@@ -5,8 +5,12 @@ import android.database.Cursor;
 import android.database.SQLException;
 
 import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
+import com.iasacv.impulsora.rutainspeccion.Modelo.Combo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.EstadoMPE;
 import com.iasacv.impulsora.rutainspeccion.Modelo.PotencialRendimiento;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 01/07/2015.
@@ -19,21 +23,14 @@ public class PotencialRendimientoDA {
         objEntLibTools = new EntLibDBTools(context);
     }
 
-    public PotencialRendimiento[] GetAllPotencialRendimiento() {
+    public List<Combo> GetAllPotencialRendimientoCombo() {
         try {
-            Cursor objCursor = objEntLibTools.executeCursor("SELECT * FROM BACPOTRE WHERE POTRESTS!=\"A\"");
-            PotencialRendimiento[] listaPotencialRendimiento = new PotencialRendimiento[objCursor.getCount()];
-            int i = 0;
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT POTRECVE,POTRENOM FROM BACPOTRE WHERE POTRESTS!=\"A\"");
+            List<Combo> listPotencialRendimiento = new ArrayList<Combo>();
             while (objCursor.moveToNext()) {
-                PotencialRendimiento objPotencialRendimiento = new PotencialRendimiento();
-                objPotencialRendimiento.Clave = Integer.parseInt(objCursor.getString(0));
-                objPotencialRendimiento.Nombre = objCursor.getString(1);
-                objPotencialRendimiento.Estatus = objCursor.getString(2);
-                objPotencialRendimiento.Uso = objCursor.getString(3);
-                listaPotencialRendimiento[i] = objPotencialRendimiento;
-                i++;
+                listPotencialRendimiento.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }
-            return listaPotencialRendimiento;
+            return listPotencialRendimiento;
         } catch (SQLException e) {
             throw e;
         }

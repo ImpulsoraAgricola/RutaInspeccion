@@ -30,8 +30,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RutaInspeccionCaptura"
-            android:label="@string/title_activity_rutainspeccion">
+            android:name=".DiagnosticoCultivo"
+            android:label="@string/title_activity_diagnostico_cultivo">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".InspeccionCampo"
+            android:label="@string/title_activity_diagnostico_cultivo">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

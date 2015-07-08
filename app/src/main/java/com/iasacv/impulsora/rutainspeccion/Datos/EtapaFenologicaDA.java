@@ -24,14 +24,14 @@ public class EtapaFenologicaDA {
         objEntLibTools = new EntLibDBTools(context);
     }
 
-    public List<Combo> GetAllEtapaFenologica() {
+    public List<Combo> GetAllEtapaFenologicaCombo() {
         try {
-            Cursor objCursor = objEntLibTools.executeCursor("SELECT * FROM BACETAFE WHERE ETAFESTS=\"A\"");
-            List<Combo> listaEtapaFenologica = new ArrayList<Combo>();
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT ETAFECVE,ETAFENOM FROM BACETAFE WHERE ETAFESTS=\"A\"");
+            List<Combo> listEtapaFenologica = new ArrayList<Combo>();
             while (objCursor.moveToNext()) {
-                listaEtapaFenologica.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
+                listEtapaFenologica.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }
-            return listaEtapaFenologica;
+            return listEtapaFenologica;
         } catch (SQLException e) {
             throw e;
         }

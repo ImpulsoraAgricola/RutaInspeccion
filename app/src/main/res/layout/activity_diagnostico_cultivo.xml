@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".DiagnosticoCultivo">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/fondo"
-        android:orientation="vertical"
-        tools:context=".RutaInspeccion">
+        android:orientation="vertical">
 
         <TextView
             style="?android:attr/listSeparatorTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical|center_horizontal"
-            android:text="@string/activity_rutainspeccion_title_sDatosGenerales"
+            android:text="@string/activity_diagnostico_cultivo_title_sDatosGenerales"
             android:textSize="15dp"
             android:typeface="sans" />
 
@@ -28,7 +29,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/activity_rutainspeccion_txtFolio"
+                android:text="@string/activity_diagnostico_cultivo_txtFolio"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
@@ -48,7 +49,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/activity_rutainspeccion_sCiclo"
+                android:text="@string/activity_diagnostico_cultivo_sCiclo"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <Spinner
@@ -69,7 +70,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/activity_rutainspeccion_txtCliente"
+                android:text="@string/activity_diagnostico_cultivo_txtCliente"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
@@ -90,7 +91,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/activity_rutainspeccion_txtProductor"
+                android:text="@string/activity_diagnostico_cultivo_txtProductor"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
@@ -111,7 +112,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/activity_rutainspeccion_txtPredio"
+                android:text="@string/activity_diagnostico_cultivo_txtPredio"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
@@ -131,7 +132,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/activity_rutainspeccion_txtLote"
+                android:text="@string/activity_diagnostico_cultivo_txtLote"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
@@ -151,7 +152,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/activity_rutainspeccion_txtFecha"
+                android:text="@string/activity_diagnostico_cultivo_txtFecha"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
@@ -169,7 +170,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical|center_horizontal"
-            android:text="@string/activity_rutainspeccion_sSiembra"
+            android:text="@string/activity_diagnostico_cultivo_sSiembra"
             android:textSize="15dp"
             android:typeface="sans" />
 
@@ -178,7 +179,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical|center_horizontal"
-            android:text="@string/activity_rutainspeccion_title_sDesarrolo"
+            android:text="@string/activity_diagnostico_cultivo_title_sDesarrolo"
             android:textSize="15dp"
             android:typeface="sans" />
 
@@ -190,7 +191,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/activity_rutainspeccion_sDesarrolo"
+                android:text="@string/activity_diagnostico_cultivo_sDesarrolo"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <Spinner
@@ -210,7 +211,7 @@
                 android:id="@+id/rutainspeccion_btnGuardar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/activity_rutainspeccion_btnGuardar" />
+                android:text="@string/activity_diagnostico_cultivo_btnGuardar" />
 
         </LinearLayout>
     </LinearLayout>

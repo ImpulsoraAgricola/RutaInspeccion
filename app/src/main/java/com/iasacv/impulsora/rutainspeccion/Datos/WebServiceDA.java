@@ -5,13 +5,20 @@ import android.content.Context;
 
 import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
+import com.iasacv.impulsora.rutainspeccion.Modelo.CondicionDesarrollo;
+import com.iasacv.impulsora.rutainspeccion.Modelo.Enfermedad;
 import com.iasacv.impulsora.rutainspeccion.Modelo.EstadoMPE;
 import com.iasacv.impulsora.rutainspeccion.Modelo.EtapaFenologica;
+import com.iasacv.impulsora.rutainspeccion.Modelo.Maleza;
+import com.iasacv.impulsora.rutainspeccion.Modelo.Plaga;
 import com.iasacv.impulsora.rutainspeccion.Modelo.PlaneacionRuta;
 import com.iasacv.impulsora.rutainspeccion.Modelo.PotencialRendimiento;
+import com.iasacv.impulsora.rutainspeccion.Modelo.Recomendacion;
 import com.iasacv.impulsora.rutainspeccion.Modelo.RutaInspeccion;
+import com.iasacv.impulsora.rutainspeccion.Modelo.SistemaProduccion;
 import com.iasacv.impulsora.rutainspeccion.Modelo.TipoArticulo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.TipoInspeccion;
+import com.iasacv.impulsora.rutainspeccion.Modelo.TipoRiego;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Usuario;
 
 import org.ksoap2.SoapEnvelope;
@@ -41,6 +48,13 @@ public class WebServiceDA extends Activity {
     private EstadoPlagaDA _objEstadoPlagaDA;
     private EstadoEnfermedadDA _objEstadoEnfermedadDA;
     private PlaneacionRutaDA _objPlaneacionRutaDA;
+    private SistemaProduccionDA _objSistemaProduccionDA;
+    private TipoRiegoDA _objTipoRiegoDA;
+    private CondicionDesarrolloDA _objCondicionDesarrolloDA;
+    private RecomendacionDA _objRecomendacionDA;
+    private PlagaDA _objPlagaDA;
+    private MalezaDA _objMalezaDA;
+    private EnfermedadDA _objEnfermedadDA;
 
     public WebServiceDA(Context context) {
         _objEntLibTools = new EntLibDBTools(context);
@@ -53,6 +67,13 @@ public class WebServiceDA extends Activity {
         _objEstadoPlagaDA = new EstadoPlagaDA(context);
         _objEstadoEnfermedadDA = new EstadoEnfermedadDA(context);
         _objPlaneacionRutaDA = new PlaneacionRutaDA(context);
+        _objSistemaProduccionDA = new SistemaProduccionDA(context);
+        _objTipoRiegoDA = new TipoRiegoDA(context);
+        _objCondicionDesarrolloDA = new CondicionDesarrolloDA(context);
+        _objRecomendacionDA = new RecomendacionDA(context);
+        _objPlagaDA = new PlagaDA(context);
+        _objMalezaDA = new MalezaDA(context);
+        _objEnfermedadDA = new EnfermedadDA(context);
     }
 
     //Variable para Web Services
@@ -280,6 +301,195 @@ public class WebServiceDA extends Activity {
                 objEstadoEnfermedad.Estatus = ic.getProperty(2).toString();
                 objEstadoEnfermedad.Uso = ic.getProperty(3).toString();
                 resul = _objEstadoEnfermedadDA.InsertEstadoEnfermedad(objEstadoEnfermedad);
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+
+        //Actualizar tabla de sistema de produccion
+        SistemaProduccion[] listaSistemaProduccion;
+        METHOD_NAME = "GetAllSistemaProduccion";
+        SOAP_ACTION = NAMESPACE+"GetAllSistemaProduccion";
+        request = new SoapObject(NAMESPACE, METHOD_NAME);
+        envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        request.addProperty("usuario", usuario);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(request);
+        transporte = new HttpTransportSE(URL);
+        try {
+            transporte.call(SOAP_ACTION, envelope);
+            SoapObject resSoap = (SoapObject) envelope.getResponse();
+            listaSistemaProduccion = new SistemaProduccion[resSoap.getPropertyCount()];
+            for (int i = 0; i < listaSistemaProduccion.length; i++) {
+                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                SistemaProduccion objSistemaProduccion = new SistemaProduccion();
+                objSistemaProduccion.Clave = Integer.parseInt(ic.getProperty(0).toString());
+                objSistemaProduccion.Nombre = ic.getProperty(1).toString();
+                objSistemaProduccion.Estatus = ic.getProperty(2).toString();
+                objSistemaProduccion.Uso = ic.getProperty(3).toString();
+                resul = _objSistemaProduccionDA.InsertSistemaProduccion(objSistemaProduccion);
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+
+        //Actualizar tabla de tipo de riego
+        TipoRiego[] listaTipoRiego;
+        METHOD_NAME = "GetAllTipoRiego";
+        SOAP_ACTION = NAMESPACE+"GetAllTipoRiego";
+        request = new SoapObject(NAMESPACE, METHOD_NAME);
+        envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        request.addProperty("usuario", usuario);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(request);
+        transporte = new HttpTransportSE(URL);
+        try {
+            transporte.call(SOAP_ACTION, envelope);
+            SoapObject resSoap = (SoapObject) envelope.getResponse();
+            listaTipoRiego = new TipoRiego[resSoap.getPropertyCount()];
+            for (int i = 0; i < listaTipoRiego.length; i++) {
+                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                TipoRiego objTipoRiego = new TipoRiego();
+                objTipoRiego.Clave = Integer.parseInt(ic.getProperty(0).toString());
+                objTipoRiego.Nombre = ic.getProperty(1).toString();
+                objTipoRiego.Estatus = ic.getProperty(2).toString();
+                objTipoRiego.Uso = ic.getProperty(3).toString();
+                resul = _objTipoRiegoDA.InsertTipoRiego(objTipoRiego);
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+
+        //Actualizar tabla de condicion de desarrollo
+        CondicionDesarrollo[] listaCondicionDesarrollo;
+        METHOD_NAME = "GetAllCondicionDesarrollo";
+        SOAP_ACTION = NAMESPACE+"GetAllCondicionDesarrollo";
+        request = new SoapObject(NAMESPACE, METHOD_NAME);
+        envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        request.addProperty("usuario", usuario);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(request);
+        transporte = new HttpTransportSE(URL);
+        try {
+            transporte.call(SOAP_ACTION, envelope);
+            SoapObject resSoap = (SoapObject) envelope.getResponse();
+            listaCondicionDesarrollo = new CondicionDesarrollo[resSoap.getPropertyCount()];
+            for (int i = 0; i < listaCondicionDesarrollo.length; i++) {
+                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                CondicionDesarrollo objCondicionDesarrollo = new CondicionDesarrollo();
+                objCondicionDesarrollo.Clave = Integer.parseInt(ic.getProperty(0).toString());
+                objCondicionDesarrollo.Nombre = ic.getProperty(1).toString();
+                objCondicionDesarrollo.Estatus = ic.getProperty(2).toString();
+                objCondicionDesarrollo.Uso = ic.getProperty(3).toString();
+                resul = _objCondicionDesarrolloDA.InsertCondicionDesarrollo(objCondicionDesarrollo);
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+
+        //Actualizar tabla de recomendacion
+        Recomendacion[] listaRecomendacion;
+        METHOD_NAME = "GetAllRecomendacion";
+        SOAP_ACTION = NAMESPACE+"GetAllRecomendacion";
+        request = new SoapObject(NAMESPACE, METHOD_NAME);
+        envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        request.addProperty("usuario", usuario);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(request);
+        transporte = new HttpTransportSE(URL);
+        try {
+            transporte.call(SOAP_ACTION, envelope);
+            SoapObject resSoap = (SoapObject) envelope.getResponse();
+            listaRecomendacion = new Recomendacion[resSoap.getPropertyCount()];
+            for (int i = 0; i < listaRecomendacion.length; i++) {
+                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                Recomendacion objRecomendacion = new Recomendacion();
+                objRecomendacion.Clave = Integer.parseInt(ic.getProperty(0).toString());
+                objRecomendacion.Nombre = ic.getProperty(1).toString();
+                objRecomendacion.Estatus = ic.getProperty(2).toString();
+                objRecomendacion.Uso = ic.getProperty(3).toString();
+                resul = _objRecomendacionDA.InsertRecomendacion(objRecomendacion);
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+
+        //Actualizar tabla de plaga
+        Plaga[] listaPlaga;
+        METHOD_NAME = "GetAllPlaga";
+        SOAP_ACTION = NAMESPACE+"GetAllPlaga";
+        request = new SoapObject(NAMESPACE, METHOD_NAME);
+        envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        request.addProperty("usuario", usuario);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(request);
+        transporte = new HttpTransportSE(URL);
+        try {
+            transporte.call(SOAP_ACTION, envelope);
+            SoapObject resSoap = (SoapObject) envelope.getResponse();
+            listaPlaga = new Plaga[resSoap.getPropertyCount()];
+            for (int i = 0; i < listaPlaga.length; i++) {
+                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                Plaga objPlaga = new Plaga();
+                objPlaga.Clave = Integer.parseInt(ic.getProperty(0).toString());
+                objPlaga.Nombre = ic.getProperty(1).toString();
+                objPlaga.Estatus = ic.getProperty(2).toString();
+                objPlaga.Uso = ic.getProperty(3).toString();
+                resul = _objPlagaDA.InsertPlaga(objPlaga);
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+
+        //Actualizar tabla de enfermedad
+        Enfermedad[] listaEnfermedad;
+        METHOD_NAME = "GetAllEnfermedad";
+        SOAP_ACTION = NAMESPACE+"GetAllEnfermedad";
+        request = new SoapObject(NAMESPACE, METHOD_NAME);
+        envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        request.addProperty("usuario", usuario);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(request);
+        transporte = new HttpTransportSE(URL);
+        try {
+            transporte.call(SOAP_ACTION, envelope);
+            SoapObject resSoap = (SoapObject) envelope.getResponse();
+            listaEnfermedad = new Enfermedad[resSoap.getPropertyCount()];
+            for (int i = 0; i < listaEnfermedad.length; i++) {
+                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                Enfermedad objEnfermedad = new Enfermedad();
+                objEnfermedad.Clave = Integer.parseInt(ic.getProperty(0).toString());
+                objEnfermedad.Nombre = ic.getProperty(1).toString();
+                objEnfermedad.Estatus = ic.getProperty(2).toString();
+                objEnfermedad.Uso = ic.getProperty(3).toString();
+                resul = _objEnfermedadDA.InsertEnfermedad(objEnfermedad);
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+
+        //Actualizar tabla de maleza
+        Maleza[] listaMaleza;
+        METHOD_NAME = "GetAllMaleza";
+        SOAP_ACTION = NAMESPACE+"GetAllMaleza";
+        request = new SoapObject(NAMESPACE, METHOD_NAME);
+        envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        request.addProperty("usuario", usuario);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(request);
+        transporte = new HttpTransportSE(URL);
+        try {
+            transporte.call(SOAP_ACTION, envelope);
+            SoapObject resSoap = (SoapObject) envelope.getResponse();
+            listaMaleza = new Maleza[resSoap.getPropertyCount()];
+            for (int i = 0; i < listaMaleza.length; i++) {
+                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                Maleza objMaleza = new Maleza();
+                objMaleza.Clave = Integer.parseInt(ic.getProperty(0).toString());
+                objMaleza.Nombre = ic.getProperty(1).toString();
+                objMaleza.Estatus = ic.getProperty(2).toString();
+                objMaleza.Uso = ic.getProperty(3).toString();
+                resul = _objMalezaDA.InsertMaleza(objMaleza);
             }
         } catch (Exception e) {
             throw e;

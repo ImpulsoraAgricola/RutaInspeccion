@@ -6,7 +6,11 @@ import android.database.SQLException;
 
 import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
+import com.iasacv.impulsora.rutainspeccion.Modelo.Combo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.EstadoMPE;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 01/07/2015.
@@ -20,21 +24,14 @@ public class EstadoEnfermedadDA {
         objEntLibTools = new EntLibDBTools(context);
     }
 
-    public EstadoMPE[] GetAllEstadoEnfermedad() {
+    public List<Combo> GetAllEstadoEnfermedadCombo() {
         try {
-            Cursor objCursor = objEntLibTools.executeCursor("SELECT * FROM BACESTEN WHERE ESTENSTS!=\"A\"");
-            EstadoMPE[] listaEstadoEnfermedad = new EstadoMPE[objCursor.getCount()];
-            int i = 0;
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT ESTENCVE,ESTENNOM FROM BACESTEN WHERE ESTENSTS!=\"A\"");
+            List<Combo> listEstadoEnfermedad = new ArrayList<Combo>();
             while (objCursor.moveToNext()) {
-                EstadoMPE objEstadoMPE = new EstadoMPE();
-                objEstadoMPE.Clave = Integer.parseInt(objCursor.getString(0));
-                objEstadoMPE.Nombre = objCursor.getString(1);
-                objEstadoMPE.Estatus = objCursor.getString(2);
-                objEstadoMPE.Uso = objCursor.getString(3);
-                listaEstadoEnfermedad[i] = objEstadoMPE;
-                i++;
+                listEstadoEnfermedad.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }
-            return listaEstadoEnfermedad;
+            return listEstadoEnfermedad;
         } catch (SQLException e) {
             throw e;
         }

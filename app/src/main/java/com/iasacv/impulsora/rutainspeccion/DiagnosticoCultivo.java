@@ -1,23 +1,16 @@
 package com.iasacv.impulsora.rutainspeccion;
 
-import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.DatePicker;
 import android.widget.Toast;
 
 import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
@@ -29,14 +22,13 @@ import com.iasacv.impulsora.rutainspeccion.Negocios.CatalogosBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.RutaInspeccionBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.WebServiceBP;
 
-import java.util.Calendar;
 import java.util.List;
 
 /**
  * Created by Administrator on 19/06/2015.
  */
 
-public class RutaInspeccionCaptura extends ActionBarActivity {
+public class DiagnosticoCultivo extends ActionBarActivity {
 
     //Variables para controles
     private EditText rutainspeccion_txtFolio;
@@ -60,7 +52,10 @@ public class RutaInspeccionCaptura extends ActionBarActivity {
     PlaneacionRuta _objPlaneacionRuta;
     private Ciclo[] listaCiclos;
 
+    int CicloClave;
+    int UsuarioClave;
     int Folio;
+    String Fecha;
     private String mYear;
     private String mMonth;
     private String mDay;
@@ -70,7 +65,7 @@ public class RutaInspeccionCaptura extends ActionBarActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rutainspeccion);
+        setContentView(R.layout.activity_diagnostico_cultivo);
 
         //Pasar contexto a las demas instancias
         _objWebServiceBP = new WebServiceBP(this);
@@ -94,9 +89,6 @@ public class RutaInspeccionCaptura extends ActionBarActivity {
 
             cargarCabecero();
 
-            //_objRutaInspeccion = creaObjeto();
-            //insertRutaInspeccion tarea = new insertRutaInspeccion();
-            //tarea.execute();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -108,7 +100,7 @@ public class RutaInspeccionCaptura extends ActionBarActivity {
 
         @Override
         protected void onPreExecute() {
-            loadProgressDialog = ProgressDialog.show(RutaInspeccionCaptura.this, "", "Insertando informacion...", true, false);
+            loadProgressDialog = ProgressDialog.show(DiagnosticoCultivo.this, "", "Insertando informacion...", true, false);
         }
 
         protected Boolean doInBackground(String... params) {
@@ -145,13 +137,13 @@ public class RutaInspeccionCaptura extends ActionBarActivity {
     }
 
     public void llenarCombos() {
-        List<Combo> listaCiclos = _objCicloBP.GetAllCiclosList();
-        ArrayAdapter<Combo> adapterCiclo = new ArrayAdapter<Combo>(RutaInspeccionCaptura.this, android.R.layout.simple_spinner_item, listaCiclos);
+        List<Combo> listaCiclos = _objCicloBP.GetAllCicloCombo();
+        ArrayAdapter<Combo> adapterCiclo = new ArrayAdapter<Combo>(DiagnosticoCultivo.this, android.R.layout.simple_spinner_item, listaCiclos);
         rutainspeccion_sCiclo.setAdapter(adapterCiclo);
 
         //Desarrolo de cultivo
-        List<Combo> listaEtapaFenologica = _objCicloBP.GetAllEtapaFenologica();
-        ArrayAdapter<Combo> adapterEtapaFenologica = new ArrayAdapter<Combo>(RutaInspeccionCaptura.this, android.R.layout.simple_spinner_item, listaEtapaFenologica);
+        List<Combo> listaEtapaFenologica = _objCicloBP.GetAllEtapaFenologicaCombo();
+        ArrayAdapter<Combo> adapterEtapaFenologica = new ArrayAdapter<Combo>(DiagnosticoCultivo.this, android.R.layout.simple_spinner_item, listaEtapaFenologica);
         rutainspeccion_sDesarrollo.setAdapter(adapterEtapaFenologica);
     }
 
@@ -161,8 +153,10 @@ public class RutaInspeccionCaptura extends ActionBarActivity {
         _objUsuario.RFC = prefs.getString("RFC", "");
         _objUsuario.Clave = Integer.valueOf(prefs.getString("Clave", ""));
         Bundle b = getIntent().getExtras();
+        CicloClave = b.getInt("CicloClave");
+        UsuarioClave = b.getInt("UsuarioClave");
         Folio = b.getInt("Folio");
-        String Date = b.getString("Fecha");
+        Fecha = b.getString("Fecha");
     }
 
     private void getControles() {
@@ -218,3 +212,4 @@ public class RutaInspeccionCaptura extends ActionBarActivity {
                 });
     }
 }
+

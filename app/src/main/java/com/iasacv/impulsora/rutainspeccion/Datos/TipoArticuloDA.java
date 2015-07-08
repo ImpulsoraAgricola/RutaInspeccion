@@ -5,8 +5,12 @@ import android.database.Cursor;
 import android.database.SQLException;
 
 import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
+import com.iasacv.impulsora.rutainspeccion.Modelo.Combo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.EstadoMPE;
 import com.iasacv.impulsora.rutainspeccion.Modelo.TipoArticulo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 01/07/2015.
@@ -20,21 +24,14 @@ public class TipoArticuloDA {
         objEntLibTools = new EntLibDBTools(context);
     }
 
-    public TipoArticulo[] GetAllTipoArticulo() {
+    public List<Combo> GetAllTipoArticuloCombo() {
         try {
-            Cursor objCursor = objEntLibTools.executeCursor("SELECT * FROM BACTIART WHERE TIARTSTS!=\"A\"");
-            TipoArticulo[] listaTipoArticulo = new TipoArticulo[objCursor.getCount()];
-            int i = 0;
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT TIARTCVE,TIARTNOM FROM BACTIART WHERE TIARTSTS!=\"A\"");
+            List<Combo> listTipoArticulo = new ArrayList<Combo>();
             while (objCursor.moveToNext()) {
-                TipoArticulo objTipoArticulo = new TipoArticulo();
-                objTipoArticulo.Clave = Integer.parseInt(objCursor.getString(0));
-                objTipoArticulo.Nombre = objCursor.getString(1);
-                objTipoArticulo.Estatus = objCursor.getString(2);
-                objTipoArticulo.Uso = objCursor.getString(3);
-                listaTipoArticulo[i] = objTipoArticulo;
-                i++;
+                listTipoArticulo.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }
-            return listaTipoArticulo;
+            return listTipoArticulo;
         } catch (SQLException e) {
             throw e;
         }

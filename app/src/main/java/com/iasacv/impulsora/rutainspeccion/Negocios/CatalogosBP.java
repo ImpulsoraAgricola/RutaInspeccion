@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.SQLException;
 import android.widget.Spinner;
 
+import com.iasacv.impulsora.rutainspeccion.Datos.ArregloTopologicoDA;
 import com.iasacv.impulsora.rutainspeccion.Datos.CicloDA;
 import com.iasacv.impulsora.rutainspeccion.Datos.EstadoEnfermedadDA;
 import com.iasacv.impulsora.rutainspeccion.Datos.EstadoMalezaDA;
@@ -36,6 +37,7 @@ public class CatalogosBP {
     private PotencialRendimientoDA _objPotencialRendimientoDA;
     private TipoArticuloDA _objTipoArticuloDA;
     private TipoInspeccionDA _objTipoInspeccionDA;
+    private ArregloTopologicoDA _objArregloTopologicoDA;
 
     public CatalogosBP(Context context) {
         _objCicloDA = new CicloDA(context);
@@ -46,6 +48,7 @@ public class CatalogosBP {
         _objPotencialRendimientoDA = new PotencialRendimientoDA(context);
         _objTipoArticuloDA = new TipoArticuloDA(context);
         _objTipoInspeccionDA = new TipoInspeccionDA(context);
+        _objArregloTopologicoDA = new ArregloTopologicoDA(context);
     }
 
     //Ciclo
@@ -57,9 +60,9 @@ public class CatalogosBP {
             throw e;
         }
     }
-    public List<Combo> GetAllCiclosList() {
+    public List<Combo> GetAllCicloCombo() {
         try {
-            List<Combo> listaCiclos = _objCicloDA.GetAllCiclosList();
+            List<Combo> listaCiclos = _objCicloDA.GetAllCicloCombo();
             return listaCiclos;
         } catch (SQLException e) {
             throw e;
@@ -83,70 +86,80 @@ public class CatalogosBP {
     }
 
     //Estado enfermedad
-    public EstadoMPE[] GetAllEstadoEnfermedad() {
+    public List<Combo> GetAllEstadoEnfermedadCombo() {
         try {
-            EstadoMPE[] listaEstadoEnfermedad = _objEstadoEnfermedadDA.GetAllEstadoEnfermedad();
-            return listaEstadoEnfermedad;
+            List<Combo> listEstadoEnfermedad = _objEstadoEnfermedadDA.GetAllEstadoEnfermedadCombo();
+            return listEstadoEnfermedad;
         } catch (SQLException e) {
             throw e;
         }
     }
 
     //Estado maleza
-    public EstadoMPE[] GetAllEstadoMaleza() {
+    public List<Combo> GetAllEstadoMalezaCombo() {
         try {
-            EstadoMPE[] listaEstadoMaleza = _objEstadoMalezaDA.GetAllEstadoMaleza();
-            return listaEstadoMaleza;
+            List<Combo> listEstadoMaleza = _objEstadoMalezaDA.GetAllEstadoMalezaCombo();
+            return listEstadoMaleza;
         } catch (SQLException e) {
             throw e;
         }
     }
 
     //Estado plaga
-    public EstadoMPE[] GetAllEstadoPlaga() {
+    public List<Combo> GetAllEstadoPlagaCombo() {
         try {
-            EstadoMPE[] listaEstadoPlaga = _objEstadoPlagaDA.GetAllEstadoPlaga();
-            return listaEstadoPlaga;
+            List<Combo> listEstadoPlaga = _objEstadoPlagaDA.GetAllEstadoPlagaCombo();
+            return listEstadoPlaga;
         } catch (SQLException e) {
             throw e;
         }
     }
 
     //Etapa fenologica
-    public List<Combo> GetAllEtapaFenologica() {
+    public List<Combo> GetAllEtapaFenologicaCombo() {
         try {
-            List<Combo> listaEtapaFenologica = _objEtapaFenologicaDA.GetAllEtapaFenologica();
-            return listaEtapaFenologica;
+            List<Combo> listEtapaFenologica = _objEtapaFenologicaDA.GetAllEtapaFenologicaCombo();
+            return listEtapaFenologica;
         } catch (SQLException e) {
             throw e;
         }
     }
 
     //Potencial de rendimiento
-    public PotencialRendimiento[] GetAllPotencialRendimiento() {
+    public List<Combo> GetAllPotencialRendimientoCombo() {
         try {
-            PotencialRendimiento[]listaPotencialRendimiento = _objPotencialRendimientoDA.GetAllPotencialRendimiento();
-            return listaPotencialRendimiento;
+            List<Combo> listPotencialRendimiento = _objPotencialRendimientoDA.GetAllPotencialRendimientoCombo();
+            return listPotencialRendimiento;
         } catch (SQLException e) {
             throw e;
         }
     }
 
     //Tipo de articulo
-    public TipoArticulo[] GetAllTipoArticulo() {
+    public List<Combo> GetAllTipoArticuloCombo() {
         try {
-            TipoArticulo[]listaTipoArticulo = _objTipoArticuloDA.GetAllTipoArticulo();
-            return listaTipoArticulo;
+            List<Combo> listTipoArticulo = _objTipoArticuloDA.GetAllTipoArticuloCombo();
+            return listTipoArticulo;
         } catch (SQLException e) {
             throw e;
         }
     }
 
     //Tipo de inspeccion
-    public TipoInspeccion[] GetAllTipoInspeccion() {
+    public List<Combo> GetAllTipoInspeccionCombo() {
         try {
-            TipoInspeccion[]listaTipoInspeccion = _objTipoInspeccionDA.GetAllTipoInspeccion();
-            return listaTipoInspeccion;
+            List<Combo> listTipoInspeccion = _objTipoInspeccionDA.GetAllTipoInspeccionCombo();
+            return listTipoInspeccion;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
+    //Arreglo topologico
+    public List<Combo> GetAllArregloTopologicoList() {
+        try {
+            List<Combo> listaGetAllArregloTopologico = _objArregloTopologicoDA.GetAllArregloTopologicoCombo();
+            return listaGetAllArregloTopologico;
         } catch (SQLException e) {
             throw e;
         }
