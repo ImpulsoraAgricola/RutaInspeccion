@@ -26,7 +26,7 @@ public class MalezaDA {
 
     public List<Combo> GetAllMalezaCombo() {
         try {
-            Cursor objCursor = objEntLibTools.executeCursor("SELECT MALEZCVE,MALEZNOM FROM BPCMALEZ WHERE MALEZSTS!=\"A\"");
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT MALEZCVE,MALEZNOM FROM BPCMALEZ WHERE MALEZSTS=\"A\"");
             List<Combo> listMaleza = new ArrayList<Combo>();
             while (objCursor.moveToNext()) {
                 listMaleza.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));

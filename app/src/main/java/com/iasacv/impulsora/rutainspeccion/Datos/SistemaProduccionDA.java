@@ -26,7 +26,7 @@ public class SistemaProduccionDA {
 
     public List<Combo> GetAllSistemaProduccionCombo() {
         try {
-            Cursor objCursor = objEntLibTools.executeCursor("SELECT SIPROCVE,SIPRONOM FROM BACSIPRO WHERE SIPROSTS!=\"A\"");
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT SIPROCVE,SIPRONOM FROM BACSIPRO WHERE SIPROSTS =\"A\"");
             List<Combo> listSistemaProduccion = new ArrayList<Combo>();
             while (objCursor.moveToNext()) {
                 listSistemaProduccion.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));

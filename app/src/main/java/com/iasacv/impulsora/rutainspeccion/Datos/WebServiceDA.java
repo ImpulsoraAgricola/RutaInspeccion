@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
+import com.iasacv.impulsora.rutainspeccion.Modelo.ArregloTopologico;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.CondicionDesarrollo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Enfermedad;
@@ -55,6 +56,7 @@ public class WebServiceDA extends Activity {
     private PlagaDA _objPlagaDA;
     private MalezaDA _objMalezaDA;
     private EnfermedadDA _objEnfermedadDA;
+    private ArregloTopologicoDA _objArregloTopologicoDA;
 
     public WebServiceDA(Context context) {
         _objEntLibTools = new EntLibDBTools(context);
@@ -74,6 +76,7 @@ public class WebServiceDA extends Activity {
         _objPlagaDA = new PlagaDA(context);
         _objMalezaDA = new MalezaDA(context);
         _objEnfermedadDA = new EnfermedadDA(context);
+        _objArregloTopologicoDA = new ArregloTopologicoDA(context);
     }
 
     //Variable para Web Services
@@ -490,6 +493,33 @@ public class WebServiceDA extends Activity {
                 objMaleza.Estatus = ic.getProperty(2).toString();
                 objMaleza.Uso = ic.getProperty(3).toString();
                 resul = _objMalezaDA.InsertMaleza(objMaleza);
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+
+        //Actualizar tabla de arreglo topologico
+        ArregloTopologico[] listaArregloTopologico;
+        METHOD_NAME = "GetAllArregloTopologico";
+        SOAP_ACTION = NAMESPACE+"GetAllArregloTopologico";
+        request = new SoapObject(NAMESPACE, METHOD_NAME);
+        envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        request.addProperty("usuario", usuario);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(request);
+        transporte = new HttpTransportSE(URL);
+        try {
+            transporte.call(SOAP_ACTION, envelope);
+            SoapObject resSoap = (SoapObject) envelope.getResponse();
+            listaArregloTopologico = new ArregloTopologico[resSoap.getPropertyCount()];
+            for (int i = 0; i < listaArregloTopologico.length; i++) {
+                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                ArregloTopologico objArregloTopologico = new ArregloTopologico();
+                objArregloTopologico.Clave = Integer.parseInt(ic.getProperty(0).toString());
+                objArregloTopologico.Nombre = ic.getProperty(1).toString();
+                objArregloTopologico.Estatus = ic.getProperty(2).toString();
+                objArregloTopologico.Uso = ic.getProperty(3).toString();
+                resul = _objArregloTopologicoDA.InsertArregloTopologico(objArregloTopologico);
             }
         } catch (Exception e) {
             throw e;

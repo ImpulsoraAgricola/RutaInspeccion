@@ -109,6 +109,27 @@ public class EntLibDBTools extends SQLiteOpenHelper {
             "[RECOMSTS] CHAR(1)  NOT NULL," +
             "[RECOMUSO] CHAR(1)  NOT NULL);";
 
+    //Sentencia SQL para crear la tabla de Plagas
+    private static String sqlBLCPLAGA = "CREATE TABLE [BLCPLAGA] (" +
+            "[PLAGACVE] INTEGER  NOT NULL PRIMARY KEY," +
+            "[PLAGANOM] VARCHAR(50)  NOT NULL," +
+            "[PLAGASTS] CHAR(1)  NOT NULL," +
+            "[PLAGAUSO] CHAR(1)  NOT NULL);";
+
+    //Sentencia SQL para crear la tabla de Malezas
+    private static String sqlBPCMALEZ = "CREATE TABLE [BPCMALEZ] (" +
+            "[MALEZCVE] INTEGER  NOT NULL PRIMARY KEY," +
+            "[MALEZNOM] VARCHAR(50)  NOT NULL," +
+            "[MALEZSTS] CHAR(1)  NOT NULL," +
+            "[MALEZUSO] CHAR(1)  NOT NULL);";
+
+    //Sentencia SQL para crear la tabla de Malezas
+    private static String sqlBECENFER = "CREATE TABLE [BECENFER] (" +
+            "[ENFERCVE] INTEGER  NOT NULL PRIMARY KEY," +
+            "[ENFERNOM] VARCHAR(50)  NOT NULL," +
+            "[ENFERSTS] CHAR(1)  NOT NULL," +
+            "[ENFERUSO] CHAR(1)  NOT NULL);";
+
     //Sentencia SQL para crear la tabla de Planeacion detalle
     private static String sqlBATPLADE = "CREATE TABLE [BATPLADE] (" +
             "[USUARCVE] INTEGER  NOT NULL," +
@@ -200,6 +221,9 @@ public class EntLibDBTools extends SQLiteOpenHelper {
         db.execSQL(sqlBACTIRIE);
         db.execSQL(sqlBACCONDI);
         db.execSQL(sqlBACRECOM);
+        db.execSQL(sqlBLCPLAGA);
+        db.execSQL(sqlBPCMALEZ);
+        db.execSQL(sqlBECENFER);
         db.execSQL(sqlBATPLADE);
     }
 
@@ -224,6 +248,9 @@ public class EntLibDBTools extends SQLiteOpenHelper {
         myDataBase.execSQL("DROP TABLE IF EXISTS BACTIRIE");
         myDataBase.execSQL("DROP TABLE IF EXISTS BACCONDI");
         myDataBase.execSQL("DROP TABLE IF EXISTS BACRECOM");
+        myDataBase.execSQL("DROP TABLE IF EXISTS BLCPLAGA");
+        myDataBase.execSQL("DROP TABLE IF EXISTS BPCMALEZ");
+        myDataBase.execSQL("DROP TABLE IF EXISTS BECENFER");
         myDataBase.execSQL("DROP TABLE IF EXISTS BATPLADE");
 
         //Se crea la nueva version de las tabla
@@ -240,6 +267,9 @@ public class EntLibDBTools extends SQLiteOpenHelper {
         myDataBase.execSQL(sqlBACTIRIE);
         myDataBase.execSQL(sqlBACCONDI);
         myDataBase.execSQL(sqlBACRECOM);
+        myDataBase.execSQL(sqlBLCPLAGA);
+        myDataBase.execSQL(sqlBPCMALEZ);
+        myDataBase.execSQL(sqlBECENFER);
         myDataBase.execSQL(sqlBATPLADE);
     }
 

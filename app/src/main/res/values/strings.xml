@@ -91,4 +91,6 @@
 
     <string name="activity_ruta_inspeccion_btnGuardar">Guardar</string>
 
+    <!-- Diagnostico de cultivo. -->
+    <string name="title_activity_diagnostico_cultivo">Captura de ruta de inspección</string>
 </resources>

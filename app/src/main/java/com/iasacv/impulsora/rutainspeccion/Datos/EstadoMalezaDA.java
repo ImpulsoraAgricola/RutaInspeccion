@@ -25,7 +25,7 @@ public class EstadoMalezaDA {
 
     public List<Combo> GetAllEstadoMalezaCombo() {
         try {
-            Cursor objCursor = objEntLibTools.executeCursor("SELECT ESTMACVE,ESTMANOM FROM BACESTMA WHERE ESTMASTS!=\"A\"");
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT ESTMACVE,ESTMANOM FROM BACESTMA WHERE ESTMASTS=\"A\"");
             List<Combo> listEstadoMaleza = new ArrayList<Combo>();
             while (objCursor.moveToNext()) {
                 listEstadoMaleza.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));

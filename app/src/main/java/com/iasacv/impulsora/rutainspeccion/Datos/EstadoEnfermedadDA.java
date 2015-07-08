@@ -26,7 +26,7 @@ public class EstadoEnfermedadDA {
 
     public List<Combo> GetAllEstadoEnfermedadCombo() {
         try {
-            Cursor objCursor = objEntLibTools.executeCursor("SELECT ESTENCVE,ESTENNOM FROM BACESTEN WHERE ESTENSTS!=\"A\"");
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT ESTENCVE,ESTENNOM FROM BACESTEN WHERE ESTENSTS=\"A\"");
             List<Combo> listEstadoEnfermedad = new ArrayList<Combo>();
             while (objCursor.moveToNext()) {
                 listEstadoEnfermedad.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));

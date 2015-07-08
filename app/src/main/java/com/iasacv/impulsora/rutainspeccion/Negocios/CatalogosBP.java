@@ -6,15 +6,21 @@ import android.widget.Spinner;
 
 import com.iasacv.impulsora.rutainspeccion.Datos.ArregloTopologicoDA;
 import com.iasacv.impulsora.rutainspeccion.Datos.CicloDA;
+import com.iasacv.impulsora.rutainspeccion.Datos.CondicionDesarrolloDA;
+import com.iasacv.impulsora.rutainspeccion.Datos.EnfermedadDA;
 import com.iasacv.impulsora.rutainspeccion.Datos.EstadoEnfermedadDA;
 import com.iasacv.impulsora.rutainspeccion.Datos.EstadoMalezaDA;
 import com.iasacv.impulsora.rutainspeccion.Datos.EstadoPlagaDA;
 import com.iasacv.impulsora.rutainspeccion.Datos.EtapaFenologicaDA;
+import com.iasacv.impulsora.rutainspeccion.Datos.MalezaDA;
+import com.iasacv.impulsora.rutainspeccion.Datos.PlagaDA;
 import com.iasacv.impulsora.rutainspeccion.Datos.PotencialRendimientoDA;
+import com.iasacv.impulsora.rutainspeccion.Datos.SistemaProduccionDA;
 import com.iasacv.impulsora.rutainspeccion.Datos.TipoArticuloDA;
 import com.iasacv.impulsora.rutainspeccion.Datos.TipoInspeccionDA;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Combo;
+import com.iasacv.impulsora.rutainspeccion.Modelo.Enfermedad;
 import com.iasacv.impulsora.rutainspeccion.Modelo.EstadoMPE;
 import com.iasacv.impulsora.rutainspeccion.Modelo.EtapaFenologica;
 import com.iasacv.impulsora.rutainspeccion.Modelo.PotencialRendimiento;
@@ -38,6 +44,11 @@ public class CatalogosBP {
     private TipoArticuloDA _objTipoArticuloDA;
     private TipoInspeccionDA _objTipoInspeccionDA;
     private ArregloTopologicoDA _objArregloTopologicoDA;
+    private SistemaProduccionDA _objSistemaProduccionDA;
+    private CondicionDesarrolloDA _objCondicionDesarrolloDA;
+    private PlagaDA _objPlagaDA;
+    private MalezaDA _objMalezaDA;
+    private EnfermedadDA _objEnfermedadDA;
 
     public CatalogosBP(Context context) {
         _objCicloDA = new CicloDA(context);
@@ -49,6 +60,11 @@ public class CatalogosBP {
         _objTipoArticuloDA = new TipoArticuloDA(context);
         _objTipoInspeccionDA = new TipoInspeccionDA(context);
         _objArregloTopologicoDA = new ArregloTopologicoDA(context);
+        _objSistemaProduccionDA = new SistemaProduccionDA(context);
+        _objCondicionDesarrolloDA = new CondicionDesarrolloDA(context);
+        _objPlagaDA = new PlagaDA(context);
+        _objMalezaDA = new MalezaDA(context);
+        _objEnfermedadDA = new EnfermedadDA(context);
     }
 
     //Ciclo
@@ -156,10 +172,60 @@ public class CatalogosBP {
     }
 
     //Arreglo topologico
-    public List<Combo> GetAllArregloTopologicoList() {
+    public List<Combo> GetAllArregloTopologicoCombo() {
         try {
             List<Combo> listaGetAllArregloTopologico = _objArregloTopologicoDA.GetAllArregloTopologicoCombo();
             return listaGetAllArregloTopologico;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
+    //Sistema de produccion
+    public List<Combo> GetAllSistemaProduccionCombo() {
+        try {
+            List<Combo> listaGetAllSistemaProduccion = _objSistemaProduccionDA.GetAllSistemaProduccionCombo();
+            return listaGetAllSistemaProduccion;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
+    //Condiciones de desarrollo
+    public List<Combo> GetAllCondicionDesarrolloCombo() {
+        try {
+            List<Combo> listaGetAllCondicionDesarrollo = _objCondicionDesarrolloDA.GetAllCondicionDesarrolloCombo();
+            return listaGetAllCondicionDesarrollo;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
+    //Plagas
+    public List<Combo> GetAllPlagaCombo() {
+        try {
+            List<Combo> listaGetAllPlaga = _objPlagaDA.GetAllPlagaCombo();
+            return listaGetAllPlaga;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
+    //Plagas
+    public List<Combo> GetAllMalezaCombo() {
+        try {
+            List<Combo> listaGetAllMaleza = _objMalezaDA.GetAllMalezaCombo();
+            return listaGetAllMaleza;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
+    //Plagas
+    public List<Combo> GetAllEnfermedadCombo() {
+        try {
+            List<Combo> listaGetAllEnfermedad = _objEnfermedadDA.GetAllEnfermedadCombo();
+            return listaGetAllEnfermedad;
         } catch (SQLException e) {
             throw e;
         }

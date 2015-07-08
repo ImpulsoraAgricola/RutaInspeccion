@@ -25,7 +25,7 @@ public class ArregloTopologicoDA {
 
     public List<Combo> GetAllArregloTopologicoCombo() {
         try {
-            Cursor objCursor = objEntLibTools.executeCursor("SELECT ARTOPCVE,ARTOPNOM FROM BACARTOP WHERE ARTOPSTS!=\"A\"");
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT ARTOPCVE,ARTOPNOM FROM BACARTOP WHERE ARTOPSTS=\"A\"");
             List<Combo> listArregloTopologico = new ArrayList<Combo>();
             while (objCursor.moveToNext()) {
                 listArregloTopologico.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));

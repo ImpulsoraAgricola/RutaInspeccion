@@ -25,7 +25,7 @@ public class EstadoPlagaDA {
 
     public List<Combo> GetAllEstadoPlagaCombo() {
         try {
-            Cursor objCursor = objEntLibTools.executeCursor("SELECT ESTPLACVE,ESTPLANOM FROM BACESTPLA WHERE ESTPLSTS!=\"A\"");
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT ESTPLCVE,ESTPLNOM FROM BACESTPL WHERE ESTPLSTS=\"A\"");
             List<Combo> listEstadoPlaga = new ArrayList<Combo>();
             while (objCursor.moveToNext()) {
                 listEstadoPlaga.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
