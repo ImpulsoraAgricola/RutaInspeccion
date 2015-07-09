@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -25,6 +27,7 @@ import android.widget.DatePicker;
 import android.widget.GridView;
 
 import com.iasacv.impulsora.rutainspeccion.Adaptador.CustomGridViewAdapter;
+import com.iasacv.impulsora.rutainspeccion.Conexion.GPSTracker;
 import com.iasacv.impulsora.rutainspeccion.Modelo.*;
 import com.iasacv.impulsora.rutainspeccion.Negocios.CatalogosBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.ComunBP;
@@ -46,7 +49,7 @@ import java.util.Date;
 public class Administrador extends ActionBarActivity {
 
     //Variables
-    CatalogosBP objCatalogosBP;
+    CatalogosBP _objCatalogosBP;
     ComunBP _objComunBP;
     RutaInspeccionBP _objRutaInspeccionBP;
     WebServiceBP _objWebServiceBP;
@@ -72,7 +75,7 @@ public class Administrador extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_administrador);
 
-        objCatalogosBP = new CatalogosBP(this);
+        _objCatalogosBP = new CatalogosBP(this);
         _objComunBP = new ComunBP(this);
         _objRutaInspeccionBP = new RutaInspeccionBP(this);
         _objWebServiceBP = new WebServiceBP(this);
@@ -99,8 +102,12 @@ public class Administrador extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                Item objItem = listaRutaInspeccion.get(position);
-                confirmDialogStart(objItem);
+                try {
+                    Item objItem = listaRutaInspeccion.get(position);
+                    confirmDialogStart(objItem);
+                } catch (Exception e) {
+                    Mensaje(e.toString(), getApplicationContext());
+                }
             }
         });
 
@@ -178,10 +185,10 @@ public class Administrador extends ActionBarActivity {
                 formatFecha = new SimpleDateFormat("yyyy-MM-dd");
                 currentDate = formatFecha.format(new Date());
                 refresh(currentDate);
-                _objComunBP.Mensaje("Se debe contar con una conexi\u00F3n a Internet", getApplicationContext());
+                Mensaje("Se debe contar con una conexi\u00F3n a Internet", getApplicationContext());
             }
         } catch (Exception e) {
-            _objComunBP.Mensaje(e.toString(), getApplicationContext());
+            Mensaje(e.toString(), getApplicationContext());
         }
     }
 
@@ -200,23 +207,22 @@ public class Administrador extends ActionBarActivity {
             boolean result = true;
             try {
                 try {
-                    result = _objWebServiceBP.getPlaneacionRuta(_objUsuario.RFC,_objUsuario.Clave,currentDateandTime);
+                    result = _objWebServiceBP.getPlaneacionRuta(_objUsuario.RFC, _objUsuario.Clave, currentDateandTime);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (XmlPullParserException e) {
                     e.printStackTrace();
                 }
             } catch (Exception e) {
-                _objComunBP.Mensaje(e.toString(), getApplicationContext());
+                Mensaje(e.toString(), getApplicationContext());
             }
             return result;
         }
 
         protected void onPostExecute(Boolean result) {
-            if (!result){
-                _objComunBP.Mensaje("Error: La informaci\u00F3n no se pudo actualizar",getApplicationContext());
-            }
-            else {
+            if (!result) {
+                Mensaje("Error: La informaci\u00F3n no se pudo actualizar", getApplicationContext());
+            } else {
                 formatFecha = new SimpleDateFormat("yyyy-MM-dd");
                 currentDate = formatFecha.format(new Date());
                 refresh(currentDate);
@@ -250,7 +256,7 @@ public class Administrador extends ActionBarActivity {
         }
     }
 
-    public void callService(){
+    public void callService() {
         resultReceiver = new MyResultReceiver(null);
         intent = new Intent(this, WebService.class);
         intent.putExtra("receiver", resultReceiver);
@@ -265,26 +271,25 @@ public class Administrador extends ActionBarActivity {
         stopService(intent);
     }
 
-    class UpdateUI implements Runnable
-    {
+    class UpdateUI implements Runnable {
         public UpdateUI() {
             formatFecha = new SimpleDateFormat("yyyy-MM-dd");
             currentDate = formatFecha.format(new Date());
             refresh(currentDate);
         }
+
         public void run() {
         }
     }
 
-    class MyResultReceiver extends ResultReceiver
-    {
+    class MyResultReceiver extends ResultReceiver {
         public MyResultReceiver(Handler handler) {
             super(handler);
         }
 
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
-            if(resultCode == 0){
+            if (resultCode == 0) {
                 runOnUiThread(new UpdateUI());
             }
         }
@@ -305,8 +310,8 @@ public class Administrador extends ActionBarActivity {
                 public void onDateSet(DatePicker view, int year,
                                       int monthOfYear, int dayOfMonth) {
                     mYear = String.valueOf(year);
-                    mMonth = String.format("%02d",monthOfYear+1);
-                    mDay = String.format("%02d",dayOfMonth);
+                    mMonth = String.format("%02d", monthOfYear + 1);
+                    mDay = String.format("%02d", dayOfMonth);
                     updateDisplay();
                 }
             };
@@ -319,10 +324,10 @@ public class Administrador extends ActionBarActivity {
                 mYear = String.valueOf(c.get(Calendar.YEAR));
                 mMonth = String.valueOf(c.get(Calendar.MONTH));
                 mDay = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
-                DatePickerDialog dialog =new DatePickerDialog(this,mDateSetListener,Integer.parseInt(mYear), Integer.parseInt(mMonth),Integer.parseInt(mDay));
+                DatePickerDialog dialog = new DatePickerDialog(this, mDateSetListener, Integer.parseInt(mYear), Integer.parseInt(mMonth), Integer.parseInt(mDay));
                 DatePicker datePicker = dialog.getDatePicker();
                 datePicker.setMinDate(c.getTimeInMillis());
-                c.add(Calendar.DAY_OF_YEAR,1);
+                c.add(Calendar.DAY_OF_YEAR, 1);
                 datePicker.setMaxDate(c.getTimeInMillis());
                 return dialog;
         }
@@ -342,26 +347,37 @@ public class Administrador extends ActionBarActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         alert.dismiss();
-                        formatFecha = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        currentDate = formatFecha.format(new Date());
-                        if (objItem.getTipoInspeccion() == 1) {
-                            //Creamos el nuevo formulario
-                            Intent i = new Intent(Administrador.this, InspeccionCampo.class);
-                            i.putExtra("CicloClave", objItem.getCicloClave());
-                            i.putExtra("UsuarioClave", objItem.getUsuarioClave());
-                            i.putExtra("Folio", objItem.getFolio());
-                            i.putExtra("Fecha", currentDate);
-                            startActivity(i);
-                        }
-                        else
-                        if (objItem.getTipoInspeccion() == 2) {
-                            //Creamos el nuevo formulario
-                            Intent i = new Intent(Administrador.this, DiagnosticoCultivo.class);
-                            i.putExtra("CicloClave", objItem.getCicloClave());
-                            i.putExtra("UsuarioClave", objItem.getUsuarioClave());
-                            i.putExtra("Folio", objItem.getFolio());
-                            i.putExtra("Fecha", currentDate);
-                            startActivity(i);
+                        try {
+                            //Obtener localizacion
+                            GPSTracker gpsTracker = new GPSTracker(Administrador.this);
+                            if (gpsTracker.getIsGPSTrackingEnabled()) {
+                                //Llenar objeto filtro
+                                PlaneacionRuta objFiltro = new PlaneacionRuta();
+                                objFiltro.CicloClave = objItem.getCicloClave();
+                                objFiltro.UsuarioClave = objItem.getUsuarioClave();
+                                objFiltro.Folio = objItem.getFolio();
+                                PlaneacionRuta objLote = _objRutaInspeccionBP.GetPlaneacionRuta(objFiltro);
+                                if ((objLote.LoteLatitud <= (gpsTracker.getLatitude() + 0.00192) && (objLote.LoteLatitud) >= (gpsTracker.getLatitude() - 0.00192)) &&
+                                        ((objLote.LoteLongitud) <= (gpsTracker.getLongitude() + 0.001802) && (objLote.LoteLongitud) >= (gpsTracker.getLongitude() - 0.001802))) {
+                                    formatFecha = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                    currentDate = formatFecha.format(new Date());
+                                    RutaInspeccion objRutaInspeccion = creaObjeto(objItem);
+                                    RutaInspeccion objTemp = _objRutaInspeccionBP.GetRutaInspeccion(objRutaInspeccion);
+                                    if (objTemp.Folio == 0) {
+                                        _objRutaInspeccionBP.InsertRutaInspeccionInicio(objRutaInspeccion);
+                                        iniciarRutaInspeccion(objItem);
+                                    }
+                                    else {
+                                        confirmInicio(objItem);
+                                    }
+                                } else {
+                                    Mensaje("Error: Su localizacion para registrar la ruta de inspeccion no es correcta", getApplicationContext());
+                                }
+                            } else {
+                                Mensaje("Error: Favor de habilitar GPS", getApplicationContext());
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                 });
@@ -372,5 +388,72 @@ public class Administrador extends ActionBarActivity {
                     }
                 });
         alert.show();
+    }
+
+    private void confirmInicio(final Item objItem) {
+        final AlertDialog alert = new AlertDialog.Builder(
+                new ContextThemeWrapper(this, android.R.style.Theme_Dialog))
+                .create();
+        alert.setTitle("Mensaje");
+        alert.setMessage("Error: La captura de la informacion inicio anteriormente pero no se concluyo");
+        alert.setCancelable(false);
+        alert.setIcon(R.drawable.info);
+        alert.setCanceledOnTouchOutside(false);
+        alert.setButton(DialogInterface.BUTTON_POSITIVE, "Aceptar",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        alert.dismiss();
+                        iniciarRutaInspeccion(objItem);
+                    }
+                });
+        alert.show();
+    }
+
+    public RutaInspeccion creaObjeto(Item objItem) {
+        RutaInspeccion objRutaInspeccion = new RutaInspeccion();
+        objRutaInspeccion.UsuarioClave = _objUsuario.Clave;
+        objRutaInspeccion.CicloClave = objItem.getCicloClave();
+        objRutaInspeccion.Fecha = objItem.getFecha();
+        objRutaInspeccion.Folio = objItem.getFolio();
+        //Obtener fecha
+        formatFecha = new SimpleDateFormat("yyyy-MM-dd");
+        currentDate = formatFecha.format(new Date());
+        objRutaInspeccion.FechaInicio = currentDate;
+        //Obtener hora
+        formatFecha = new SimpleDateFormat("HH:mm:ss");
+        currentDate = formatFecha.format(new Date());
+        objRutaInspeccion.HoraInicio = currentDate;
+        objRutaInspeccion.Estatus = "O";
+        objRutaInspeccion.Uso = "S";
+        return objRutaInspeccion;
+    }
+
+    public void Mensaje(String mensaje,Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Rutas de Inspecci\u00F3n");
+        builder.setMessage(mensaje);
+        builder.setPositiveButton("Aceptar",null);
+        builder.create();
+        builder.show();
+    }
+
+    public void iniciarRutaInspeccion(Item objItem){
+        if (objItem.getTipoInspeccion() == 1) {
+            //Creamos el nuevo formulario
+            Intent i = new Intent(Administrador.this, InspeccionCampo.class);
+            i.putExtra("CicloClave", objItem.getCicloClave());
+            i.putExtra("UsuarioClave", objItem.getUsuarioClave());
+            i.putExtra("Folio", objItem.getFolio());
+            i.putExtra("Fecha", currentDate);
+            startActivity(i);
+        } else if (objItem.getTipoInspeccion() == 2) {
+            //Creamos el nuevo formulario
+            Intent i = new Intent(Administrador.this, DiagnosticoCultivo.class);
+            i.putExtra("CicloClave", objItem.getCicloClave());
+            i.putExtra("UsuarioClave", objItem.getUsuarioClave());
+            i.putExtra("Folio", objItem.getFolio());
+            i.putExtra("Fecha", currentDate);
+            startActivity(i);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.iasacv.impulsora.rutainspeccion.Negocios;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteException;
@@ -52,8 +53,17 @@ public class ComunBP {
         return _objComunDA.Encrypt(plainText);
     }
 
-    public void Mensaje(String mensaje, Context context) {
-        Toast toastCorrecto = Toast.makeText(context,mensaje, Toast.LENGTH_LONG);
-        toastCorrecto.show();
+    //public void Mensaje(String mensaje, Context context) {
+      //  Toast toastCorrecto = Toast.makeText(context,mensaje, Toast.LENGTH_LONG);
+       // toastCorrecto.show();
+    //}
+
+    public void Mensaje(String mensaje,Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Rutas de Inspecci\u00F3n");
+        builder.setMessage(mensaje);
+        builder.setPositiveButton("OK",null);
+        builder.create();
+        builder.show();
     }
 }

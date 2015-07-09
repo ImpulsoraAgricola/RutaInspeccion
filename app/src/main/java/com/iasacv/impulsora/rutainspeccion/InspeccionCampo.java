@@ -6,11 +6,13 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -21,10 +23,19 @@ import com.iasacv.impulsora.rutainspeccion.Modelo.PlaneacionRuta;
 import com.iasacv.impulsora.rutainspeccion.Modelo.RutaInspeccion;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Usuario;
 import com.iasacv.impulsora.rutainspeccion.Negocios.CatalogosBP;
+import com.iasacv.impulsora.rutainspeccion.Negocios.ComunBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.RutaInspeccionBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.WebServiceBP;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 /**
  * Created by Administrator on 19/06/2015.
@@ -73,6 +84,7 @@ public class InspeccionCampo extends ActionBarActivity {
     private CheckBox rutainspeccion_chbDesaguar;
     private CheckBox rutainspeccion_chbDescostrar;
     private CheckBox rutainspeccion_chbRecomendacionOtro;
+    private EditText rutainspeccion_txtRecomendacionOtro;
     //Manejo de agroquimico
     private RadioGroup rutainspeccion_rdOrden;
     private RadioGroup rutainspeccion_rdRegula;
@@ -96,26 +108,25 @@ public class InspeccionCampo extends ActionBarActivity {
     private Spinner rutainspeccion_sEstadoEnfermedad;
     //Potencial de rendimiento
     private Spinner rutainspeccion_sPotencial;
-
     private Button rutainspeccion_btnGuardar;
 
-    //Variables
+    //Variables clases
     WebServiceBP _objWebServiceBP;
     CatalogosBP _objCatalogosBP;
     RutaInspeccionBP _objRutaInspeccionBP;
+    ComunBP _objComunBP;
+
+    //Variables objetos
     Usuario _objUsuario;
     Ciclo _objCiclo;
     RutaInspeccion _objRutaInspeccion;
     PlaneacionRuta _objPlaneacionRuta;
-    private Ciclo[] listaCiclos;
 
+    private Ciclo[] listaCiclos;
     int CicloClave;
     int UsuarioClave;
     int Folio;
     String Fecha;
-    private String mYear;
-    private String mMonth;
-    private String mDay;
 
     static final int DATE_DIALOG_ID = 0;
 
@@ -128,10 +139,9 @@ public class InspeccionCampo extends ActionBarActivity {
         _objWebServiceBP = new WebServiceBP(this);
         _objCatalogosBP = new CatalogosBP(this);
         _objRutaInspeccionBP = new RutaInspeccionBP(this);
+        _objComunBP = new ComunBP(this);
         _objUsuario = new Usuario();
         _objCiclo = new Ciclo();
-        _objRutaInspeccion = new RutaInspeccion();
-        _objPlaneacionRuta = new PlaneacionRuta();
 
         try {
             //Recuperar valores
@@ -146,9 +156,14 @@ public class InspeccionCampo extends ActionBarActivity {
 
             cargarCabecero();
 
-            //_objRutaInspeccion = creaObjeto();
-            //insertRutaInspeccion tarea = new insertRutaInspeccion();
-            //tarea.execute();
+            rutainspeccion_btnGuardar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (validar()) {
+                        _objComunBP.Mensaje("Error: Se debe contar con una conexi\u00F3n a Internet", InspeccionCampo.this);
+                    }
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -189,11 +204,35 @@ public class InspeccionCampo extends ActionBarActivity {
 
     //Llenar objetos
     public RutaInspeccion creaObjeto() {
-        RutaInspeccion objRutaInspeccion = new RutaInspeccion();
-        objRutaInspeccion.UsuarioClave = _objUsuario.Clave;
-        objRutaInspeccion.Fecha = this.rutainspeccion_txtFecha.getText().toString();
-        objRutaInspeccion.CicloClave = _objCiclo.Clave;
-        return objRutaInspeccion;
+        _objRutaInspeccion.SistemaProduccionClave = obtenerValorSpinner(rutainspeccion_sSistemaProduccion);
+        _objRutaInspeccion.ArregloTopologicoClave = obtenerValorSpinner(rutainspeccion_sArregloTopologico);
+        _objRutaInspeccion.ProfundidadSiembra = obtenerValorRadio(rutainspeccion_rdAdecuada);
+        _objRutaInspeccion.ProfundidadSurco = obtenerValorRadio(rutainspeccion_rdSurco);
+        _objRutaInspeccion.ManejoAdecuado = obtenerValorRadio(rutainspeccion_rdAdecuada);
+        _objRutaInspeccion.EtapaFenologicaClave = obtenerValorSpinner(rutainspeccion_sEtapa);
+        _objRutaInspeccion.Exposicion = obtenerValorRadio(rutainspeccion_rdExposicion);
+        _objRutaInspeccion.CondicionDesarrolLoClave = obtenerValorSpinner(rutainspeccion_sCondicionDesarrollo);
+        _objRutaInspeccion.OrdenCorrecto = obtenerValorRadio(rutainspeccion_rdOrden);
+        _objRutaInspeccion.RegulaPh = obtenerValorRadio(rutainspeccion_rdRegula);
+        _objRutaInspeccion.UsoAdecuado = obtenerValorRadio(rutainspeccion_rdUso);
+        _objRutaInspeccion.HoraAplicacion = obtenerValorRadio(rutainspeccion_rdHora);
+        _objRutaInspeccion.AguaCanal = obtenerValorRadio(rutainspeccion_rdAgua);
+        _objRutaInspeccion.Inundacion = obtenerValorRadio(rutainspeccion_rdInundacion);
+        _objRutaInspeccion.BajaPoblacion = obtenerValorRadio(rutainspeccion_rdPoblacion);
+        _objRutaInspeccion.AplicacionNutrientes = obtenerValorRadio(rutainspeccion_rdProblema);
+        _objRutaInspeccion.AlteracionCiclo = obtenerValorRadio(rutainspeccion_rdAlteracion);
+        _objRutaInspeccion.AplicacionAgroquimicos = obtenerValorRadio(rutainspeccion_rdAplicacion);
+        _objRutaInspeccion.AltasTemperaturas = obtenerValorRadio(rutainspeccion_rdTemperatura);
+        _objRutaInspeccion.Fito = obtenerValorRadio(rutainspeccion_rdFito);
+        _objRutaInspeccion.PlagasMalControladas = obtenerValorRadio(rutainspeccion_rdPlaga);
+        _objRutaInspeccion.MalezaClave = obtenerValorSpinner(rutainspeccion_sMaleza);
+        _objRutaInspeccion.EstadoMalezaClave = obtenerValorSpinner(rutainspeccion_sEstadoMaleza);
+        _objRutaInspeccion.PlagaClave = obtenerValorSpinner(rutainspeccion_sPlaga);
+        _objRutaInspeccion.EstadoPlagaClave = obtenerValorSpinner(rutainspeccion_sEstadoPlaga);
+        _objRutaInspeccion.EnfermedadClave = obtenerValorSpinner(rutainspeccion_sEnfermedad);
+        _objRutaInspeccion.EstadoEnfermedadClave = obtenerValorSpinner(rutainspeccion_sEstadoEnfermedad);
+        _objRutaInspeccion.PotencialRendimientoClave = obtenerValorSpinner(rutainspeccion_sPotencial);
+        return _objRutaInspeccion;
     }
 
     public void llenarCombos() {
@@ -264,10 +303,11 @@ public class InspeccionCampo extends ActionBarActivity {
         _objUsuario.RFC = prefs.getString("RFC", "");
         _objUsuario.Clave = Integer.valueOf(prefs.getString("Clave", ""));
         Bundle b = getIntent().getExtras();
-        CicloClave = b.getInt("CicloClave");
-        UsuarioClave = b.getInt("UsuarioClave");
-        Folio = b.getInt("Folio");
-        Fecha = b.getString("Fecha");
+        _objRutaInspeccion = new RutaInspeccion();
+        _objRutaInspeccion.CicloClave = b.getInt("CicloClave");
+        _objRutaInspeccion.UsuarioClave = b.getInt("UsuarioClave");
+        _objRutaInspeccion.Folio = b.getInt("Folio");
+        _objRutaInspeccion.Fecha = b.getString("Fecha");
     }
 
     private void getControles() {
@@ -311,6 +351,7 @@ public class InspeccionCampo extends ActionBarActivity {
         rutainspeccion_chbDesaguar = (CheckBox) findViewById(R.id.rutainspeccion_chbDesaguar);
         rutainspeccion_chbDescostrar = (CheckBox) findViewById(R.id.rutainspeccion_chbDescostrar);
         rutainspeccion_chbRecomendacionOtro = (CheckBox) findViewById(R.id.rutainspeccion_chbRecomendacionOtro);
+        rutainspeccion_txtRecomendacionOtro = (EditText) findViewById(R.id.rutainspeccion_txtRecomendacionOtro);
         //Manejo de agroquimico
         rutainspeccion_rdOrden = (RadioGroup) findViewById(R.id.rutainspeccion_rdOrden);
         rutainspeccion_rdRegula = (RadioGroup) findViewById(R.id.rutainspeccion_rdRegula);
@@ -334,7 +375,6 @@ public class InspeccionCampo extends ActionBarActivity {
         rutainspeccion_sEstadoEnfermedad = (Spinner) findViewById(R.id.rutainspeccion_sEstadoEnfermedad);
         //Potencial de rendimiento
         rutainspeccion_sPotencial = (Spinner) findViewById(R.id.rutainspeccion_sPotencial);
-
         rutainspeccion_btnGuardar = (Button) findViewById(R.id.rutainspeccion_btnGuardar);
 
     }
@@ -342,9 +382,10 @@ public class InspeccionCampo extends ActionBarActivity {
     private void cargarCabecero() {
         PlaneacionRuta objPlaneacionRuta = new PlaneacionRuta();
         objPlaneacionRuta.Folio = Folio;
+        _objPlaneacionRuta = new PlaneacionRuta();
         _objPlaneacionRuta = _objRutaInspeccionBP.GetPlaneacionRuta(objPlaneacionRuta);
         rutainspeccion_txtFolio.setText(String.valueOf(_objPlaneacionRuta.Folio));
-        seleccionarValor(rutainspeccion_sCiclo, String.valueOf(_objPlaneacionRuta.CicloNombre));
+        seleccionarValorSpinner(rutainspeccion_sCiclo, String.valueOf(_objPlaneacionRuta.CicloNombre));
         rutainspeccion_txtCliente.setText(_objPlaneacionRuta.ClienteNombre);
         rutainspeccion_txtProductor.setText(_objPlaneacionRuta.ProductorNombre);
         rutainspeccion_txtPredio.setText(_objPlaneacionRuta.PredioNombre);
@@ -352,13 +393,24 @@ public class InspeccionCampo extends ActionBarActivity {
         rutainspeccion_txtFecha.setText(_objPlaneacionRuta.Fecha);
     }
 
-    private void seleccionarValor(Spinner _objSpinner, String valor) {
+    private void seleccionarValorSpinner(Spinner _objSpinner, String valor) {
         ArrayAdapter<Combo> objArrayAdapter = (ArrayAdapter<Combo>) _objSpinner.getAdapter();
         for (int i = 0; i < objArrayAdapter.getCount(); i++) {
             if (((Combo) objArrayAdapter.getItem(i)).getNombre().equals(valor)) {
                 _objSpinner.setSelection(i);
             }
         }
+    }
+
+    private Character obtenerValorRadio(RadioGroup objRadioGroup) {
+        int id = objRadioGroup.getCheckedRadioButtonId();
+        RadioButton objRadioButton = (RadioButton) findViewById(id);
+        return objRadioButton.getText().toString().charAt(0);
+    }
+
+    private int obtenerValorSpinner(Spinner _objSpinner){
+        Combo objCombo = (Combo)rutainspeccion_sSistemaProduccion.getSelectedItem();
+        return objCombo.getClave();
     }
 
     private void eventosCombo() {
@@ -377,5 +429,147 @@ public class InspeccionCampo extends ActionBarActivity {
                         _objCiclo = null;
                     }
                 });
+    }
+
+    private boolean validar() {
+        if(rutainspeccion_rdRecomendacion.getCheckedRadioButtonId()==-1) {
+            rutainspeccion_rdRecomendacion.requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_sSistemaProduccion.getSelectedItem() ==-1) {
+            rutainspeccion_sSistemaProduccion.requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_sArregloTopologico.getSelectedItem() ==-1) {
+            rutainspeccion_sArregloTopologico .requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_rdAdecuada.getCheckedRadioButtonId()==-1) {
+            rutainspeccion_rdAdecuada.requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_rdSurco.getCheckedRadioButtonId()==-1) {
+            rutainspeccion_rdSurco.requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_rdManejo.getCheckedRadioButtonId()==-1) {
+            rutainspeccion_rdManejo.requestFocus();
+            return false;
+        }
+        else if(!rutainspeccion_chbCanal.isChecked() || !rutainspeccion_chbGravedad.isChecked() || !rutainspeccion_chbAspersion.isChecked() ||
+                !rutainspeccion_chbGoteo.isChecked() || !rutainspeccion_chbPozo.isChecked() || !rutainspeccion_chbRiegoOtro.isChecked()){
+            return false;
+        }
+        else if(rutainspeccion_chbPozo.isChecked()) {
+            if(rutainspeccion_txtCapacidad.getText().toString().length() == 0)
+                return false;
+        }
+        else if(rutainspeccion_chbRiegoOtro.isChecked()) {
+            if(rutainspeccion_txtRiegoOtro.getText().toString().length() == 0)
+                return false;
+        }
+        else if(rutainspeccion_sEtapa.getSelectedItem() ==-1) {
+            rutainspeccion_sEtapa .requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_rdExposicion.getCheckedRadioButtonId()==-1) {
+            rutainspeccion_rdExposicion.requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_sCondicionDesarrollo.getSelectedItem() ==-1) {
+            rutainspeccion_sCondicionDesarrollo .requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_chbRegar.isChecked() || rutainspeccion_chbDesmezclar.isChecked() || rutainspeccion_chbFungicida.isChecked() ||
+                rutainspeccion_chbInsecticida.isChecked() || rutainspeccion_chbHerbicida.isChecked() || rutainspeccion_chbDesaguar.isChecked() ||
+                rutainspeccion_chbDescostrar.isChecked() || rutainspeccion_chbRecomendacionOtro.isChecked()){
+            return false;
+        }
+        else if(rutainspeccion_chbRecomendacionOtro.isChecked()) {
+            if(rutainspeccion_txtRecomendacionOtro.getText().toString().length() == 0)
+                return false;
+        }
+
+        else if(rutainspeccion_rdOrden.getCheckedRadioButtonId()==-1) {
+            rutainspeccion_rdOrden.requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_rdRegula.getCheckedRadioButtonId()==-1) {
+            rutainspeccion_rdRegula.requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_rdUso.getCheckedRadioButtonId()==-1) {
+            rutainspeccion_rdUso.requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_rdHora.getCheckedRadioButtonId()==-1) {
+            rutainspeccion_rdHora.requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_rdAgua.getCheckedRadioButtonId()==-1) {
+            rutainspeccion_rdAgua.requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_rdInundacion.getCheckedRadioButtonId()==-1) {
+            rutainspeccion_rdInundacion.requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_rdPoblacion.getCheckedRadioButtonId()==-1) {
+            rutainspeccion_rdPoblacion.requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_rdProblema.getCheckedRadioButtonId()==-1) {
+            rutainspeccion_rdProblema.requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_rdAlteracion.getCheckedRadioButtonId()==-1) {
+            rutainspeccion_rdAlteracion.requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_rdAplicacion.getCheckedRadioButtonId()==-1) {
+            rutainspeccion_rdAplicacion.requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_rdTemperatura.getCheckedRadioButtonId()==-1) {
+            rutainspeccion_rdTemperatura.requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_rdFito.getCheckedRadioButtonId()==-1) {
+            rutainspeccion_rdFito.requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_rdPlaga.getCheckedRadioButtonId()==-1) {
+            rutainspeccion_rdPlaga.requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_sMaleza.getSelectedItem() ==-1) {
+            rutainspeccion_sMaleza .requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_sEstadoMaleza.getSelectedItem() ==-1) {
+            rutainspeccion_sEstadoMaleza .requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_sPlaga.getSelectedItem() ==-1) {
+            rutainspeccion_sPlaga .requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_sEstadoPlaga.getSelectedItem() ==-1) {
+            rutainspeccion_sEstadoPlaga .requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_sEnfermedad.getSelectedItem() ==-1) {
+            rutainspeccion_sEnfermedad .requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_sEstadoEnfermedad.getSelectedItem() ==-1) {
+            rutainspeccion_sEstadoEnfermedad .requestFocus();
+            return false;
+        }
+        else if(rutainspeccion_sPotencial.getSelectedItem() ==-1) {
+            rutainspeccion_sPotencial .requestFocus();
+            return false;
+        }
+        return true;
     }
 }

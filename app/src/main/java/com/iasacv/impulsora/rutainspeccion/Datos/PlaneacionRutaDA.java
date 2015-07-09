@@ -66,31 +66,31 @@ public class PlaneacionRutaDA {
                     "INNER JOIN BACTIART D ON (A.TIARTCVE=D.TIARTCVE) " +
                     "WHERE " + filtro);
             while (objCursor.moveToNext()) {
-                objPlaneacionRuta.UsuarioClave = Integer.parseInt(objCursor.getString(0));
+                objPlaneacionRuta.UsuarioClave = objCursor.getInt(0);
                 objPlaneacionRuta.UsuarioNombre = objCursor.getString(1);
-                objPlaneacionRuta.CicloClave = Integer.parseInt(objCursor.getString(2));
+                objPlaneacionRuta.CicloClave = objCursor.getInt(2);
                 objPlaneacionRuta.CicloNombre = objCursor.getString(3);
                 objPlaneacionRuta.Fecha = objCursor.getString(4);
-                objPlaneacionRuta.Folio = Integer.parseInt(objCursor.getString(5));
-                objPlaneacionRuta.TipoInspeccionClave = Integer.parseInt(objCursor.getString(6));
+                objPlaneacionRuta.Folio = objCursor.getInt(5);
+                objPlaneacionRuta.TipoInspeccionClave = objCursor.getInt(6);
                 objPlaneacionRuta.TipoInspeccionNombre = objCursor.getString(7);
-                objPlaneacionRuta.TipoArticuloClave = Integer.parseInt(objCursor.getString(8));
+                objPlaneacionRuta.TipoArticuloClave = objCursor.getInt(8);
                 objPlaneacionRuta.TipoArticuloNombre = objCursor.getString(9);
-                objPlaneacionRuta.ClienteClave = Integer.parseInt(objCursor.getString(10));
+                objPlaneacionRuta.ClienteClave = objCursor.getInt(10);
                 objPlaneacionRuta.ClienteNombre = objCursor.getString(11);
-                objPlaneacionRuta.ProductorClave = Integer.parseInt(objCursor.getString(12));
+                objPlaneacionRuta.ProductorClave = objCursor.getInt(12);
                 objPlaneacionRuta.ProductorNombre = objCursor.getString(13);
-                objPlaneacionRuta.PredioClave = Integer.parseInt(objCursor.getString(14));
+                objPlaneacionRuta.PredioClave = objCursor.getInt(14);
                 objPlaneacionRuta.PredioNombre = objCursor.getString(15);
-                objPlaneacionRuta.PredioLatitud = Double.parseDouble(objCursor.getString(16));
-                objPlaneacionRuta.PredioLongitud = Double.parseDouble(objCursor.getString(17));
-                objPlaneacionRuta.LoteClave = Integer.parseInt(objCursor.getString(18));
+                objPlaneacionRuta.PredioLatitud = objCursor.getDouble(16);
+                objPlaneacionRuta.PredioLongitud = objCursor.getDouble(17);
+                objPlaneacionRuta.LoteClave = objCursor.getInt(18);
                 objPlaneacionRuta.LoteNombre = objCursor.getString(19);
-                objPlaneacionRuta.LoteLatitud = Double.parseDouble(objCursor.getString(20));
-                objPlaneacionRuta.LoteLongitud = Double.parseDouble(objCursor.getString(21));
-                objPlaneacionRuta.ArticuloSembrarClave = Integer.parseInt(objCursor.getString(22));
+                objPlaneacionRuta.LoteLatitud = objCursor.getDouble(20);
+                objPlaneacionRuta.LoteLongitud = objCursor.getDouble(21);
+                objPlaneacionRuta.ArticuloSembrarClave = objCursor.getInt(22);
                 objPlaneacionRuta.ArticuloSembrarNombre = objCursor.getString(23);
-                objPlaneacionRuta.ArticuloCosecharClave = Integer.parseInt(objCursor.getString(24));
+                objPlaneacionRuta.ArticuloCosecharClave = objCursor.getInt(24);
                 objPlaneacionRuta.ArticuloCosecharNombre = objCursor.getString(25);
                 objPlaneacionRuta.Estatus = objCursor.getString(26);
                 objPlaneacionRuta.Uso = objCursor.getString(27);
@@ -124,18 +124,18 @@ public class PlaneacionRutaDA {
 
     public ArrayList<Item> GetAllPlaneacionRutaImage(int usuarioClave, String fecha) {
         try {
-            Cursor objCursor = objEntLibTools.executeCursor("SELECT CICLOCVE,USUARCVE,PLADEFOL,A.TIINSCVE,TIINSNOM,PERSONOM,PRODUNOM,PREDINOM,LOTESNOM,PLADESTS " +
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT CICLOCVE,USUARCVE,PLADEFOL,A.TIINSCVE,TIINSNOM,PERSONOM,PRODUNOM,PREDINOM,LOTESNOM,PLADESTS,PLANEFEC " +
                     "FROM BATPLADE A INNER JOIN BACTIINS B ON (A.TIINSCVE=B.TIINSCVE) WHERE USUARCVE="+usuarioClave+" AND PLANEFEC='"+fecha+"' ORDER BY PLADEFOL");
             ArrayList<Item> listaPlaneacionRuta = new ArrayList<Item>();
             while (objCursor.moveToNext()) {
                 if(objCursor.getString(5).toString().equals("I"))
                     listaPlaneacionRuta.add(new Item(Integer.parseInt(objCursor.getString(0)),Integer.parseInt(objCursor.getString(1)),
-                            Integer.parseInt(objCursor.getString(2)),Integer.parseInt(objCursor.getString(3)),objInspection,
+                            Integer.parseInt(objCursor.getString(2)),Integer.parseInt(objCursor.getString(3)),objCursor.getString(10),objInspection,
                             "Folio: "+objCursor.getString(2)+"\nCliente: "+objCursor.getString(5)+"\nProductor: "+ objCursor.getString(6)+
                                     "\nPredio: "+objCursor.getString(7)+"\nLote: "+objCursor.getString(8)+"\nTipo de inspecci\u00F3n: "+objCursor.getString(4)));
                 else
                     listaPlaneacionRuta.add(new Item(Integer.parseInt(objCursor.getString(0)),Integer.parseInt(objCursor.getString(1)),
-                            Integer.parseInt(objCursor.getString(2)),Integer.parseInt(objCursor.getString(3)),objSurvey,
+                            Integer.parseInt(objCursor.getString(2)),Integer.parseInt(objCursor.getString(3)),objCursor.getString(10),objSurvey,
                             "Folio: "+objCursor.getString(2)+"\nCliente: "+objCursor.getString(5)+"\nProductor: "+ objCursor.getString(6)+
                                     "\nPredio: "+objCursor.getString(7)+"\nLote: "+objCursor.getString(8)+"\nTipo de inspecci\u00F3n: "+objCursor.getString(4)));
             }

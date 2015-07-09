@@ -26,12 +26,12 @@ public class PlaneacionRuta implements KvmSerializable {
     public String ProductorNombre;
     public int PredioClave;
     public String PredioNombre;
-    public double PredioLatitud;
-    public double PredioLongitud;
+    public Double PredioLatitud;
+    public Double PredioLongitud;
     public int LoteClave;
     public String LoteNombre;
-    public double LoteLatitud;
-    public double LoteLongitud;
+    public Double LoteLatitud;
+    public Double LoteLongitud;
     public int ArticuloSembrarClave;
     public String ArticuloSembrarNombre;
     public int ArticuloCosecharClave;

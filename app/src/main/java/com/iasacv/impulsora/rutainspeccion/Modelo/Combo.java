@@ -5,9 +5,9 @@ package com.iasacv.impulsora.rutainspeccion.Modelo;
  */
 public class Combo {
     private String Nombre;
-    private long Clave;
+    private int Clave;
 
-    public Combo(String nombre, long clave)
+    public Combo(String nombre, int clave)
     {
         Nombre = nombre;
         Clave = clave;
@@ -18,7 +18,7 @@ public class Combo {
         return Nombre;
     }
 
-    public long getClave()
+    public int getClave()
     {
         return Clave;
     }

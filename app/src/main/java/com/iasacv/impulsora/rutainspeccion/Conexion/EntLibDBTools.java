@@ -159,6 +159,70 @@ public class EntLibDBTools extends SQLiteOpenHelper {
             "[PLADEUSO] VARCHAR(1)  NOT NULL,\n" +
             "PRIMARY KEY ([USUARCVE],[CICLOCVE],[PLANEFEC],[PLADEFOL]));";
 
+    //Sentencia SQL para crear la tabla de Ruta de inspeccion
+    private static String sqlBATRUINS = "CREATE TABLE [BATRUINS] (\n" +
+            "[USUARCVE] INTEGER  NOT NULL,\n" +
+            "[CICLOCVE] INTEGER  NOT NULL,\n" +
+            "[PLANEFEC] DATE  NOT NULL,\n" +
+            "[PLADEFOL] INTEGER  NOT NULL,\n" +
+            "[RUINSFEI] DATE  NOT NULL,\n" +
+            "[RUINSINI] TIME  NOT NULL,\n" +
+            "[RUINSFEF] DATE  NULL,\n" +
+            "[RUINSFIN] TIME  NULL,\n" +
+            "[RUINSTIE] TIME  NULL,\n" +
+            "[RUINSREC] VARCHAR(1)  NULL,\n" +
+            "[SIPROCVE] INTEGER  NULL,\n" +
+            "[ARTOPCVE] INTEGER  NULL,\n" +
+            "[RUINSSIA] VARCHAR(1)  NULL,\n" +
+            "[RUINSSUA] VARCHAR(1)  NULL,\n" +
+            "[RUINSMAN] VARCHAR(1)  NULL,\n" +
+            "[ETAFECVE] INTEGER  NULL,\n" +
+            "[RUINSEXP] VARCHAR(1)  NULL,\n" +
+            "[CONDICVE] INTEGER  NULL,\n" +
+            "[RUINSORD] VARCHAR(1)  NULL,\n" +
+            "[RUINSREG] VARCHAR(1)  NULL,\n" +
+            "[RUINSUSA] VARCHAR(1)  NULL,\n" +
+            "[RUINSHOR] VARCHAR(1)  NULL,\n" +
+            "[RUINSAGU] VARCHAR(1)  NULL,\n" +
+            "[RUINSINU] VARCHAR(1)  NULL,\n" +
+            "[RUINSPOB] VARCHAR(1)  NULL,\n" +
+            "[RUINSPRO] VARCHAR(1)  NULL,\n" +
+            "[RUINSALT] VARCHAR(1)  NULL,\n" +
+            "[RUINSAPL] VARCHAR(1)  NULL,\n" +
+            "[RUINSTEM] VARCHAR(1)  NULL,\n" +
+            "[RUINSFIT] VARCHAR(1)  NULL,\n" +
+            "[RUINSPLA] VARCHAR(1)  NULL,\n" +
+            "[MALEZCVE] INTEGER  NULL,\n" +
+            "[ESTMACVE] INTEGER  NULL,\n" +
+            "[PLAGACVE] INTEGER  NULL,\n" +
+            "[ESTPLCVE] INTEGER  NULL,\n" +
+            "[ENFERCVE] INTEGER  NULL,\n" +
+            "[ESTENCVE] INTEGER  NULL,\n" +
+            "[POTRECVE] INTEGER  NULL,\n" +
+            "[RUINSSTS] VARCHAR(1)  NULL,\n" +
+            "[RUINSUSO] VARCHAR(1)  NULL,\n" +
+            "PRIMARY KEY ([USUARCVE],[CICLOCVE],[PLANEFEC],[PLADEFOL]));";
+
+    //Sentencia SQL para crear la tabla de relacion Riego por Ruta de inspeccion
+    private static String sqlBARRIEGO = "CREATE TABLE [BARRIEGO] (\n" +
+            "[USUARCVE] INTEGER  NOT NULL,\n" +
+            "[CICLOCVE] INTEGER  NOT NULL,\n" +
+            "[PLANEFEC] DATE  NOT NULL,\n" +
+            "[PLADEFOL] INTEGER  NOT NULL,\n" +
+            "[TIRIECVE] INTEGER  NULL,\n" +
+            "[RIEGOCAP] INTEGER  NULL,\n" +
+            "[RIEGOOTR] VARCHAR(50)  NULL,\n" +
+            "PRIMARY KEY ([USUARCVE],[CICLOCVE],[PLANEFEC],[PLADEFOL]));";
+
+    //Sentencia SQL para crear la tabla de relacion Riego por Ruta de inspeccion
+    private static String sqlBARRECOM = "CREATE TABLE [BARRECOM] (\n" +
+            "[USUARCVE] INTEGER  NOT NULL,\n" +
+            "[CICLOCVE] INTEGER  NOT NULL,\n" +
+            "[PLANEFEC] DATE  NOT NULL,\n" +
+            "[PLADEFOL] INTEGER  NOT NULL,\n" +
+            "[RECOMCVE] INTEGER  NULL,\n" +
+            "[RECOMOTR] VARCHAR(50)  NULL,\n" +
+            "PRIMARY KEY ([USUARCVE],[CICLOCVE],[PLANEFEC],[PLADEFOL]));";
 
     //Direccion de la base de datos
     private static String DB_PATH = "/data/data/com.iasacv.impulsora.rutainspeccion/databases/";
@@ -224,6 +288,9 @@ public class EntLibDBTools extends SQLiteOpenHelper {
         db.execSQL(sqlBLCPLAGA);
         db.execSQL(sqlBPCMALEZ);
         db.execSQL(sqlBECENFER);
+        db.execSQL(sqlBATRUINS);
+        db.execSQL(sqlBARRIEGO);
+        db.execSQL(sqlBARRECOM);
         db.execSQL(sqlBATPLADE);
     }
 
@@ -252,6 +319,9 @@ public class EntLibDBTools extends SQLiteOpenHelper {
         myDataBase.execSQL("DROP TABLE IF EXISTS BPCMALEZ");
         myDataBase.execSQL("DROP TABLE IF EXISTS BECENFER");
         myDataBase.execSQL("DROP TABLE IF EXISTS BATPLADE");
+        myDataBase.execSQL("DROP TABLE IF EXISTS BATRUINS");
+        myDataBase.execSQL("DROP TABLE IF EXISTS BARRIEGO");
+        myDataBase.execSQL("DROP TABLE IF EXISTS BARRECOM");
 
         //Se crea la nueva version de las tabla
         myDataBase.execSQL(sqlIGMCICLO);
@@ -271,6 +341,9 @@ public class EntLibDBTools extends SQLiteOpenHelper {
         myDataBase.execSQL(sqlBPCMALEZ);
         myDataBase.execSQL(sqlBECENFER);
         myDataBase.execSQL(sqlBATPLADE);
+        myDataBase.execSQL(sqlBATRUINS);
+        myDataBase.execSQL(sqlBARRIEGO);
+        myDataBase.execSQL(sqlBARRECOM);
     }
 
     public Cursor executeCursor(String query) {
