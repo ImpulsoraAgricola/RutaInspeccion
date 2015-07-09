@@ -101,7 +101,7 @@ public class RutaInspeccionDA {
                     "'"+ objRutaInspeccion.ManejoAdecuado + "'," +
                     + objRutaInspeccion.EtapaFenologicaClave + "," +
                     "'"+ objRutaInspeccion.Exposicion + "'," +
-                    + objRutaInspeccion.CondicionDesarrolLoClave + "," +
+                    + objRutaInspeccion.CondicionDesarrolloClave + "," +
                     "'"+ objRutaInspeccion.OrdenCorrecto + "'," +
                     "'"+ objRutaInspeccion.RegulaPh + "'," +
                     "'"+ objRutaInspeccion.UsoAdecuado + "'," +

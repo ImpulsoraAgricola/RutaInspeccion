@@ -164,6 +164,7 @@ public class InspeccionCampo extends ActionBarActivity {
                     }
                 }
             });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -211,7 +212,7 @@ public class InspeccionCampo extends ActionBarActivity {
         _objRutaInspeccion.ManejoAdecuado = obtenerValorRadio(rutainspeccion_rdAdecuada);
         _objRutaInspeccion.EtapaFenologicaClave = obtenerValorSpinner(rutainspeccion_sEtapa);
         _objRutaInspeccion.Exposicion = obtenerValorRadio(rutainspeccion_rdExposicion);
-        _objRutaInspeccion.CondicionDesarrolLoClave = obtenerValorSpinner(rutainspeccion_sCondicionDesarrollo);
+        _objRutaInspeccion.CondicionDesarrolloClave = obtenerValorSpinner(rutainspeccion_sCondicionDesarrollo);
         _objRutaInspeccion.OrdenCorrecto = obtenerValorRadio(rutainspeccion_rdOrden);
         _objRutaInspeccion.RegulaPh = obtenerValorRadio(rutainspeccion_rdRegula);
         _objRutaInspeccion.UsoAdecuado = obtenerValorRadio(rutainspeccion_rdUso);
@@ -308,6 +309,11 @@ public class InspeccionCampo extends ActionBarActivity {
         _objRutaInspeccion.UsuarioClave = b.getInt("UsuarioClave");
         _objRutaInspeccion.Folio = b.getInt("Folio");
         _objRutaInspeccion.Fecha = b.getString("Fecha");
+        _objPlaneacionRuta = new PlaneacionRuta();
+        _objPlaneacionRuta.CicloClave = b.getInt("CicloClave");
+        _objPlaneacionRuta.UsuarioClave = b.getInt("UsuarioClave");
+        _objPlaneacionRuta.Folio = b.getInt("Folio");
+        _objPlaneacionRuta.Fecha = b.getString("Fecha");
     }
 
     private void getControles() {
@@ -380,17 +386,14 @@ public class InspeccionCampo extends ActionBarActivity {
     }
 
     private void cargarCabecero() {
-        PlaneacionRuta objPlaneacionRuta = new PlaneacionRuta();
-        objPlaneacionRuta.Folio = Folio;
-        _objPlaneacionRuta = new PlaneacionRuta();
-        _objPlaneacionRuta = _objRutaInspeccionBP.GetPlaneacionRuta(objPlaneacionRuta);
-        rutainspeccion_txtFolio.setText(String.valueOf(_objPlaneacionRuta.Folio));
-        seleccionarValorSpinner(rutainspeccion_sCiclo, String.valueOf(_objPlaneacionRuta.CicloNombre));
-        rutainspeccion_txtCliente.setText(_objPlaneacionRuta.ClienteNombre);
-        rutainspeccion_txtProductor.setText(_objPlaneacionRuta.ProductorNombre);
-        rutainspeccion_txtPredio.setText(_objPlaneacionRuta.PredioNombre);
-        rutainspeccion_txtLote.setText(_objPlaneacionRuta.LoteNombre);
-        rutainspeccion_txtFecha.setText(_objPlaneacionRuta.Fecha);
+        PlaneacionRuta _objPlaneacionFiltro = _objRutaInspeccionBP.GetPlaneacionRuta(_objPlaneacionRuta);
+        rutainspeccion_txtFolio.setText(String.valueOf(_objPlaneacionFiltro.Folio));
+        seleccionarValorSpinner(rutainspeccion_sCiclo, String.valueOf(_objPlaneacionFiltro.CicloClave));
+        rutainspeccion_txtCliente.setText(_objPlaneacionFiltro.ClienteNombre);
+        rutainspeccion_txtProductor.setText(_objPlaneacionFiltro.ProductorNombre);
+        rutainspeccion_txtPredio.setText(_objPlaneacionFiltro.PredioNombre);
+        rutainspeccion_txtLote.setText(_objPlaneacionFiltro.LoteNombre);
+        rutainspeccion_txtFecha.setText(_objPlaneacionFiltro.Fecha);
     }
 
     private void seleccionarValorSpinner(Spinner _objSpinner, String valor) {
@@ -436,12 +439,12 @@ public class InspeccionCampo extends ActionBarActivity {
             rutainspeccion_rdRecomendacion.requestFocus();
             return false;
         }
-        else if(rutainspeccion_sSistemaProduccion.getSelectedItem() ==-1) {
+        else if(rutainspeccion_sSistemaProduccion.getSelectedItemPosition() ==0) {
             rutainspeccion_sSistemaProduccion.requestFocus();
             return false;
         }
-        else if(rutainspeccion_sArregloTopologico.getSelectedItem() ==-1) {
-            rutainspeccion_sArregloTopologico .requestFocus();
+        else if(rutainspeccion_sArregloTopologico.getSelectedItem() ==null) {
+            rutainspeccion_sArregloTopologico.requestFocus();
             return false;
         }
         else if(rutainspeccion_rdAdecuada.getCheckedRadioButtonId()==-1) {
@@ -468,15 +471,15 @@ public class InspeccionCampo extends ActionBarActivity {
             if(rutainspeccion_txtRiegoOtro.getText().toString().length() == 0)
                 return false;
         }
-        else if(rutainspeccion_sEtapa.getSelectedItem() ==-1) {
-            rutainspeccion_sEtapa .requestFocus();
+        else if(rutainspeccion_sEtapa.getSelectedItem() ==null) {
+            rutainspeccion_sEtapa.requestFocus();
             return false;
         }
         else if(rutainspeccion_rdExposicion.getCheckedRadioButtonId()==-1) {
             rutainspeccion_rdExposicion.requestFocus();
             return false;
         }
-        else if(rutainspeccion_sCondicionDesarrollo.getSelectedItem() ==-1) {
+        else if(rutainspeccion_sCondicionDesarrollo.getSelectedItem() ==null) {
             rutainspeccion_sCondicionDesarrollo .requestFocus();
             return false;
         }
@@ -542,34 +545,40 @@ public class InspeccionCampo extends ActionBarActivity {
             rutainspeccion_rdPlaga.requestFocus();
             return false;
         }
-        else if(rutainspeccion_sMaleza.getSelectedItem() ==-1) {
-            rutainspeccion_sMaleza .requestFocus();
+        else if(rutainspeccion_sMaleza.getSelectedItem() ==null) {
+            rutainspeccion_sMaleza.requestFocus();
             return false;
         }
-        else if(rutainspeccion_sEstadoMaleza.getSelectedItem() ==-1) {
-            rutainspeccion_sEstadoMaleza .requestFocus();
+        else if(rutainspeccion_sEstadoMaleza.getSelectedItem() ==null) {
+            rutainspeccion_sEstadoMaleza.requestFocus();
             return false;
         }
-        else if(rutainspeccion_sPlaga.getSelectedItem() ==-1) {
-            rutainspeccion_sPlaga .requestFocus();
+        else if(rutainspeccion_sPlaga.getSelectedItem() ==null) {
+            rutainspeccion_sPlaga.requestFocus();
             return false;
         }
-        else if(rutainspeccion_sEstadoPlaga.getSelectedItem() ==-1) {
+        else if(rutainspeccion_sEstadoPlaga.getSelectedItem() ==null) {
             rutainspeccion_sEstadoPlaga .requestFocus();
             return false;
         }
-        else if(rutainspeccion_sEnfermedad.getSelectedItem() ==-1) {
+        else if(rutainspeccion_sEnfermedad.getSelectedItem() ==null) {
             rutainspeccion_sEnfermedad .requestFocus();
             return false;
         }
-        else if(rutainspeccion_sEstadoEnfermedad.getSelectedItem() ==-1) {
+        else if(rutainspeccion_sEstadoEnfermedad.getSelectedItem() ==null) {
             rutainspeccion_sEstadoEnfermedad .requestFocus();
             return false;
         }
-        else if(rutainspeccion_sPotencial.getSelectedItem() ==-1) {
+        else if(rutainspeccion_sPotencial.getSelectedItem() ==null) {
             rutainspeccion_sPotencial .requestFocus();
             return false;
         }
         return true;
+    }
+
+    public void onRadioButtonClicked(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+        switch(view.getId()) {
+        }
     }
 }

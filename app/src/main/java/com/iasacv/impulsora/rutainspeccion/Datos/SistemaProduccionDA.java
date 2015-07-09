@@ -28,6 +28,7 @@ public class SistemaProduccionDA {
         try {
             Cursor objCursor = objEntLibTools.executeCursor("SELECT SIPROCVE,SIPRONOM FROM BACSIPRO WHERE SIPROSTS =\"A\"");
             List<Combo> listSistemaProduccion = new ArrayList<Combo>();
+            listSistemaProduccion.add(new Combo("-- Sistema de producci\u00F3n --", 0));
             while (objCursor.moveToNext()) {
                 listSistemaProduccion.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }

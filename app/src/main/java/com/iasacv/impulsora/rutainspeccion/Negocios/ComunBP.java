@@ -2,13 +2,16 @@ package com.iasacv.impulsora.rutainspeccion.Negocios;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteException;
+import android.view.ContextThemeWrapper;
 import android.widget.Toast;
 
 import com.iasacv.impulsora.rutainspeccion.Conexion.Crypt;
 import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
 import com.iasacv.impulsora.rutainspeccion.Datos.ComunDA;
+import com.iasacv.impulsora.rutainspeccion.R;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -58,12 +61,21 @@ public class ComunBP {
        // toastCorrecto.show();
     //}
 
-    public void Mensaje(String mensaje,Context context){
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Rutas de Inspecci\u00F3n");
-        builder.setMessage(mensaje);
-        builder.setPositiveButton("OK",null);
-        builder.create();
-        builder.show();
+    public void Mensaje(String mensaje,Context context) {
+        final AlertDialog alert = new AlertDialog.Builder(
+                new ContextThemeWrapper(context, android.R.style.Theme_Dialog))
+                .create();
+        alert.setTitle("Mensaje");
+        alert.setMessage(mensaje);
+        alert.setCancelable(false);
+        alert.setIcon(R.drawable.info);
+        alert.setCanceledOnTouchOutside(false);
+        alert.setButton(DialogInterface.BUTTON_POSITIVE, "Aceptar",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        alert.dismiss();
+                    }
+                });
+        alert.show();
     }
 }

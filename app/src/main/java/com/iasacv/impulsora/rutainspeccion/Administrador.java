@@ -61,6 +61,7 @@ public class Administrador extends ActionBarActivity {
     SwipeRefreshLayout mSwipeRefreshLayout;
     SimpleDateFormat formatFecha;
     String currentDate;
+    String currentTime;
 
     Intent intent;
     MyResultReceiver resultReceiver;
@@ -106,7 +107,7 @@ public class Administrador extends ActionBarActivity {
                     Item objItem = listaRutaInspeccion.get(position);
                     confirmDialogStart(objItem);
                 } catch (Exception e) {
-                    Mensaje(e.toString(), getApplicationContext());
+                    _objComunBP.Mensaje(e.toString(), getApplicationContext());
                 }
             }
         });
@@ -185,10 +186,10 @@ public class Administrador extends ActionBarActivity {
                 formatFecha = new SimpleDateFormat("yyyy-MM-dd");
                 currentDate = formatFecha.format(new Date());
                 refresh(currentDate);
-                Mensaje("Se debe contar con una conexi\u00F3n a Internet", getApplicationContext());
+                _objComunBP.Mensaje("Se debe contar con una conexi\u00F3n a Internet", getApplicationContext());
             }
         } catch (Exception e) {
-            Mensaje(e.toString(), getApplicationContext());
+            _objComunBP.Mensaje(e.toString(), getApplicationContext());
         }
     }
 
@@ -214,14 +215,14 @@ public class Administrador extends ActionBarActivity {
                     e.printStackTrace();
                 }
             } catch (Exception e) {
-                Mensaje(e.toString(), getApplicationContext());
+                _objComunBP.Mensaje(e.toString(), getApplicationContext());
             }
             return result;
         }
 
         protected void onPostExecute(Boolean result) {
             if (!result) {
-                Mensaje("Error: La informaci\u00F3n no se pudo actualizar", getApplicationContext());
+                _objComunBP.Mensaje("Error: La informaci\u00F3n no se pudo actualizar", getApplicationContext());
             } else {
                 formatFecha = new SimpleDateFormat("yyyy-MM-dd");
                 currentDate = formatFecha.format(new Date());
@@ -356,6 +357,7 @@ public class Administrador extends ActionBarActivity {
                                 objFiltro.CicloClave = objItem.getCicloClave();
                                 objFiltro.UsuarioClave = objItem.getUsuarioClave();
                                 objFiltro.Folio = objItem.getFolio();
+                                objFiltro.Fecha = objItem.getFecha();
                                 PlaneacionRuta objLote = _objRutaInspeccionBP.GetPlaneacionRuta(objFiltro);
                                 if ((objLote.LoteLatitud <= (gpsTracker.getLatitude() + 0.00192) && (objLote.LoteLatitud) >= (gpsTracker.getLatitude() - 0.00192)) &&
                                         ((objLote.LoteLongitud) <= (gpsTracker.getLongitude() + 0.001802) && (objLote.LoteLongitud) >= (gpsTracker.getLongitude() - 0.001802))) {
@@ -366,15 +368,14 @@ public class Administrador extends ActionBarActivity {
                                     if (objTemp.Folio == 0) {
                                         _objRutaInspeccionBP.InsertRutaInspeccionInicio(objRutaInspeccion);
                                         iniciarRutaInspeccion(objItem);
-                                    }
-                                    else {
+                                    } else {
                                         confirmInicio(objItem);
                                     }
                                 } else {
-                                    Mensaje("Error: Su localizacion para registrar la ruta de inspeccion no es correcta", getApplicationContext());
+                                    _objComunBP.Mensaje("Error: Su localizacion para registrar la ruta de inspeccion no es correcta", Administrador.this);
                                 }
                             } else {
-                                Mensaje("Error: Favor de habilitar GPS", getApplicationContext());
+                                _objComunBP.Mensaje("Error: Favor de habilitar GPS", getApplicationContext());
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -421,23 +422,16 @@ public class Administrador extends ActionBarActivity {
         objRutaInspeccion.FechaInicio = currentDate;
         //Obtener hora
         formatFecha = new SimpleDateFormat("HH:mm:ss");
-        currentDate = formatFecha.format(new Date());
-        objRutaInspeccion.HoraInicio = currentDate;
+        currentTime = formatFecha.format(new Date());
+        objRutaInspeccion.HoraInicio = currentTime;
         objRutaInspeccion.Estatus = "O";
         objRutaInspeccion.Uso = "S";
         return objRutaInspeccion;
     }
 
-    public void Mensaje(String mensaje,Context context){
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Rutas de Inspecci\u00F3n");
-        builder.setMessage(mensaje);
-        builder.setPositiveButton("Aceptar",null);
-        builder.create();
-        builder.show();
-    }
-
     public void iniciarRutaInspeccion(Item objItem){
+        formatFecha = new SimpleDateFormat("yyyy-MM-dd");
+        currentDate = formatFecha.format(new Date());
         if (objItem.getTipoInspeccion() == 1) {
             //Creamos el nuevo formulario
             Intent i = new Intent(Administrador.this, InspeccionCampo.class);

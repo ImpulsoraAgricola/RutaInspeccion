@@ -10,6 +10,7 @@ import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Item;
 import com.iasacv.impulsora.rutainspeccion.Modelo.PlaneacionRuta;
+import com.iasacv.impulsora.rutainspeccion.Modelo.RutaInspeccion;
 import com.iasacv.impulsora.rutainspeccion.R;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class PlaneacionRutaDA {
         //--Fecha
         if (entidad.Fecha != null) {
             if (cadena != "") { cadena += " AND "; }
-            cadena += "A.PLANEFEC=" + entidad.Fecha;
+            cadena += "A.PLANEFEC='" + entidad.Fecha+"'";
         }
         //--Folio
         if (entidad.Folio != 0) {

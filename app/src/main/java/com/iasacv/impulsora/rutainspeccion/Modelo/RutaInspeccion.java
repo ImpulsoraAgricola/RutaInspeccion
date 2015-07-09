@@ -11,7 +11,9 @@ import java.util.Hashtable;
 public class RutaInspeccion implements KvmSerializable{
 
     public int UsuarioClave;
+    public String UsuarioNombre;
     public int CicloClave;
+    public String CicloNombre;
     public String Fecha;
     public int Folio;
     public String FechaInicio;
@@ -21,13 +23,17 @@ public class RutaInspeccion implements KvmSerializable{
     public String Tiempo;
     public char RecomendacionTecnica;
     public int SistemaProduccionClave;
+    public String SistemaProduccionNombre;
     public int ArregloTopologicoClave;
+    public String ArregloTopologicoNombre;
     public char ProfundidadSiembra;
     public char ProfundidadSurco;
     public char ManejoAdecuado;
     public int EtapaFenologicaClave;
+    public String EtapaFenologicaNombre;
     public char Exposicion;
-    public int CondicionDesarrolLoClave;
+    public int CondicionDesarrolloClave;
+    public String CondicionDesarrolloNombre;
     public char OrdenCorrecto;
     public char RegulaPh;
     public char UsoAdecuado;
@@ -42,16 +48,25 @@ public class RutaInspeccion implements KvmSerializable{
     public char Fito;
     public char PlagasMalControladas;
     public int MalezaClave;
+    public String MalezaNombre;
     public int EstadoMalezaClave;
+    public String EstadoMalezaNombre;
     public int PlagaClave;
+    public String PlagaNombre;
     public int EstadoPlagaClave;
+    public String EstadoPlagaNombre;
     public int EnfermedadClave;
+    public String EnfermedadNombre;
     public int EstadoEnfermedadClave;
+    public String EstadoEnfermedadNombre;
     public int PotencialRendimientoClave;
+    public String PotencialRendimientoNombre;
     public int TipoRiegoClave;
+    public String TipoRiegoNombre;
     public int Capacidad;
     public String TipoRiegoOtro;
     public int RecomendacionClave;
+    public String RecomendacionNombre;
     public String RecomendacionOtro;
     public String Estatus;
     public String Uso;
@@ -63,92 +78,122 @@ public class RutaInspeccion implements KvmSerializable{
             case 0:
                 return UsuarioClave;
             case 1:
-                return CicloClave;
+                return UsuarioNombre;
             case 2:
-                return Fecha;
+                return CicloClave;
             case 3:
-                return Folio;
+                return CicloNombre;
             case 4:
-                return FechaInicio;
+                return Fecha;
             case 5:
-                return HoraInicio;
+                return Folio;
             case 6:
-                return FechaFin;
+                return FechaInicio;
             case 7:
-                return HoraFin;
+                return HoraInicio;
             case 8:
-                return Tiempo;
+                return FechaFin;
             case 9:
-                return RecomendacionTecnica;
+                return HoraFin;
             case 10:
-                return SistemaProduccionClave;
+                return Tiempo;
             case 11:
-                return ArregloTopologicoClave;
+                return RecomendacionTecnica;
             case 12:
-                return ProfundidadSiembra;
+                return SistemaProduccionClave;
             case 13:
-                return ProfundidadSurco;
+                return SistemaProduccionNombre;
             case 14:
-                return ManejoAdecuado;
+                return ArregloTopologicoClave;
             case 15:
-                return EtapaFenologicaClave;
+                return ArregloTopologicoNombre;
             case 16:
-                return Exposicion;
+                return ProfundidadSiembra;
             case 17:
-                return CondicionDesarrolLoClave;
+                return ProfundidadSurco;
             case 18:
-                return OrdenCorrecto;
+                return ManejoAdecuado;
             case 19:
-                return RegulaPh;
+                return EtapaFenologicaClave;
             case 20:
-                return UsoAdecuado;
+                return EtapaFenologicaNombre;
             case 21:
-                return HoraAplicacion;
+                return Exposicion;
             case 22:
-                return AguaCanal;
+                return CondicionDesarrolloClave;
             case 23:
-                return Inundacion;
+                return CondicionDesarrolloNombre;
             case 24:
-                return BajaPoblacion;
+                return OrdenCorrecto;
             case 25:
-                return AplicacionNutrientes;
+                return RegulaPh;
             case 26:
-                return AlteracionCiclo;
+                return UsoAdecuado;
             case 27:
-                return AplicacionAgroquimicos;
+                return HoraAplicacion;
             case 28:
-                return AltasTemperaturas;
+                return AguaCanal;
             case 29:
-                return Fito;
+                return Inundacion;
             case 30:
-                return PlagasMalControladas;
+                return BajaPoblacion;
             case 31:
-                return MalezaClave;
+                return AplicacionNutrientes;
             case 32:
-                return EstadoMalezaClave;
+                return AlteracionCiclo;
             case 33:
-                return PlagaClave;
+                return AplicacionAgroquimicos;
             case 34:
-                return EstadoPlagaClave;
+                return AltasTemperaturas;
             case 35:
-                return EnfermedadClave;
+                return Fito;
             case 36:
-                return EstadoEnfermedadClave;
+                return PlagasMalControladas;
             case 37:
-                return PotencialRendimientoClave;
+                return MalezaClave;
             case 38:
-                return TipoRiegoClave;
+                return MalezaNombre;
             case 39:
-                return Capacidad;
+                return EstadoMalezaClave;
             case 40:
-                return TipoRiegoOtro;
+                return EstadoMalezaNombre;
             case 41:
-                return RecomendacionClave;
+                return PlagaClave;
             case 42:
-                return RecomendacionOtro;
+                return PlagaNombre;
             case 43:
-                return Estatus;
+                return EstadoPlagaClave;
             case 44:
+                return EstadoPlagaNombre;
+            case 45:
+                return EnfermedadClave;
+            case 46:
+                return EnfermedadNombre;
+            case 47:
+                return EstadoEnfermedadClave;
+            case 48:
+                return EstadoEnfermedadNombre;
+            case 49:
+                return PotencialRendimientoClave;
+            case 50:
+                return PotencialRendimientoNombre;
+            case 51:
+                return TipoRiegoClave;
+            case 52:
+                return TipoRiegoNombre;
+            case 53:
+                return Capacidad;
+            case 54:
+                return TipoRiegoOtro;
+            case 55:
+                return RecomendacionClave;
+            case 56:
+                return RecomendacionNombre;
+            case 57:
+                return RecomendacionOtro;
+            case 58:
+                return Estatus;
+            case 59:
                 return Uso;
         }
         return null;
@@ -156,7 +201,7 @@ public class RutaInspeccion implements KvmSerializable{
 
     @Override
     public int getPropertyCount() {
-        return 45;
+        return 60;
     }
 
     @Override
@@ -168,182 +213,238 @@ public class RutaInspeccion implements KvmSerializable{
                 info.name = "UsuarioClave";
                 break;
             case 1:
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "UsuarioNombre";
+                break;
+            case 2:
                 info.type = PropertyInfo.INTEGER_CLASS;
                 info.name = "CicloClave";
                 break;
-            case 2:
-                info.type = PropertyInfo.STRING_CLASS;
-                info.name = "Fecha";
-                break;
             case 3:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "Folio";
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "CicloNombre";
                 break;
             case 4:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "FechaInicio";
+                info.name = "Fecha";
                 break;
             case 5:
                 info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "HoraInicio";
+                info.name = "Folio";
                 break;
             case 6:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "FechaFin";
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "FechaInicio";
                 break;
             case 7:
                 info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "HoraFin";
+                info.name = "HoraInicio";
                 break;
             case 8:
                 info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "Tiempo";
+                info.name = "FechaFin";
                 break;
             case 9:
-                info.type = PropertyInfo.STRING_CLASS;
-                info.name = "RecomendacionTecnica";
+                info.type = PropertyInfo.INTEGER_CLASS;
+                info.name = "HoraFin";
                 break;
             case 10:
                 info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "SistemaProduccionClave";
+                info.name = "Tiempo";
                 break;
             case 11:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "ArregloTopologicoClave";
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "RecomendacionTecnica";
                 break;
             case 12:
-                info.type = PropertyInfo.STRING_CLASS;
-                info.name = "ProfundidadSiembra";
+                info.type = PropertyInfo.INTEGER_CLASS;
+                info.name = "SistemaProduccionClave";
                 break;
             case 13:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "ProfundidadSurco";
+                info.name = "SistemaProduccionNombre";
                 break;
             case 14:
-                info.type = PropertyInfo.STRING_CLASS;
-                info.name = "ManejoAdecuado";
+                info.type = PropertyInfo.INTEGER_CLASS;
+                info.name = "ArregloTopologicoClave";
                 break;
             case 15:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "EtapaFenologicaClave";
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "ArregloTopologicoNombre";
                 break;
             case 16:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "Exposicion";
+                info.name = "ProfundidadSiembra";
                 break;
             case 17:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "CicloClave";
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "ProfundidadSurco";
                 break;
             case 18:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "CondicionDesarrolloClave";
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "ManejoAdecuado";
                 break;
             case 19:
-                info.type = PropertyInfo.STRING_CLASS;
-                info.name = "OrdenCorrecto";
+                info.type = PropertyInfo.INTEGER_CLASS;
+                info.name = "EtapaFenologicaClave";
                 break;
             case 20:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "RegulaPh";
+                info.name = "EtapaFenologicaNombre";
                 break;
             case 21:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "UsoAdecuado";
+                info.name = "Exposicion";
                 break;
             case 22:
-                info.type = PropertyInfo.STRING_CLASS;
-                info.name = "HoraAplicacion";
+                info.type = PropertyInfo.INTEGER_CLASS;
+                info.name = "CondicionDesarrolloClave";
                 break;
             case 23:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "AguaCanal";
+                info.name = "CondicionDesarrolloNombre";
                 break;
             case 24:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "Inundacion";
+                info.name = "OrdenCorrecto";
                 break;
             case 25:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "BajaPoblacion";
+                info.name = "RegulaPh";
                 break;
             case 26:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "AplicacionNutrientes";
+                info.name = "UsoAdecuado";
                 break;
             case 27:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "AlteracionCiclo";
+                info.name = "HoraAplicacion";
                 break;
             case 28:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "AplicacionAgroquimicos";
+                info.name = "AguaCanal";
                 break;
             case 29:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "AltasTemperaturas";
+                info.name = "Inundacion";
                 break;
             case 30:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "Fito";
+                info.name = "BajaPoblacion";
                 break;
             case 31:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "PlagasMalControladas";
+                info.name = "AplicacionNutrientes";
                 break;
             case 32:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "MalezaClave";
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "AlteracionCiclo";
                 break;
             case 33:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "EstadoMalezaClave";
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "AplicacionAgroquimicos";
                 break;
             case 34:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "PlagaClave";
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "AltasTemperaturas";
                 break;
             case 35:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "EstadoPlagaClave";
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "Fito";
                 break;
             case 36:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "EnfermedadClave";
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "PlagasMalControladas";
                 break;
             case 37:
                 info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "EstadoEnfermedadClave";
+                info.name = "MalezaClave";
                 break;
             case 38:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "PotencialRendimientoClave";
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "MalezaNombre";
                 break;
             case 39:
                 info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "TipoRiegoClave";
+                info.name = "EstadoMalezaClave";
                 break;
             case 40:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "Capacidad";
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "EstadoMalezaNombre";
                 break;
             case 41:
-                info.type = PropertyInfo.STRING_CLASS;
-                info.name = "TipoRiegoOtro";
+                info.type = PropertyInfo.INTEGER_CLASS;
+                info.name = "PlagaClave";
                 break;
             case 42:
-                info.type = PropertyInfo.INTEGER_CLASS;
-                info.name = "RecomendacionClave";
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "PlagaNombre";
                 break;
             case 43:
-                info.type = PropertyInfo.STRING_CLASS;
-                info.name = "RecomendacionOtro";
+                info.type = PropertyInfo.INTEGER_CLASS;
+                info.name = "EstadoPlagaClave";
                 break;
             case 44:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "Estatus";
+                info.name = "EstadoPlagaNombre";
                 break;
             case 45:
+                info.type = PropertyInfo.INTEGER_CLASS;
+                info.name = "EnfermedadClave";
+                break;
+            case 46:
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "EnfermedadNombre";
+                break;
+            case 47:
+                info.type = PropertyInfo.INTEGER_CLASS;
+                info.name = "EstadoEnfermedadClave";
+                break;
+            case 48:
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "EstadoEnfermedadNombre";
+                break;
+            case 49:
+                info.type = PropertyInfo.INTEGER_CLASS;
+                info.name = "PotencialRendimientoClave";
+                break;
+            case 50:
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "PotencialRendimientoNombre";
+                break;
+            case 51:
+                info.type = PropertyInfo.INTEGER_CLASS;
+                info.name = "TipoRiegoClave";
+                break;
+            case 52:
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "TipoRiegoNombre";
+                break;
+            case 53:
+                info.type = PropertyInfo.INTEGER_CLASS;
+                info.name = "Capacidad";
+                break;
+            case 54:
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "TipoRiegoOtro";
+                break;
+            case 55:
+                info.type = PropertyInfo.INTEGER_CLASS;
+                info.name = "RecomendacionClave";
+                break;
+            case 56:
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "RecomendacionNombre";
+                break;
+            case 57:
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "RecomendacionOtro";
+                break;
+            case 58:
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "Estatus";
+                break;
+            case 59:
                 info.type = PropertyInfo.STRING_CLASS;
                 info.name = "Uso";
                 break;
@@ -407,7 +508,7 @@ public class RutaInspeccion implements KvmSerializable{
                 Exposicion = val.toString().charAt(0);
                 break;
             case 17:
-                CondicionDesarrolLoClave = Integer.parseInt(val.toString());
+                CondicionDesarrolloClave = Integer.parseInt(val.toString());
                 break;
             case 18:
                 OrdenCorrecto = val.toString().charAt(0);
