@@ -46,7 +46,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".Servicios.WebService"></service>
+        <service android:name=".Servicios.WebServicePlaneacion"></service>
     </application>
 
 </manifest>

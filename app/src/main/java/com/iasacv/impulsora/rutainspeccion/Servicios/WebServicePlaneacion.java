@@ -24,7 +24,7 @@ import org.xmlpull.v1.XmlPullParserException;
 /**
  * Created by Administrator on 02/07/2015.
  */
-public class WebService extends Service{
+public class WebServicePlaneacion extends Service{
 
     Timer timer = new Timer();
     MyTimerTask timerTask;

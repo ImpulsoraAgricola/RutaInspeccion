@@ -114,6 +114,7 @@ public class InspeccionCampo extends ActionBarActivity {
     //Potencial de rendimiento
     private Spinner rutainspeccion_sPotencial;
     private Button rutainspeccion_btnGuardar;
+    private Button rutainspeccion_btnEnviar;
 
     //Variables clases
     WebServiceBP _objWebServiceBP;
@@ -164,17 +165,43 @@ public class InspeccionCampo extends ActionBarActivity {
             rutainspeccion_btnGuardar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                        try {
-                            if (validar()) {
-                                RutaInspeccion objRutaInspeccion = creaObjeto();
-                                boolean resul = _objRutaInspeccionBP.UpdateRutaInspeccion(objRutaInspeccion);
+                    try {
+                        if (validar()) {
+                            RutaInspeccion objRutaInspeccion = creaObjeto();
+                            objRutaInspeccion.Estatus = "G";
+                            boolean resul = _objRutaInspeccionBP.UpdateRutaInspeccion(objRutaInspeccion);
+                            _objPlaneacionRuta.Estatus = "G";
+                            resul = _objRutaInspeccionBP.UpdatePlaneacionRutaEstatus(_objPlaneacionRuta);
+                            guardarRecomendacion();
+                            if (resul) {
                                 _objComunBP.Mensaje("La informaci\u00F3n se guardo correctamente", InspeccionCampo.this);
+                                rutainspeccion_btnEnviar.setVisibility(View.VISIBLE);
                             }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (XmlPullParserException e) {
-                            e.printStackTrace();
                         }
+                    } catch (IOException e) {
+                        _objComunBP.Mensaje(e.toString(), InspeccionCampo.this);
+                    } catch (XmlPullParserException e) {
+                        _objComunBP.Mensaje(e.toString(), InspeccionCampo.this);
+                    }
+                }
+            });
+
+            rutainspeccion_btnEnviar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (validar()) {
+                            RutaInspeccion objRutaInspeccion = creaObjeto();
+                            objRutaInspeccion.Estatus = "E";
+                            boolean resul = _objRutaInspeccionBP.UpdateRutaInspeccion(objRutaInspeccion);
+                            _objComunBP.Mensaje("La informaci\u00F3n se enviara a IASA", InspeccionCampo.this);
+                            rutainspeccion_btnEnviar.setVisibility(View.INVISIBLE);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (XmlPullParserException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
@@ -248,9 +275,56 @@ public class InspeccionCampo extends ActionBarActivity {
         _objRutaInspeccion.EnfermedadClave = obtenerValorSpinner(rutainspeccion_sEnfermedad);
         _objRutaInspeccion.EstadoEnfermedadClave = obtenerValorSpinner(rutainspeccion_sEstadoEnfermedad);
         _objRutaInspeccion.PotencialRendimientoClave = obtenerValorSpinner(rutainspeccion_sPotencial);
-        _objRutaInspeccion.Estatus = "I";
         _objRutaInspeccion.Uso = "S";
         return _objRutaInspeccion;
+    }
+
+    private  void guardarRecomendacion () throws IOException, XmlPullParserException{
+        _objRutaInspeccion.RecomendacionOtro="";
+        if(rutainspeccion_chbRegar.isChecked())
+            agregarRelacionRecomendacion(1);
+        else
+            eliminarRelacionRecomendacion(1);
+        if(rutainspeccion_chbDesmezclar.isChecked())
+            agregarRelacionRecomendacion(2);
+        else
+            eliminarRelacionRecomendacion(2);
+        if(rutainspeccion_chbFungicida.isChecked())
+            agregarRelacionRecomendacion(3);
+        else
+            eliminarRelacionRecomendacion(3);
+        if(rutainspeccion_chbInsecticida.isChecked())
+            agregarRelacionRecomendacion(4);
+        else
+            eliminarRelacionRecomendacion(4);
+        if(rutainspeccion_chbHerbicida.isChecked())
+            agregarRelacionRecomendacion(5);
+        else
+            eliminarRelacionRecomendacion(5);
+        if(rutainspeccion_chbDesaguar.isChecked())
+            agregarRelacionRecomendacion(6);
+        else
+            eliminarRelacionRecomendacion(6);
+        if(rutainspeccion_chbDescostrar.isChecked())
+            agregarRelacionRecomendacion(7);
+        else
+            eliminarRelacionRecomendacion(7);
+        if(rutainspeccion_chbRecomendacionOtro.isChecked()) {
+            _objRutaInspeccion.RecomendacionOtro=rutainspeccion_txtRecomendacionOtro.getText().toString();
+            agregarRelacionRecomendacion(8);
+        }
+        else
+            eliminarRelacionRecomendacion(9);
+    }
+
+    private void agregarRelacionRecomendacion(int Clave) throws IOException, XmlPullParserException{
+        _objRutaInspeccion.RecomendacionClave = Clave;
+        boolean resul = _objRutaInspeccionBP.InsertRelacionRecomendacion(_objRutaInspeccion);
+    }
+
+    private void eliminarRelacionRecomendacion(int Clave) throws IOException, XmlPullParserException{
+        _objRutaInspeccion.RecomendacionClave = Clave;
+        boolean resul = _objRutaInspeccionBP.DeleteRelacionRecomendacion(_objRutaInspeccion);
     }
 
     public void llenarCombos() {
@@ -397,7 +471,7 @@ public class InspeccionCampo extends ActionBarActivity {
         //Potencial de rendimiento
         rutainspeccion_sPotencial = (Spinner) findViewById(R.id.rutainspeccion_sPotencial);
         rutainspeccion_btnGuardar = (Button) findViewById(R.id.rutainspeccion_btnGuardar);
-
+        rutainspeccion_btnEnviar = (Button) findViewById(R.id.rutainspeccion_btnEnviar);
     }
 
     private void cargarCabecero() {
@@ -409,12 +483,52 @@ public class InspeccionCampo extends ActionBarActivity {
         rutainspeccion_txtPredio.setText(_objPlaneacionFiltro.PredioNombre);
         rutainspeccion_txtLote.setText(_objPlaneacionFiltro.LoteNombre);
         rutainspeccion_txtFecha.setText(_objPlaneacionFiltro.Fecha);
+        if (_objPlaneacionFiltro.Estatus.equals("G"))
+            cargarInspeccionCampo();
+    }
+
+    private void cargarInspeccionCampo() {
+        RutaInspeccion objRutaInspeccion = _objRutaInspeccionBP.GetRutaInspeccion(_objRutaInspeccion);
+        RutaInspeccion[] listaRutaInspeccion = _objRutaInspeccionBP.GetAllRelacionRecomendacion(_objRutaInspeccion);
+        for (int i = 0; i < listaRutaInspeccion.length; i++) {
+            RutaInspeccion objTemp = new RutaInspeccion();
+            objTemp = (RutaInspeccion) listaRutaInspeccion[i];
+            switch (objTemp.RecomendacionClave) {
+                case 1:
+                    rutainspeccion_chbRegar.setChecked(true);
+                    break;
+                case 2:
+                    rutainspeccion_chbDesmezclar.setChecked(true);
+                    break;
+                case 3:
+                    rutainspeccion_chbFungicida.setChecked(true);
+                    break;
+                case 4:
+                    rutainspeccion_chbInsecticida.setChecked(true);
+                    break;
+                case 5:
+                    rutainspeccion_chbHerbicida.setChecked(true);
+                    break;
+                case 6:
+                    rutainspeccion_chbDesaguar.setChecked(true);
+                    break;
+                case 7:
+                    rutainspeccion_chbDescostrar.setChecked(true);
+                    break;
+                case 8:
+                    rutainspeccion_chbRecomendacionOtro.setChecked(true);
+                    rutainspeccion_txtRecomendacionOtro.setEnabled(true);
+                    rutainspeccion_txtRecomendacionOtro.setText(objTemp.RecomendacionOtro);
+                    break;
+            }
+        }
+
     }
 
     private void seleccionarValorSpinner(Spinner _objSpinner, int valor) {
         ArrayAdapter<Combo> objArrayAdapter = (ArrayAdapter<Combo>) _objSpinner.getAdapter();
         for (int i = 0; i < objArrayAdapter.getCount(); i++) {
-            if (((Combo) objArrayAdapter.getItem(i)).getClave()==valor) {
+            if (((Combo) objArrayAdapter.getItem(i)).getClave() == valor) {
                 _objSpinner.setSelection(i);
             }
         }
@@ -450,182 +564,182 @@ public class InspeccionCampo extends ActionBarActivity {
     }
 
     private boolean validar() {
-        boolean validar=true;
+        boolean validar = true;
         if (rutainspeccion_rdRecomendacion.getCheckedRadioButtonId() == -1) {
             rutainspeccion_rdRecomendacion.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [¿El productor consult\u00F3 las recomendaciones técnicas?]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_sSistemaProduccion.getSelectedItemPosition() == 0) {
             rutainspeccion_sSistemaProduccion.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Sitema de producci\u00F3n]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_sArregloTopologico.getSelectedItemPosition() == 0) {
             rutainspeccion_sArregloTopologico.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Arreglo topologico]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_rdAdecuada.getCheckedRadioButtonId() == -1) {
             rutainspeccion_rdAdecuada.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Profundidad de siembra adecuada]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_rdSurco.getCheckedRadioButtonId() == -1) {
             rutainspeccion_rdSurco.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Profundidad de surco adecuada]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_rdManejo.getCheckedRadioButtonId() == -1) {
             rutainspeccion_rdManejo.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Manejo adecuado de la siembra]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (!rutainspeccion_chbCanal.isChecked() && !rutainspeccion_chbGravedad.isChecked() && !rutainspeccion_chbAspersion.isChecked() &&
                 !rutainspeccion_chbGoteo.isChecked() && !rutainspeccion_chbPozo.isChecked() && !rutainspeccion_chbRiegoOtro.isChecked()) {
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Riego]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_chbPozo.isChecked()) {
             if (rutainspeccion_txtCapacidad.getText().toString().length() == 0) {
                 rutainspeccion_txtCapacidad.requestFocus();
                 _objComunBP.Mensaje("*Favor de no dejar el campo vac\u00EDo. [Capacidad de la bomba en pulgadas]", InspeccionCampo.this);
-                return validar=false;
+                return validar = false;
             }
         }
         if (rutainspeccion_chbRiegoOtro.isChecked()) {
             if (rutainspeccion_txtRiegoOtro.getText().toString().length() == 0) {
                 rutainspeccion_txtRiegoOtro.requestFocus();
                 _objComunBP.Mensaje("*Favor de no dejar el campo vac\u00EDo. [Otro (Riego)]", InspeccionCampo.this);
-                return validar=false;
+                return validar = false;
             }
         }
         if (rutainspeccion_sEtapa.getSelectedItemPosition() == 0) {
             rutainspeccion_sEtapa.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Etapa principal Zadoks]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_rdExposicion.getCheckedRadioButtonId() == -1) {
             rutainspeccion_rdExposicion.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Exposici\u00F3n de la excersi\u00F3n]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_sCondicionDesarrollo.getSelectedItemPosition() == 0) {
             rutainspeccion_sCondicionDesarrollo.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Condiciones de desarrollo]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (!rutainspeccion_chbRegar.isChecked() && !rutainspeccion_chbDesmezclar.isChecked() && !rutainspeccion_chbFungicida.isChecked() &&
                 !rutainspeccion_chbInsecticida.isChecked() && !rutainspeccion_chbHerbicida.isChecked() && !rutainspeccion_chbDesaguar.isChecked() &&
                 !rutainspeccion_chbDescostrar.isChecked() && !rutainspeccion_chbRecomendacionOtro.isChecked()) {
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Recomendaciones]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_chbRecomendacionOtro.isChecked()) {
             if (rutainspeccion_txtRecomendacionOtro.getText().toString().length() == 0) {
                 _objComunBP.Mensaje("*Favor de no dejar el campo vac\u00EDo. [Otro (Recomendaciones)]", InspeccionCampo.this);
-                return validar=false;
+                return validar = false;
             }
         }
         if (rutainspeccion_rdOrden.getCheckedRadioButtonId() == -1) {
             rutainspeccion_rdOrden.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Orden correcto de preparaci\u00F3n de mezcla]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_rdRegula.getCheckedRadioButtonId() == -1) {
             rutainspeccion_rdRegula.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Regula pH del agua]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_rdUso.getCheckedRadioButtonId() == -1) {
             rutainspeccion_rdUso.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Uso adecuado de boquillas]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_rdHora.getCheckedRadioButtonId() == -1) {
             rutainspeccion_rdHora.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Hora de aplicaci\u00F3n]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_rdAgua.getCheckedRadioButtonId() == -1) {
             rutainspeccion_rdAgua.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Agua de canal para aplicaciones]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_rdInundacion.getCheckedRadioButtonId() == -1) {
             rutainspeccion_rdInundacion.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Inundación]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_rdPoblacion.getCheckedRadioButtonId() == -1) {
             rutainspeccion_rdPoblacion.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Baja población de plantas]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_rdProblema.getCheckedRadioButtonId() == -1) {
             rutainspeccion_rdProblema.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Problemas en la aplicaci\u00F3n de nutrientes]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_rdAlteracion.getCheckedRadioButtonId() == -1) {
             rutainspeccion_rdAlteracion.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Alteraci\u00F3n de ciclo]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_rdAplicacion.getCheckedRadioButtonId() == -1) {
             rutainspeccion_rdAplicacion.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Aplicaci\u00F3n adecuada de agroquímicos]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_rdTemperatura.getCheckedRadioButtonId() == -1) {
             rutainspeccion_rdTemperatura.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Altas temperaturas]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_rdFito.getCheckedRadioButtonId() == -1) {
             rutainspeccion_rdFito.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Fitotoxicidad]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_rdPlaga.getCheckedRadioButtonId() == -1) {
             rutainspeccion_rdPlaga.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Plagas mal controladas]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_sMaleza.getSelectedItemPosition() == 0) {
             rutainspeccion_sMaleza.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Maleza]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_sEstadoMaleza.getSelectedItemPosition() == 0) {
             rutainspeccion_sEstadoMaleza.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Grado de infestaci\u00F3n (Maleza)]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_sPlaga.getSelectedItemPosition() == 0) {
             rutainspeccion_sPlaga.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Insectos]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_sEstadoPlaga.getSelectedItemPosition() == 0) {
             rutainspeccion_sEstadoPlaga.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Grado de infestaci\u00F3n (Insectos)]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_sEnfermedad.getSelectedItemPosition() == 0) {
             rutainspeccion_sEnfermedad.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Enfermedad]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_sEstadoEnfermedad.getSelectedItemPosition() == 0) {
             rutainspeccion_sEstadoEnfermedad.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Grado de infestaci\u00F3n (Enfermedad)]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         if (rutainspeccion_sPotencial.getSelectedItemPosition() == 0) {
             rutainspeccion_sPotencial.requestFocus();
             _objComunBP.Mensaje("*Favor de seleccionar una opci\u00F3n. [Potencial de rendimiento del cultivo]", InspeccionCampo.this);
-            return validar=false;
+            return validar = false;
         }
         return validar;
     }

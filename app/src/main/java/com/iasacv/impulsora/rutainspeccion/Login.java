@@ -112,7 +112,7 @@ public class Login extends ActionBarActivity {
 
         @Override
         protected void onPreExecute() {
-            loadProgressDialog = ProgressDialog.show(Login.this, "Rutas de Inspecci\u00F3n", "Comprobando informaci\u00F3n...", true, false);
+            loadProgressDialog = ProgressDialog.show(Login.this, "Rutas de Inspecci\u00F3n", "Iniciando sesi\u00F3n. Por favor un momento...", true, false);
         }
 
         protected Boolean doInBackground(String... params) {

@@ -1239,6 +1239,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_btnGuardar" />
+            <Button
+                android:id="@+id/rutainspeccion_btnEnviar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:text="@string/activity_ruta_inspeccion_btnEnviar" />
 
         </LinearLayout>
     </LinearLayout>

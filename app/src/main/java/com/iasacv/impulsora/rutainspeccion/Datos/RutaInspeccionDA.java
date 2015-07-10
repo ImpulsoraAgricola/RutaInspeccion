@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 
 import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
+import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.PlaneacionRuta;
 import com.iasacv.impulsora.rutainspeccion.Modelo.RutaInspeccion;
 
@@ -44,11 +45,12 @@ public class RutaInspeccionDA {
         return cadena;
     }
 
+    //Ruta de inspeccion
     public RutaInspeccion GetRutaInspeccionCabecero(RutaInspeccion objFiltro) {
         try {
             String filtro = ArmaFiltro(objFiltro);
             RutaInspeccion objRutaInspeccion = new RutaInspeccion();
-            Cursor objCursor = objEntLibTools.executeCursor("SELECT USUARCVE,CICLOCVE,PLANEFEC,PLADEFOL  " +
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT USUARCVE,CICLOCVE,PLANEFEC,PLADEFOL,RUINSSTS  " +
                     "FROM BATRUINS A " +
                     "WHERE " + filtro);
             while (objCursor.moveToNext()) {
@@ -56,6 +58,7 @@ public class RutaInspeccionDA {
                 objRutaInspeccion.CicloClave = objCursor.getInt(1);
                 objRutaInspeccion.Fecha = objCursor.getString(2);
                 objRutaInspeccion.Folio = objCursor.getInt(3);
+                objRutaInspeccion.Estatus = objCursor.getString(4);
             }
             objCursor.close();
             return objRutaInspeccion;
@@ -190,13 +193,43 @@ public class RutaInspeccionDA {
                     "ENFERCVE="+ objRutaInspeccion.EnfermedadClave + "," +
                     "ESTENCVE="+ objRutaInspeccion.EstadoEnfermedadClave + "," +
                     "POTRECVE="+ objRutaInspeccion.PotencialRendimientoClave + "," +
-                    "RUINSSTS='" + objRutaInspeccion.Estatus + "'" +
+                    "RUINSSTS='" + objRutaInspeccion.Estatus + "'," +
+                    "RUINSUSO='" + objRutaInspeccion.Uso + "'" +
                     "WHERE USUARCVE="+objRutaInspeccion.UsuarioClave+
                     " AND CICLOCVE="+objRutaInspeccion.CicloClave+
                     " AND PLANEFEC='"+objRutaInspeccion.Fecha+"'"+
                     " AND PLADEFOL="+objRutaInspeccion.Folio+";";
             objEntLibTools.insert(query);
             return resul;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
+    //Relacion riego
+    public RutaInspeccion[] GetAllRelacionRiego(RutaInspeccion objFiltro) {
+        try {
+            String filtro = ArmaFiltro(objFiltro);
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT USUARCVE,CICLOCVE,PLANEFEC,PLADEFOL,A.TIRIECVE," +
+                    "TIRIENOM,RIEGOCAP,RIEGOOTR \n" +
+                    "FROM BARRIEGO A INNER JOIN BACTIRIE B ON (A.TIRIECVE=B.TIRIECVE) "+
+                    "WHERE " + filtro);
+            RutaInspeccion[] listaRutaInspeccion = new RutaInspeccion[objCursor.getCount()];
+            int i = 0;
+            while (objCursor.moveToNext()) {
+                RutaInspeccion objRutaInspeccion = new RutaInspeccion();
+                objRutaInspeccion.UsuarioClave = objCursor.getInt(0);
+                objRutaInspeccion.CicloClave = objCursor.getInt(1);
+                objRutaInspeccion.Fecha = objCursor.getString(2);
+                objRutaInspeccion.Folio = objCursor.getInt(3);
+                objRutaInspeccion.TipoRiegoClave = objCursor.getInt(4);
+                objRutaInspeccion.TipoRiegoNombre = objCursor.getString(5);
+                objRutaInspeccion.Capacidad = objCursor.getInt(6);
+                objRutaInspeccion.TipoRiegoOtro = objCursor.getString(7);
+                listaRutaInspeccion[i] = objRutaInspeccion;
+                i++;
+            }
+            return listaRutaInspeccion;
         } catch (SQLException e) {
             throw e;
         }
@@ -221,6 +254,34 @@ public class RutaInspeccionDA {
         }
     }
 
+    //Relacion recomendacion
+    public RutaInspeccion[] GetAllRelacionRecomendacion(RutaInspeccion objFiltro) {
+        try {
+            String filtro = ArmaFiltro(objFiltro);
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT USUARCVE,CICLOCVE,PLANEFEC,PLADEFOL,A.RECOMCVE," +
+                    "RECOMNOM,RECOMOTR\n" +
+                    "FROM BARRECOM A INNER JOIN BACRECOM B ON (A.RECOMCVE=B.RECOMCVE) "+
+                    "WHERE " + filtro);
+            RutaInspeccion[] listaRutaInspeccion = new RutaInspeccion[objCursor.getCount()];
+            int i = 0;
+            while (objCursor.moveToNext()) {
+                RutaInspeccion objRutaInspeccion = new RutaInspeccion();
+                objRutaInspeccion.UsuarioClave = objCursor.getInt(0);
+                objRutaInspeccion.CicloClave = objCursor.getInt(1);
+                objRutaInspeccion.Fecha = objCursor.getString(2);
+                objRutaInspeccion.Folio = objCursor.getInt(3);
+                objRutaInspeccion.RecomendacionClave = objCursor.getInt(4);
+                objRutaInspeccion.RecomendacionNombre = objCursor.getString(5);
+                objRutaInspeccion.RecomendacionOtro = objCursor.getString(6);
+                listaRutaInspeccion[i] = objRutaInspeccion;
+                i++;
+            }
+            return listaRutaInspeccion;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
     public boolean InsertRelacionRecomendacion(RutaInspeccion objRutaInspeccion) {
         try {
             boolean resul = true;
@@ -229,9 +290,23 @@ public class RutaInspeccionDA {
                     "'" + objRutaInspeccion.Fecha + "'," +
                     + objRutaInspeccion.Folio + "," +
                     + objRutaInspeccion.RecomendacionClave + "," +
-                    "'" + objRutaInspeccion.RecomendacionOtro + "'," +
-                    "'" + objRutaInspeccion.Estatus + "'," +
-                    "'" + objRutaInspeccion.Uso + "')";
+                    "'" + objRutaInspeccion.RecomendacionOtro + "')";
+            objEntLibTools.insert(query);
+            return resul;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
+    public boolean DeleteRelacionRecomendacion(RutaInspeccion objRutaInspeccion) {
+        try {
+            boolean resul = true;
+            String query = "DELETE FROM BARRECOM WHERE " +
+                    "USUARCVE=" + objRutaInspeccion.UsuarioClave + "," +
+                    " AND CICLOCVE="+ objRutaInspeccion.CicloClave + "," +
+                    " AND PLANEFEC='" + objRutaInspeccion.Fecha + "'," +
+                    " AND PLADEFOL="+ objRutaInspeccion.Folio + "," +
+                    " AND RECOMCVE="+ objRutaInspeccion.RecomendacionClave + ";";
             objEntLibTools.insert(query);
             return resul;
         } catch (SQLException e) {

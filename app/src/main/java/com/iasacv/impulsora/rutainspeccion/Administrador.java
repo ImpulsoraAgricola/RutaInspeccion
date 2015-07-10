@@ -31,7 +31,7 @@ import com.iasacv.impulsora.rutainspeccion.Negocios.CatalogosBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.ComunBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.RutaInspeccionBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.WebServiceBP;
-import com.iasacv.impulsora.rutainspeccion.Servicios.WebService;
+import com.iasacv.impulsora.rutainspeccion.Servicios.WebServicePlaneacion;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -101,7 +101,7 @@ public class Administrador extends ActionBarActivity {
                     Item objItem = listaRutaInspeccion.get(position);
                     confirmDialogStart(objItem);
                 } catch (Exception e) {
-                    _objComunBP.Mensaje(e.toString(), getApplicationContext());
+                    _objComunBP.Mensaje(e.toString(), Administrador.this);
                 }
             }
         });
@@ -180,10 +180,10 @@ public class Administrador extends ActionBarActivity {
                 formatFecha = new SimpleDateFormat("yyyy-MM-dd");
                 currentDate = formatFecha.format(new Date());
                 refresh(currentDate);
-                _objComunBP.Mensaje("Se debe contar con una conexi\u00F3n a Internet", getApplicationContext());
+                _objComunBP.Mensaje("Se debe contar con una conexi\u00F3n a Internet", Administrador.this);
             }
         } catch (Exception e) {
-            _objComunBP.Mensaje(e.toString(), getApplicationContext());
+            _objComunBP.Mensaje(e.toString(), Administrador.this);
         }
     }
 
@@ -209,14 +209,14 @@ public class Administrador extends ActionBarActivity {
                     e.printStackTrace();
                 }
             } catch (Exception e) {
-                _objComunBP.Mensaje(e.toString(), getApplicationContext());
+                _objComunBP.Mensaje(e.toString(), Administrador.this);
             }
             return result;
         }
 
         protected void onPostExecute(Boolean result) {
             if (!result) {
-                _objComunBP.Mensaje("Error: La informaci\u00F3n no se pudo actualizar", getApplicationContext());
+                _objComunBP.Mensaje("Error: La informaci\u00F3n no se pudo actualizar. Favor de revisar la hora de su dispositivo", Administrador.this);
             } else {
                 formatFecha = new SimpleDateFormat("yyyy-MM-dd");
                 currentDate = formatFecha.format(new Date());
@@ -253,7 +253,7 @@ public class Administrador extends ActionBarActivity {
 
     public void callService() {
         resultReceiver = new MyResultReceiver(null);
-        intent = new Intent(this, WebService.class);
+        intent = new Intent(this, WebServicePlaneacion.class);
         intent.putExtra("receiver", resultReceiver);
         intent.putExtra("Clave", _objUsuario.Clave);
         intent.putExtra("RFC", _objUsuario.RFC);
@@ -360,7 +360,7 @@ public class Administrador extends ActionBarActivity {
                                     if (objTemp.Folio == 0) {
                                         _objRutaInspeccionBP.InsertRutaInspeccion(objRutaInspeccion);
                                         iniciarRutaInspeccion(objItem);
-                                    } else if (objTemp.Estatus == "O") {
+                                    } else if (objTemp.Estatus.equals("C")) {
                                         confirmInicio(objItem);
                                     } else
                                         iniciarRutaInspeccion(objItem);
@@ -368,7 +368,7 @@ public class Administrador extends ActionBarActivity {
                                     _objComunBP.Mensaje("Error: Su localizacion para registrar la ruta de inspeccion no es correcta", Administrador.this);
                                 }
                             } else {
-                                _objComunBP.Mensaje("Error: Favor de habilitar GPS", getApplicationContext());
+                                _objComunBP.Mensaje("Error: Favor de habilitar GPS", Administrador.this);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();

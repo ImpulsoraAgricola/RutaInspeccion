@@ -181,6 +181,22 @@ public class PlaneacionRutaDA {
         }
     }
 
+    public boolean UpdatePlaneacionRutaEstatus(PlaneacionRuta objPlaneacionRuta) {
+        try {
+            boolean resul = true;
+            String query = "UPDATE BATPLADE SET " +
+                    "PLADESTS='" + objPlaneacionRuta.Estatus + "'" +
+                    " WHERE USUARCVE="+objPlaneacionRuta.UsuarioClave+
+                    " AND CICLOCVE="+objPlaneacionRuta.CicloClave+
+                    " AND PLANEFEC='"+objPlaneacionRuta.Fecha+"'"+
+                    " AND PLADEFOL="+objPlaneacionRuta.Folio;
+            objEntLibTools.insert(query);
+            return resul;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
 }
 
 
