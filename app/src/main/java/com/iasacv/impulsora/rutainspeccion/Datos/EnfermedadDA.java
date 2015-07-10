@@ -28,6 +28,7 @@ public class EnfermedadDA {
         try {
             Cursor objCursor = objEntLibTools.executeCursor("SELECT ENFERCVE,ENFERNOM FROM BECENFER WHERE ENFERSTS=\"A\"");
             List<Combo> listEnfermedad = new ArrayList<Combo>();
+            listEnfermedad.add(new Combo("-- Enfermedad (prinicipal) --", 0));
             while (objCursor.moveToNext()) {
                 listEnfermedad.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }

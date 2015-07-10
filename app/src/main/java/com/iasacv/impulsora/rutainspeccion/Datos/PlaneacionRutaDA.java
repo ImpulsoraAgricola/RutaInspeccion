@@ -129,7 +129,7 @@ public class PlaneacionRutaDA {
                     "FROM BATPLADE A INNER JOIN BACTIINS B ON (A.TIINSCVE=B.TIINSCVE) WHERE USUARCVE="+usuarioClave+" AND PLANEFEC='"+fecha+"' ORDER BY PLADEFOL");
             ArrayList<Item> listaPlaneacionRuta = new ArrayList<Item>();
             while (objCursor.moveToNext()) {
-                if(objCursor.getString(5).toString().equals("I"))
+                if(objCursor.getString(9).toString().equals("I"))
                     listaPlaneacionRuta.add(new Item(Integer.parseInt(objCursor.getString(0)),Integer.parseInt(objCursor.getString(1)),
                             Integer.parseInt(objCursor.getString(2)),Integer.parseInt(objCursor.getString(3)),objCursor.getString(10),objInspection,
                             "Folio: "+objCursor.getString(2)+"\nCliente: "+objCursor.getString(5)+"\nProductor: "+ objCursor.getString(6)+

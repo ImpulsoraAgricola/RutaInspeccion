@@ -28,6 +28,7 @@ public class PlagaDA {
         try {
             Cursor objCursor = objEntLibTools.executeCursor("SELECT PLAGACVE,PLAGANOM FROM BLCPLAGA WHERE PLAGASTS=\"A\"");
             List<Combo> listPlaga = new ArrayList<Combo>();
+            listPlaga.add(new Combo("-- Insectos (principal) --", 0));
             while (objCursor.moveToNext()) {
                 listPlaga.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }

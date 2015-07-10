@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".InspeccionCampo">
+    android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/fondo"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:context=".InspeccionCampo">
 
         <TextView
             style="?android:attr/listSeparatorTextViewStyle"
@@ -34,7 +32,7 @@
 
             <EditText
                 android:id="@+id/rutainspeccion_txtFolio"
-                android:layout_width="match_parent"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:inputType="number"
@@ -188,8 +186,8 @@
 
         </LinearLayout>
 
-        <RadioGroup 
-	    android:id="@+id/rutainspeccion_rdRecomendacion"
+        <RadioGroup
+            android:id="@+id/rutainspeccion_rdRecomendacion"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -233,7 +231,7 @@
                 android:id="@+id/rutainspeccion_sSistemaProduccion"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:typeface="sans"/>
+                android:typeface="sans" />
 
         </LinearLayout>
 
@@ -278,8 +276,8 @@
 
         </LinearLayout>
 
-        <RadioGroup 
-	    android:id="@+id/rutainspeccion_rdAdecuada"
+        <RadioGroup
+            android:id="@+id/rutainspeccion_rdAdecuada"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -312,8 +310,8 @@
 
         </LinearLayout>
 
-        <RadioGroup 
-	    android:id="@+id/rutainspeccion_rdSurco"
+        <RadioGroup
+            android:id="@+id/rutainspeccion_rdSurco"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -346,8 +344,8 @@
 
         </LinearLayout>
 
-        <RadioGroup 
-	    android:id="@+id/rutainspeccion_rdManejo"
+        <RadioGroup
+            android:id="@+id/rutainspeccion_rdManejo"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -402,19 +400,19 @@
                 android:onClick="onCheckboxClicked"
                 android:text="@string/activity_ruta_inspeccion_aspersion" />
 
-            <CheckBox
-                android:id="@+id/rutainspeccion_chbGoteo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onCheckboxClicked"
-                android:text="@string/activity_ruta_inspeccion_goteo" />
-
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/rutainspeccion_chbGoteo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onCheckboxClicked"
+                android:text="@string/activity_ruta_inspeccion_goteo" />
 
             <CheckBox
                 android:id="@+id/rutainspeccion_chbPozo"
@@ -428,8 +426,16 @@
                 android:layout_width="95dp"
                 android:layout_height="wrap_content"
                 android:enabled="false"
-                android:inputType="numberDecimal"
+                android:hint="@string/activity_ruta_inspeccion_capacidad"
+                android:inputType="number"
                 android:typeface="sans" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <CheckBox
                 android:id="@+id/rutainspeccion_chbRiegoOtro"
@@ -440,11 +446,12 @@
 
             <EditText
                 android:id="@+id/rutainspeccion_txtRiegoOtro"
-                android:layout_width="95dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:inputType="text"
                 android:typeface="sans" />
+
         </LinearLayout>
 
         <TextView
@@ -489,7 +496,7 @@
         </LinearLayout>
 
         <RadioGroup
-	    android:id="@+id/rutainspeccion_rdExposicion"
+            android:id="@+id/rutainspeccion_rdExposicion"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -584,12 +591,6 @@
                 android:onClick="onCheckboxClicked"
                 android:text="@string/activity_ruta_inspeccion_herbicida" />
 
-            <CheckBox
-                android:id="@+id/rutainspeccion_chbDesaguar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onCheckboxClicked"
-                android:text="@string/activity_ruta_inspeccion_desaguar" />
         </LinearLayout>
 
         <LinearLayout
@@ -605,6 +606,20 @@
                 android:text="@string/activity_ruta_inspeccion_descostrar" />
 
             <CheckBox
+                android:id="@+id/rutainspeccion_chbDesaguar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onCheckboxClicked"
+                android:text="@string/activity_ruta_inspeccion_desaguar" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
                 android:id="@+id/rutainspeccion_chbRecomendacionOtro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -618,6 +633,7 @@
                 android:enabled="false"
                 android:inputType="text"
                 android:typeface="sans" />
+
         </LinearLayout>
 
         <TextView
@@ -643,7 +659,7 @@
         </LinearLayout>
 
         <RadioGroup
-	    android:id="@+id/rutainspeccion_rdOrden"
+            android:id="@+id/rutainspeccion_rdOrden"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -677,7 +693,7 @@
         </LinearLayout>
 
         <RadioGroup
-	    android:id="@+id/rutainspeccion_rdRegula"
+            android:id="@+id/rutainspeccion_rdRegula"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -711,7 +727,7 @@
         </LinearLayout>
 
         <RadioGroup
-	    android:id="@+id/rutainspeccion_rdUso"
+            android:id="@+id/rutainspeccion_rdUso"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -745,7 +761,7 @@
         </LinearLayout>
 
         <RadioGroup
-	    android:id="@+id/rutainspeccion_rdHora"
+            android:id="@+id/rutainspeccion_rdHora"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -779,7 +795,7 @@
         </LinearLayout>
 
         <RadioGroup
-	    android:id="@+id/rutainspeccion_rdAgua"
+            android:id="@+id/rutainspeccion_rdAgua"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -822,7 +838,7 @@
         </LinearLayout>
 
         <RadioGroup
-	    android:id="@+id/rutainspeccion_rdInundacion"
+            android:id="@+id/rutainspeccion_rdInundacion"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -856,7 +872,7 @@
         </LinearLayout>
 
         <RadioGroup
-	    android:id="@+id/rutainspeccion_rdPoblacion"
+            android:id="@+id/rutainspeccion_rdPoblacion"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -890,7 +906,7 @@
         </LinearLayout>
 
         <RadioGroup
-	    android:id="@+id/rutainspeccion_rdProblema"
+            android:id="@+id/rutainspeccion_rdProblema"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -924,7 +940,7 @@
         </LinearLayout>
 
         <RadioGroup
-	    android:id="@+id/rutainspeccion_rdAlteracion"
+            android:id="@+id/rutainspeccion_rdAlteracion"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -958,7 +974,7 @@
         </LinearLayout>
 
         <RadioGroup
-	    android:id="@+id/rutainspeccion_rdAplicacion"
+            android:id="@+id/rutainspeccion_rdAplicacion"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -992,7 +1008,7 @@
         </LinearLayout>
 
         <RadioGroup
-	    android:id="@+id/rutainspeccion_rdTemperatura"
+            android:id="@+id/rutainspeccion_rdTemperatura"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -1026,7 +1042,7 @@
         </LinearLayout>
 
         <RadioGroup
-	    android:id="@+id/rutainspeccion_rdFito"
+            android:id="@+id/rutainspeccion_rdFito"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -1060,7 +1076,7 @@
         </LinearLayout>
 
         <RadioGroup
-	    android:id="@+id/rutainspeccion_rdPlaga"
+            android:id="@+id/rutainspeccion_rdPlaga"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">

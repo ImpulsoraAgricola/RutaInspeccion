@@ -28,6 +28,7 @@ public class MalezaDA {
         try {
             Cursor objCursor = objEntLibTools.executeCursor("SELECT MALEZCVE,MALEZNOM FROM BPCMALEZ WHERE MALEZSTS=\"A\"");
             List<Combo> listMaleza = new ArrayList<Combo>();
+            listMaleza.add(new Combo("-- Maleza (principal) --", 0));
             while (objCursor.moveToNext()) {
                 listMaleza.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }

@@ -46,6 +46,7 @@
 
     <string name="activity_ruta_inspeccion_title_sRiego">2.- Riego</string>
     <string name="activity_ruta_inspeccion_pozo">Pozo</string>
+    <string name="activity_ruta_inspeccion_capacidad">Capacidad</string>
     <string name="activity_ruta_inspeccion_gravedad">Gravedad</string>
     <string name="activity_ruta_inspeccion_aspersion">Aspersión</string>
     <string name="activity_ruta_inspeccion_goteo">Goteo</string>
@@ -55,7 +56,7 @@
     <string name="activity_ruta_inspeccion_title_sEtapa">3.- Etapa fenológica</string>
     <string name="activity_ruta_inspeccion_etapa">Etapa principal Zadoks:</string>
     <string name="activity_ruta_inspeccion_exposicion">Exposición de la excersión:</string>
-    <string name="activity_ruta_inspeccion_title_sCondicionesDesarrollo">Condiciones de desarrollo</string>
+    <string name="activity_ruta_inspeccion_title_sCondicionesDesarrollo">Condiciones de desarrollo:</string>
     <string name="activity_ruta_inspeccion_title_sRecomendaciones">Recomendaciones</string>
     <string name="activity_ruta_inspeccion_regar">Regar</string>
     <string name="activity_ruta_inspeccion_desmezclar">Desmezclar</string>
@@ -84,10 +85,10 @@
     <string name="activity_ruta_inspeccion_plaga_mal">8. Plagas mal controladas</string>
     <string name="activity_ruta_inspeccion_maleza">9. Maleza (principal)</string>
     <string name="activity_ruta_inspeccion_insecto">10. Insectos</string>
-    <string name="activity_ruta_inspeccion_enfermedad">11. Enfermedades (principal)</string>
+    <string name="activity_ruta_inspeccion_enfermedad">11. Enfermedad (principal)</string>
     <string name="activity_ruta_inspeccion_estado">Grado de infestación:</string>
 
-    <string name="activity_ruta_inspeccion_potencial">Potencial de rendimiento del cultivo</string>
+    <string name="activity_ruta_inspeccion_potencial">Potencial de rendimiento del cultivo:</string>
 
     <string name="activity_ruta_inspeccion_btnGuardar">Guardar</string>
 

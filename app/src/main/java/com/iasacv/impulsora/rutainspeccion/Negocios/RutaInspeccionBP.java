@@ -48,6 +48,15 @@ public class RutaInspeccionBP {
     }
 
     //Ruta de inspeccion
+    public RutaInspeccion GetRutaInspeccionCabecero(RutaInspeccion objFiltro) {
+        try {
+            RutaInspeccion objRutaInspeccion = _objRutaInspeccionDA.GetRutaInspeccionCabecero(objFiltro);
+            return objRutaInspeccion;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
     public RutaInspeccion GetRutaInspeccion(RutaInspeccion objFiltro) {
         try {
             RutaInspeccion objRutaInspeccion = _objRutaInspeccionDA.GetRutaInspeccion(objFiltro);
@@ -57,7 +66,7 @@ public class RutaInspeccionBP {
         }
     }
 
-    public boolean InsertRutaInspeccionInicio(RutaInspeccion objRutaInspeccion) throws IOException, XmlPullParserException {
+    public boolean InsertRutaInspeccion(RutaInspeccion objRutaInspeccion) throws IOException, XmlPullParserException {
         try {
             boolean resul = _objRutaInspeccionDA.InsertRutaInspeccionInicio(objRutaInspeccion);
             return resul;
@@ -66,9 +75,9 @@ public class RutaInspeccionBP {
         }
     }
 
-    public boolean InsertRutaInspeccion(RutaInspeccion objRutaInspeccion) throws IOException, XmlPullParserException {
+    public boolean UpdateRutaInspeccion(RutaInspeccion objRutaInspeccion) throws IOException, XmlPullParserException {
         try {
-            boolean resul = _objRutaInspeccionDA.InsertRutaInspeccion(objRutaInspeccion);
+            boolean resul = _objRutaInspeccionDA.UpdateRutaInspeccion(objRutaInspeccion);
             return resul;
         } catch (Exception e) {
             throw e;

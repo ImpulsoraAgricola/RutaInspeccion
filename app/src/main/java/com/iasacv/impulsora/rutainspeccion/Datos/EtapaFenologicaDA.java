@@ -28,7 +28,7 @@ public class EtapaFenologicaDA {
         try {
             Cursor objCursor = objEntLibTools.executeCursor("SELECT ETAFECVE,ETAFENOM FROM BACETAFE WHERE ETAFESTS=\"A\"");
             List<Combo> listEtapaFenologica = new ArrayList<Combo>();
-            listEtapaFenologica.add(new Combo("-- Etapa principal  --", 0));
+            listEtapaFenologica.add(new Combo("-- Etapa principal Zadoks --", 0));
             while (objCursor.moveToNext()) {
                 listEtapaFenologica.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }

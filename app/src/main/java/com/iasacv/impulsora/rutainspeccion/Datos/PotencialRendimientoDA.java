@@ -27,6 +27,7 @@ public class PotencialRendimientoDA {
         try {
             Cursor objCursor = objEntLibTools.executeCursor("SELECT POTRECVE,POTRENOM FROM BACPOTRE WHERE POTRESTS=\"A\"");
             List<Combo> listPotencialRendimiento = new ArrayList<Combo>();
+            listPotencialRendimiento.add(new Combo("-- Potencial de rendimiento del cultivo --", 0));
             while (objCursor.moveToNext()) {
                 listPotencialRendimiento.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }

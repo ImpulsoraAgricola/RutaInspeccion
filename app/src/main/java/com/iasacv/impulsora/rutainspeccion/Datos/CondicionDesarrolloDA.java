@@ -27,6 +27,7 @@ public class CondicionDesarrolloDA {
         try {
             Cursor objCursor = objEntLibTools.executeCursor("SELECT CONDICVE,CONDINOM FROM BACCONDI WHERE CONDISTS=\"A\"");
             List<Combo> listCondicionDesarrollo = new ArrayList<Combo>();
+            listCondicionDesarrollo.add(new Combo("-- Condiciones de desarrollo --", 0));
             while (objCursor.moveToNext()) {
                 listCondicionDesarrollo.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }

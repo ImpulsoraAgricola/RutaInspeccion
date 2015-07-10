@@ -165,11 +165,8 @@ public class EntLibDBTools extends SQLiteOpenHelper {
             "[CICLOCVE] INTEGER  NOT NULL,\n" +
             "[PLANEFEC] DATE  NOT NULL,\n" +
             "[PLADEFOL] INTEGER  NOT NULL,\n" +
-            "[RUINSFEI] DATE  NOT NULL,\n" +
-            "[RUINSINI] TIME  NOT NULL,\n" +
-            "[RUINSFEF] DATE  NULL,\n" +
-            "[RUINSFIN] TIME  NULL,\n" +
-            "[RUINSTIE] TIME  NULL,\n" +
+            "[RUINSFEI] DATETIME  NOT NULL,\n" +
+            "[RUINSFEF] DATETIME  NULL,\n" +
             "[RUINSREC] VARCHAR(1)  NULL,\n" +
             "[SIPROCVE] INTEGER  NULL,\n" +
             "[ARTOPCVE] INTEGER  NULL,\n" +

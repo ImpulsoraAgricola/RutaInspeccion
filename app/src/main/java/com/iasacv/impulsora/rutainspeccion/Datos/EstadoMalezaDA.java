@@ -27,6 +27,7 @@ public class EstadoMalezaDA {
         try {
             Cursor objCursor = objEntLibTools.executeCursor("SELECT ESTMACVE,ESTMANOM FROM BACESTMA WHERE ESTMASTS=\"A\"");
             List<Combo> listEstadoMaleza = new ArrayList<Combo>();
+            listEstadoMaleza.add(new Combo("-- Grado de insfestaci\u00F3n --", 0));
             while (objCursor.moveToNext()) {
                 listEstadoMaleza.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }

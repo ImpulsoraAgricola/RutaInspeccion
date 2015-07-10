@@ -8,8 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -61,7 +59,6 @@ public class Administrador extends ActionBarActivity {
     SwipeRefreshLayout mSwipeRefreshLayout;
     SimpleDateFormat formatFecha;
     String currentDate;
-    String currentTime;
 
     Intent intent;
     MyResultReceiver resultReceiver;
@@ -80,9 +77,6 @@ public class Administrador extends ActionBarActivity {
         _objComunBP = new ComunBP(this);
         _objRutaInspeccionBP = new RutaInspeccionBP(this);
         _objWebServiceBP = new WebServiceBP(this);
-
-        formatFecha = new SimpleDateFormat("yyyy-MM-dd");
-        currentDate = formatFecha.format(new Date());
 
         gridView = (GridView) findViewById(R.id.gridView);
 
@@ -361,16 +355,15 @@ public class Administrador extends ActionBarActivity {
                                 PlaneacionRuta objLote = _objRutaInspeccionBP.GetPlaneacionRuta(objFiltro);
                                 if ((objLote.LoteLatitud <= (gpsTracker.getLatitude() + 0.00192) && (objLote.LoteLatitud) >= (gpsTracker.getLatitude() - 0.00192)) &&
                                         ((objLote.LoteLongitud) <= (gpsTracker.getLongitude() + 0.001802) && (objLote.LoteLongitud) >= (gpsTracker.getLongitude() - 0.001802))) {
-                                    formatFecha = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                    currentDate = formatFecha.format(new Date());
                                     RutaInspeccion objRutaInspeccion = creaObjeto(objItem);
-                                    RutaInspeccion objTemp = _objRutaInspeccionBP.GetRutaInspeccion(objRutaInspeccion);
+                                    RutaInspeccion objTemp = _objRutaInspeccionBP.GetRutaInspeccionCabecero(objRutaInspeccion);
                                     if (objTemp.Folio == 0) {
-                                        _objRutaInspeccionBP.InsertRutaInspeccionInicio(objRutaInspeccion);
+                                        _objRutaInspeccionBP.InsertRutaInspeccion(objRutaInspeccion);
                                         iniciarRutaInspeccion(objItem);
-                                    } else {
+                                    } else if (objTemp.Estatus == "O") {
                                         confirmInicio(objItem);
-                                    }
+                                    } else
+                                        iniciarRutaInspeccion(objItem);
                                 } else {
                                     _objComunBP.Mensaje("Error: Su localizacion para registrar la ruta de inspeccion no es correcta", Administrador.this);
                                 }
@@ -416,29 +409,18 @@ public class Administrador extends ActionBarActivity {
         objRutaInspeccion.CicloClave = objItem.getCicloClave();
         objRutaInspeccion.Fecha = objItem.getFecha();
         objRutaInspeccion.Folio = objItem.getFolio();
-        //Obtener fecha
-        formatFecha = new SimpleDateFormat("yyyy-MM-dd");
-        currentDate = formatFecha.format(new Date());
-        objRutaInspeccion.FechaInicio = currentDate;
-        //Obtener hora
-        formatFecha = new SimpleDateFormat("HH:mm:ss");
-        currentTime = formatFecha.format(new Date());
-        objRutaInspeccion.HoraInicio = currentTime;
         objRutaInspeccion.Estatus = "O";
-        objRutaInspeccion.Uso = "S";
         return objRutaInspeccion;
     }
 
-    public void iniciarRutaInspeccion(Item objItem){
-        formatFecha = new SimpleDateFormat("yyyy-MM-dd");
-        currentDate = formatFecha.format(new Date());
+    public void iniciarRutaInspeccion(Item objItem) {
         if (objItem.getTipoInspeccion() == 1) {
             //Creamos el nuevo formulario
             Intent i = new Intent(Administrador.this, InspeccionCampo.class);
             i.putExtra("CicloClave", objItem.getCicloClave());
             i.putExtra("UsuarioClave", objItem.getUsuarioClave());
             i.putExtra("Folio", objItem.getFolio());
-            i.putExtra("Fecha", currentDate);
+            i.putExtra("Fecha", objItem.getFecha());
             startActivity(i);
         } else if (objItem.getTipoInspeccion() == 2) {
             //Creamos el nuevo formulario
@@ -446,7 +428,7 @@ public class Administrador extends ActionBarActivity {
             i.putExtra("CicloClave", objItem.getCicloClave());
             i.putExtra("UsuarioClave", objItem.getUsuarioClave());
             i.putExtra("Folio", objItem.getFolio());
-            i.putExtra("Fecha", currentDate);
+            i.putExtra("Fecha", objItem.getFecha());
             startActivity(i);
         }
     }
