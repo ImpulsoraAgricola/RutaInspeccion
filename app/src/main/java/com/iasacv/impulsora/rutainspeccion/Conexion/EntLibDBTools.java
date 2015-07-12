@@ -209,7 +209,7 @@ public class EntLibDBTools extends SQLiteOpenHelper {
             "[TIRIECVE] INTEGER  NULL,\n" +
             "[RIEGOCAP] INTEGER  NULL,\n" +
             "[RIEGOOTR] VARCHAR(50)  NULL,\n" +
-            "PRIMARY KEY ([USUARCVE],[CICLOCVE],[PLANEFEC],[PLADEFOL]));";
+            "PRIMARY KEY ([USUARCVE],[CICLOCVE],[PLANEFEC],[PLADEFOL],[TIRIECVE]));";
 
     //Sentencia SQL para crear la tabla de relacion Riego por Ruta de inspeccion
     private static String sqlBARRECOM = "CREATE TABLE [BARRECOM] (\n" +
@@ -219,7 +219,7 @@ public class EntLibDBTools extends SQLiteOpenHelper {
             "[PLADEFOL] INTEGER  NOT NULL,\n" +
             "[RECOMCVE] INTEGER  NULL,\n" +
             "[RECOMOTR] VARCHAR(50)  NULL,\n" +
-            "PRIMARY KEY ([USUARCVE],[CICLOCVE],[PLANEFEC],[PLADEFOL]));";
+            "PRIMARY KEY ([USUARCVE],[CICLOCVE],[PLANEFEC],[PLADEFOL],[RECOMCVE]));";
 
     //Direccion de la base de datos
     private static String DB_PATH = "/data/data/com.iasacv.impulsora.rutainspeccion/databases/";

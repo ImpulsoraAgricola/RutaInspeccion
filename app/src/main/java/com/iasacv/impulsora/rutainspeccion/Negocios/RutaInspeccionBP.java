@@ -14,6 +14,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 01/07/2015.
@@ -48,7 +49,7 @@ public class RutaInspeccionBP {
         }
     }
 
-    public boolean UpdatePlaneacionRutaEstatus(PlaneacionRuta objPlaneacionRuta) throws IOException, XmlPullParserException {
+    public boolean UpdatePlaneacionRutaEstatus(PlaneacionRuta objPlaneacionRuta) throws Exception {
         try {
             boolean resul = _objPlaneacionRutaDA.UpdatePlaneacionRutaEstatus(objPlaneacionRuta);
             return resul;
@@ -76,7 +77,16 @@ public class RutaInspeccionBP {
         }
     }
 
-    public boolean InsertRutaInspeccion(RutaInspeccion objRutaInspeccion) throws IOException, XmlPullParserException {
+    public List<RutaInspeccion> GetAllRutaInspeccion() {
+        try {
+            List<RutaInspeccion> listRutaInspeccion = _objRutaInspeccionDA.GetAllRutaInspeccion();
+            return listRutaInspeccion;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
+    public boolean InsertRutaInspeccion(RutaInspeccion objRutaInspeccion) throws Exception {
         try {
             boolean resul = _objRutaInspeccionDA.InsertRutaInspeccionInicio(objRutaInspeccion);
             return resul;
@@ -85,7 +95,7 @@ public class RutaInspeccionBP {
         }
     }
 
-    public boolean UpdateRutaInspeccion(RutaInspeccion objRutaInspeccion) throws IOException, XmlPullParserException {
+    public boolean UpdateRutaInspeccion(RutaInspeccion objRutaInspeccion) throws Exception {
         try {
             boolean resul = _objRutaInspeccionDA.UpdateRutaInspeccion(objRutaInspeccion);
             return resul;
@@ -95,6 +105,15 @@ public class RutaInspeccionBP {
     }
 
     //Relacion riego
+    public RutaInspeccion GetRelacionRiego(RutaInspeccion objFiltro) {
+        try {
+            RutaInspeccion objRutaInspeccion = _objRutaInspeccionDA.GetRelacionRiego(objFiltro);
+            return objRutaInspeccion;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
     public RutaInspeccion[] GetAllRelacionRiego(RutaInspeccion objRutaInspeccion) {
         try {
             RutaInspeccion[] listaRutaInspeccion = _objRutaInspeccionDA.GetAllRelacionRiego(objRutaInspeccion);
@@ -104,7 +123,7 @@ public class RutaInspeccionBP {
         }
     }
 
-    public boolean InsertRelacionRiego(RutaInspeccion objRutaInspeccion) throws IOException, XmlPullParserException {
+    public boolean InsertRelacionRiego(RutaInspeccion objRutaInspeccion) throws Exception {
         try {
             boolean resul = _objRutaInspeccionDA.InsertRelacionRiego(objRutaInspeccion);
             return resul;
@@ -113,7 +132,25 @@ public class RutaInspeccionBP {
         }
     }
 
+    public boolean DeleteRelacionRiego(RutaInspeccion objRutaInspeccion) throws Exception {
+        try {
+            boolean resul = _objRutaInspeccionDA.DeleteRelacionRiego(objRutaInspeccion);
+            return resul;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
     //Relacion recomendacion
+    public RutaInspeccion GetRelacionRecomendacion(RutaInspeccion objFiltro) {
+        try {
+            RutaInspeccion objRutaInspeccion = _objRutaInspeccionDA.GetRelacionRecomendacion(objFiltro);
+            return objRutaInspeccion;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
     public RutaInspeccion[] GetAllRelacionRecomendacion(RutaInspeccion objRutaInspeccion) {
         try {
             RutaInspeccion[] listaRutaInspeccion = _objRutaInspeccionDA.GetAllRelacionRecomendacion(objRutaInspeccion);
@@ -123,7 +160,7 @@ public class RutaInspeccionBP {
         }
     }
 
-    public boolean InsertRelacionRecomendacion(RutaInspeccion objRutaInspeccion) throws IOException, XmlPullParserException {
+    public boolean InsertRelacionRecomendacion(RutaInspeccion objRutaInspeccion) throws Exception {
         try {
             boolean resul = _objRutaInspeccionDA.InsertRelacionRecomendacion(objRutaInspeccion);
             return resul;
@@ -132,7 +169,7 @@ public class RutaInspeccionBP {
         }
     }
 
-    public boolean DeleteRelacionRecomendacion(RutaInspeccion objRutaInspeccion) throws IOException, XmlPullParserException {
+    public boolean DeleteRelacionRecomendacion(RutaInspeccion objRutaInspeccion) throws Exception {
         try {
             boolean resul = _objRutaInspeccionDA.DeleteRelacionRecomendacion(objRutaInspeccion);
             return resul;

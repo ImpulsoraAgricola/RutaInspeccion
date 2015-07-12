@@ -51,10 +51,7 @@ public class Login extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //Pasar contexto a las demas instancias
-        _objComunBP = new ComunBP(this);
-        _objWebServiceBP = new WebServiceBP(this);
+        setContentView(R.layout.activity_login);
 
         //Revisar las preferencias
         SharedPreferences prefs = getSharedPreferences("RutaInspeccion", Context.MODE_PRIVATE);
@@ -62,9 +59,11 @@ public class Login extends ActionBarActivity {
             //Creamos el nuevo formulario
             Intent i = new Intent(Login.this, Administrador.class);
             startActivity(i);
-            finish();
         } else {
-            setContentView(R.layout.activity_login);
+
+            //Pasar contexto a las demas instancias
+            _objComunBP = new ComunBP(this);
+            _objWebServiceBP = new WebServiceBP(this);
 
             //Obtener controles
             GetControles();
@@ -99,7 +98,7 @@ public class Login extends ActionBarActivity {
                                 e.printStackTrace();
                             }
                         } else
-                            _objComunBP.Mensaje("Error: Se debe contar con una conexi\u00F3n a Internet", getApplicationContext());
+                            _objComunBP.Mensaje("Error: Se debe contar con una conexi\u00F3n a Internet", Login.this);
                     }
                 }
             });
@@ -144,7 +143,7 @@ public class Login extends ActionBarActivity {
                 startActivity(i);
                 finish();
             } else {
-                _objComunBP.Mensaje("Error: Usuario incorrecto",getApplicationContext());
+                _objComunBP.Mensaje("Error: Usuario incorrecto",Login.this);
             }
             loadProgressDialog.dismiss();
         }

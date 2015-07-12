@@ -547,7 +547,73 @@ public class WebServiceDA extends Activity {
         try {
             transporte.call(SOAP_ACTION, envelope);
             SoapObject resSoap = (SoapObject) envelope.getResponse();
-            _objEntLibTools.executeQuery("DELETE FROM BATPLADE WHERE PLADESTS!=\"I\"");
+            _objEntLibTools.executeQuery("DELETE FROM BATPLADE WHERE PLADESTS!=\"O\"");
+            listaPlaneacionRuta = new PlaneacionRuta[resSoap.getPropertyCount()];
+            for (int i = 0; i < listaPlaneacionRuta.length; i++) {
+                SoapObject ic = (SoapObject) resSoap.getProperty(i);
+                if(Integer.parseInt(ic.getProperty(0).toString())== -1)
+                    resul = false;
+                else {
+                    //Se elimina la version anterior de las tablas
+                    PlaneacionRuta objPlaneacionRuta = new PlaneacionRuta();
+                    objPlaneacionRuta.UsuarioClave = Integer.parseInt(ic.getProperty(0).toString());
+                    objPlaneacionRuta.UsuarioNombre = ic.getProperty(1).toString();
+                    objPlaneacionRuta.CicloClave = Integer.parseInt(ic.getProperty(2).toString());
+                    objPlaneacionRuta.CicloNombre = ic.getProperty(3).toString();
+                    objPlaneacionRuta.Fecha = ic.getProperty(4).toString();
+                    objPlaneacionRuta.Folio = Integer.parseInt(ic.getProperty(5).toString());
+                    objPlaneacionRuta.TipoInspeccionClave = Integer.parseInt(ic.getProperty(6).toString());
+                    objPlaneacionRuta.TipoInspeccionNombre = ic.getProperty(7).toString();
+                    objPlaneacionRuta.TipoArticuloClave = Integer.parseInt(ic.getProperty(8).toString());
+                    objPlaneacionRuta.TipoArticuloNombre = ic.getProperty(9).toString();
+                    objPlaneacionRuta.ClienteClave = Integer.parseInt(ic.getProperty(10).toString());
+                    objPlaneacionRuta.ClienteNombre = ic.getProperty(11).toString();
+                    objPlaneacionRuta.ProductorClave = Integer.parseInt(ic.getProperty(12).toString());
+                    objPlaneacionRuta.ProductorNombre = ic.getProperty(13).toString();
+                    objPlaneacionRuta.PredioClave = Integer.parseInt(ic.getProperty(14).toString());
+                    objPlaneacionRuta.PredioNombre = ic.getProperty(15).toString();
+                    objPlaneacionRuta.PredioLatitud = Double.parseDouble(ic.getProperty(16).toString());
+                    objPlaneacionRuta.PredioLongitud = Double.parseDouble(ic.getProperty(17).toString());
+                    objPlaneacionRuta.LoteClave = Integer.parseInt(ic.getProperty(18).toString());
+                    objPlaneacionRuta.LoteNombre = ic.getProperty(19).toString();
+                    objPlaneacionRuta.LoteLatitud = Double.parseDouble(ic.getProperty(20).toString());
+                    objPlaneacionRuta.LoteLongitud = Double.parseDouble(ic.getProperty(21).toString());
+                    objPlaneacionRuta.ArticuloSembrarClave = Integer.parseInt(ic.getProperty(22).toString());
+                    objPlaneacionRuta.ArticuloSembrarNombre = ic.getProperty(23).toString();
+                    objPlaneacionRuta.ArticuloCosecharClave = Integer.parseInt(ic.getProperty(24).toString());
+                    objPlaneacionRuta.ArticuloCosecharNombre = ic.getProperty(25).toString();
+                    objPlaneacionRuta.Estatus = ic.getProperty(26).toString();
+                    objPlaneacionRuta.Uso = ic.getProperty(27).toString();
+                    resul = _objPlaneacionRutaDA.InsertPlaneacionRuta(objPlaneacionRuta);
+                }
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+        return resul;
+    }
+
+    public boolean getPlaneacionRuta(String usuario, int usuarioCve, String fecha) throws IOException, XmlPullParserException {
+
+        //Variables
+        boolean resul = true;
+
+        //Actualizar tabla de planeacion de ruta de inspeccion
+        PlaneacionRuta[] listaPlaneacionRuta;
+        String METHOD_NAME = "GetAllPlaneacionRuta";
+        String SOAP_ACTION = NAMESPACE + "GetAllPlaneacionRuta";
+        SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        request.addProperty("usuario", usuario);
+        request.addProperty("usuarioCve", usuarioCve);
+        request.addProperty("fecha", fecha);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(request);
+        HttpTransportSE transporte = new HttpTransportSE(URL);
+        try {
+            transporte.call(SOAP_ACTION, envelope);
+            SoapObject resSoap = (SoapObject) envelope.getResponse();
+            _objEntLibTools.executeQuery("DELETE FROM BATPLADE WHERE PLADESTS!=\"O\"");
             listaPlaneacionRuta = new PlaneacionRuta[resSoap.getPropertyCount()];
             for (int i = 0; i < listaPlaneacionRuta.length; i++) {
                 SoapObject ic = (SoapObject) resSoap.getProperty(i);

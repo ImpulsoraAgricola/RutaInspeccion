@@ -22,13 +22,16 @@ import java.util.List;
 public class PlaneacionRutaDA {
     //Variables
     private EntLibDBTools objEntLibTools;
-    Bitmap objInspection;
-    Bitmap objSurvey;
+    Bitmap[] objImagen;
 
     public PlaneacionRutaDA(Context context) {
         objEntLibTools = new EntLibDBTools(context);
-        objInspection=BitmapFactory.decodeResource(context.getResources(), R.drawable.inspection);
-        objSurvey=BitmapFactory.decodeResource(context.getResources(), R.drawable.survey);
+        objImagen = new Bitmap[5];
+        objImagen[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable.cebada1);
+        objImagen[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable.cebada2);
+        objImagen[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable.cebada3);
+        objImagen[3] = BitmapFactory.decodeResource(context.getResources(), R.drawable.cebada4);
+        objImagen[4] = BitmapFactory.decodeResource(context.getResources(), R.drawable.cebada5);
     }
 
     public String ArmaFiltro(PlaneacionRuta entidad) {
@@ -39,17 +42,23 @@ public class PlaneacionRutaDA {
         }
         //--Clave del ciclo
         if (entidad.CicloClave != 0) {
-            if (cadena != "") { cadena += " AND "; }
+            if (cadena != "") {
+                cadena += " AND ";
+            }
             cadena += "A.CICLOCVE=" + entidad.CicloClave;
         }
         //--Fecha
         if (entidad.Fecha != null) {
-            if (cadena != "") { cadena += " AND "; }
-            cadena += "A.PLANEFEC='" + entidad.Fecha+"'";
+            if (cadena != "") {
+                cadena += " AND ";
+            }
+            cadena += "A.PLANEFEC='" + entidad.Fecha + "'";
         }
         //--Folio
         if (entidad.Folio != 0) {
-            if (cadena != "") { cadena += " AND "; }
+            if (cadena != "") {
+                cadena += " AND ";
+            }
             cadena += "A.PLADEFOL=" + entidad.Folio;
         }
         return cadena;
@@ -126,19 +135,17 @@ public class PlaneacionRutaDA {
     public ArrayList<Item> GetAllPlaneacionRutaImage(int usuarioClave, String fecha) {
         try {
             Cursor objCursor = objEntLibTools.executeCursor("SELECT CICLOCVE,USUARCVE,PLADEFOL,A.TIINSCVE,TIINSNOM,PERSONOM,PRODUNOM,PREDINOM,LOTESNOM,PLADESTS,PLANEFEC " +
-                    "FROM BATPLADE A INNER JOIN BACTIINS B ON (A.TIINSCVE=B.TIINSCVE) WHERE USUARCVE="+usuarioClave+" AND PLANEFEC='"+fecha+"' ORDER BY PLADEFOL");
+                    "FROM BATPLADE A INNER JOIN BACTIINS B ON (A.TIINSCVE=B.TIINSCVE) WHERE USUARCVE=" + usuarioClave + " AND PLANEFEC='" + fecha + "' ORDER BY PLADEFOL");
             ArrayList<Item> listaPlaneacionRuta = new ArrayList<Item>();
+            int i=0;
             while (objCursor.moveToNext()) {
-                if(objCursor.getString(9).toString().equals("I"))
-                    listaPlaneacionRuta.add(new Item(Integer.parseInt(objCursor.getString(0)),Integer.parseInt(objCursor.getString(1)),
-                            Integer.parseInt(objCursor.getString(2)),Integer.parseInt(objCursor.getString(3)),objCursor.getString(10),objInspection,
-                            "Folio: "+objCursor.getString(2)+"\nCliente: "+objCursor.getString(5)+"\nProductor: "+ objCursor.getString(6)+
-                                    "\nPredio: "+objCursor.getString(7)+"\nLote: "+objCursor.getString(8)+"\nTipo de inspecci\u00F3n: "+objCursor.getString(4)));
-                else
-                    listaPlaneacionRuta.add(new Item(Integer.parseInt(objCursor.getString(0)),Integer.parseInt(objCursor.getString(1)),
-                            Integer.parseInt(objCursor.getString(2)),Integer.parseInt(objCursor.getString(3)),objCursor.getString(10),objSurvey,
-                            "Folio: "+objCursor.getString(2)+"\nCliente: "+objCursor.getString(5)+"\nProductor: "+ objCursor.getString(6)+
-                                    "\nPredio: "+objCursor.getString(7)+"\nLote: "+objCursor.getString(8)+"\nTipo de inspecci\u00F3n: "+objCursor.getString(4)));
+                listaPlaneacionRuta.add(new Item(Integer.parseInt(objCursor.getString(0)), Integer.parseInt(objCursor.getString(1)),
+                        Integer.parseInt(objCursor.getString(2)), Integer.parseInt(objCursor.getString(3)), objCursor.getString(10), objImagen[i],
+                        "Folio: " + objCursor.getString(2) + "\nCliente: " + objCursor.getString(5) + "\nProductor: " + objCursor.getString(6) +
+                                "\nPredio: " + objCursor.getString(7) + "\nLote: " + objCursor.getString(8) + "\nTipo de inspecci\u00F3n: " + objCursor.getString(4)));
+                i++;
+                if(i==5)
+                    i=0;
             }
             return listaPlaneacionRuta;
         } catch (SQLException e) {
@@ -151,26 +158,26 @@ public class PlaneacionRutaDA {
             boolean resul = true;
             String query = "INSERT INTO BATPLADE VALUES (" + objPlaneacionRuta.UsuarioClave + "," +
                     "'" + objPlaneacionRuta.UsuarioNombre + "'," +
-                    + objPlaneacionRuta.CicloClave + "," +
+                    +objPlaneacionRuta.CicloClave + "," +
                     "'" + objPlaneacionRuta.Fecha + "'," +
-                    + objPlaneacionRuta.Folio + "," +
-                    + objPlaneacionRuta.TipoInspeccionClave + "," +
-                    + objPlaneacionRuta.TipoArticuloClave + "," +
-                    + objPlaneacionRuta.ClienteClave + "," +
+                    +objPlaneacionRuta.Folio + "," +
+                    +objPlaneacionRuta.TipoInspeccionClave + "," +
+                    +objPlaneacionRuta.TipoArticuloClave + "," +
+                    +objPlaneacionRuta.ClienteClave + "," +
                     "'" + objPlaneacionRuta.ClienteNombre + "'," +
-                    + objPlaneacionRuta.ProductorClave + "," +
+                    +objPlaneacionRuta.ProductorClave + "," +
                     "'" + objPlaneacionRuta.ProductorNombre + "'," +
-                    + objPlaneacionRuta.PredioClave + "," +
+                    +objPlaneacionRuta.PredioClave + "," +
                     "'" + objPlaneacionRuta.PredioNombre + "'," +
-                    + objPlaneacionRuta.PredioLatitud + "," +
-                    + objPlaneacionRuta.PredioLongitud + "," +
-                    + objPlaneacionRuta.LoteClave + "," +
+                    +objPlaneacionRuta.PredioLatitud + "," +
+                    +objPlaneacionRuta.PredioLongitud + "," +
+                    +objPlaneacionRuta.LoteClave + "," +
                     "'" + objPlaneacionRuta.LoteNombre + "'," +
-                    + objPlaneacionRuta.LoteLatitud + "," +
-                    + objPlaneacionRuta.LoteLongitud + "," +
-                    + objPlaneacionRuta.ArticuloSembrarClave + "," +
+                    +objPlaneacionRuta.LoteLatitud + "," +
+                    +objPlaneacionRuta.LoteLongitud + "," +
+                    +objPlaneacionRuta.ArticuloSembrarClave + "," +
                     "'" + objPlaneacionRuta.ArticuloSembrarNombre + "'," +
-                    + objPlaneacionRuta.ArticuloCosecharClave + "," +
+                    +objPlaneacionRuta.ArticuloCosecharClave + "," +
                     "'" + objPlaneacionRuta.ArticuloCosecharNombre + "'," +
                     "'" + objPlaneacionRuta.Estatus + "'," +
                     "'" + objPlaneacionRuta.Uso + "')";
@@ -186,10 +193,10 @@ public class PlaneacionRutaDA {
             boolean resul = true;
             String query = "UPDATE BATPLADE SET " +
                     "PLADESTS='" + objPlaneacionRuta.Estatus + "'" +
-                    " WHERE USUARCVE="+objPlaneacionRuta.UsuarioClave+
-                    " AND CICLOCVE="+objPlaneacionRuta.CicloClave+
-                    " AND PLANEFEC='"+objPlaneacionRuta.Fecha+"'"+
-                    " AND PLADEFOL="+objPlaneacionRuta.Folio;
+                    " WHERE USUARCVE=" + objPlaneacionRuta.UsuarioClave +
+                    " AND CICLOCVE=" + objPlaneacionRuta.CicloClave +
+                    " AND PLANEFEC='" + objPlaneacionRuta.Fecha + "'" +
+                    " AND PLADEFOL=" + objPlaneacionRuta.Folio;
             objEntLibTools.insert(query);
             return resul;
         } catch (SQLException e) {

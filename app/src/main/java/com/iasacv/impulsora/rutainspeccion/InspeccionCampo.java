@@ -158,8 +158,6 @@ public class InspeccionCampo extends ActionBarActivity {
 
             llenarCombos();
 
-            //eventosCombo();
-
             cargarCabecero();
 
             rutainspeccion_btnGuardar.setOnClickListener(new View.OnClickListener() {
@@ -173,6 +171,7 @@ public class InspeccionCampo extends ActionBarActivity {
                             _objPlaneacionRuta.Estatus = "G";
                             resul = _objRutaInspeccionBP.UpdatePlaneacionRutaEstatus(_objPlaneacionRuta);
                             guardarRecomendacion();
+                            guardarRiego();
                             if (resul) {
                                 _objComunBP.Mensaje("La informaci\u00F3n se guardo correctamente", InspeccionCampo.this);
                                 rutainspeccion_btnEnviar.setVisibility(View.VISIBLE);
@@ -182,6 +181,8 @@ public class InspeccionCampo extends ActionBarActivity {
                         _objComunBP.Mensaje(e.toString(), InspeccionCampo.this);
                     } catch (XmlPullParserException e) {
                         _objComunBP.Mensaje(e.toString(), InspeccionCampo.this);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             });
@@ -200,6 +201,8 @@ public class InspeccionCampo extends ActionBarActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (XmlPullParserException e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -244,87 +247,158 @@ public class InspeccionCampo extends ActionBarActivity {
     }
 
     //Llenar objetos
-    public RutaInspeccion creaObjeto() {
-        _objRutaInspeccion = _objRutaInspeccionBP.GetRutaInspeccionCabecero(_objRutaInspeccion);
-        _objRutaInspeccion.RecomendacionTecnica = obtenerValorRadio(rutainspeccion_rdRecomendacion);
-        _objRutaInspeccion.SistemaProduccionClave = obtenerValorSpinner(rutainspeccion_sSistemaProduccion);
-        _objRutaInspeccion.ArregloTopologicoClave = obtenerValorSpinner(rutainspeccion_sArregloTopologico);
-        _objRutaInspeccion.ProfundidadSiembra = obtenerValorRadio(rutainspeccion_rdAdecuada);
-        _objRutaInspeccion.ProfundidadSurco = obtenerValorRadio(rutainspeccion_rdSurco);
-        _objRutaInspeccion.ManejoAdecuado = obtenerValorRadio(rutainspeccion_rdAdecuada);
-        _objRutaInspeccion.EtapaFenologicaClave = obtenerValorSpinner(rutainspeccion_sEtapa);
-        _objRutaInspeccion.Exposicion = obtenerValorRadio(rutainspeccion_rdExposicion);
-        _objRutaInspeccion.CondicionDesarrolloClave = obtenerValorSpinner(rutainspeccion_sCondicionDesarrollo);
-        _objRutaInspeccion.OrdenCorrecto = obtenerValorRadio(rutainspeccion_rdOrden);
-        _objRutaInspeccion.RegulaPh = obtenerValorRadio(rutainspeccion_rdRegula);
-        _objRutaInspeccion.UsoAdecuado = obtenerValorRadio(rutainspeccion_rdUso);
-        _objRutaInspeccion.HoraAplicacion = obtenerValorRadio(rutainspeccion_rdHora);
-        _objRutaInspeccion.AguaCanal = obtenerValorRadio(rutainspeccion_rdAgua);
-        _objRutaInspeccion.Inundacion = obtenerValorRadio(rutainspeccion_rdInundacion);
-        _objRutaInspeccion.BajaPoblacion = obtenerValorRadio(rutainspeccion_rdPoblacion);
-        _objRutaInspeccion.AplicacionNutrientes = obtenerValorRadio(rutainspeccion_rdProblema);
-        _objRutaInspeccion.AlteracionCiclo = obtenerValorRadio(rutainspeccion_rdAlteracion);
-        _objRutaInspeccion.AplicacionAgroquimicos = obtenerValorRadio(rutainspeccion_rdAplicacion);
-        _objRutaInspeccion.AltasTemperaturas = obtenerValorRadio(rutainspeccion_rdTemperatura);
-        _objRutaInspeccion.Fito = obtenerValorRadio(rutainspeccion_rdFito);
-        _objRutaInspeccion.PlagasMalControladas = obtenerValorRadio(rutainspeccion_rdPlaga);
-        _objRutaInspeccion.MalezaClave = obtenerValorSpinner(rutainspeccion_sMaleza);
-        _objRutaInspeccion.EstadoMalezaClave = obtenerValorSpinner(rutainspeccion_sEstadoMaleza);
-        _objRutaInspeccion.PlagaClave = obtenerValorSpinner(rutainspeccion_sPlaga);
-        _objRutaInspeccion.EstadoPlagaClave = obtenerValorSpinner(rutainspeccion_sEstadoPlaga);
-        _objRutaInspeccion.EnfermedadClave = obtenerValorSpinner(rutainspeccion_sEnfermedad);
-        _objRutaInspeccion.EstadoEnfermedadClave = obtenerValorSpinner(rutainspeccion_sEstadoEnfermedad);
-        _objRutaInspeccion.PotencialRendimientoClave = obtenerValorSpinner(rutainspeccion_sPotencial);
-        _objRutaInspeccion.Uso = "S";
-        return _objRutaInspeccion;
+    public RutaInspeccion creaObjeto() throws IOException{
+        RutaInspeccion objRutaInspeccion = new RutaInspeccion();
+        Bundle b = getIntent().getExtras();
+        objRutaInspeccion.CicloClave = b.getInt("CicloClave");
+        objRutaInspeccion.UsuarioClave = b.getInt("UsuarioClave");
+        objRutaInspeccion.Folio = b.getInt("Folio");
+        objRutaInspeccion.Fecha = b.getString("Fecha");
+        objRutaInspeccion = _objRutaInspeccionBP.GetRutaInspeccionCabecero(objRutaInspeccion);
+        objRutaInspeccion.RecomendacionTecnica = obtenerValorRadio(rutainspeccion_rdRecomendacion);
+        objRutaInspeccion.SistemaProduccionClave = obtenerValorSpinner(rutainspeccion_sSistemaProduccion);
+        objRutaInspeccion.ArregloTopologicoClave = obtenerValorSpinner(rutainspeccion_sArregloTopologico);
+        objRutaInspeccion.ProfundidadSiembra = obtenerValorRadio(rutainspeccion_rdAdecuada);
+        objRutaInspeccion.ProfundidadSurco = obtenerValorRadio(rutainspeccion_rdSurco);
+        objRutaInspeccion.ManejoAdecuado = obtenerValorRadio(rutainspeccion_rdAdecuada);
+        objRutaInspeccion.EtapaFenologicaClave = obtenerValorSpinner(rutainspeccion_sEtapa);
+        objRutaInspeccion.Exposicion = obtenerValorRadio(rutainspeccion_rdExposicion);
+        objRutaInspeccion.CondicionDesarrolloClave = obtenerValorSpinner(rutainspeccion_sCondicionDesarrollo);
+        objRutaInspeccion.OrdenCorrecto = obtenerValorRadio(rutainspeccion_rdOrden);
+        objRutaInspeccion.RegulaPh = obtenerValorRadio(rutainspeccion_rdRegula);
+        objRutaInspeccion.UsoAdecuado = obtenerValorRadio(rutainspeccion_rdUso);
+        objRutaInspeccion.HoraAplicacion = obtenerValorRadio(rutainspeccion_rdHora);
+        objRutaInspeccion.AguaCanal = obtenerValorRadio(rutainspeccion_rdAgua);
+        objRutaInspeccion.Inundacion = obtenerValorRadio(rutainspeccion_rdInundacion);
+        objRutaInspeccion.BajaPoblacion = obtenerValorRadio(rutainspeccion_rdPoblacion);
+        objRutaInspeccion.AplicacionNutrientes = obtenerValorRadio(rutainspeccion_rdProblema);
+        objRutaInspeccion.AlteracionCiclo = obtenerValorRadio(rutainspeccion_rdAlteracion);
+        objRutaInspeccion.AplicacionAgroquimicos = obtenerValorRadio(rutainspeccion_rdAplicacion);
+        objRutaInspeccion.AltasTemperaturas = obtenerValorRadio(rutainspeccion_rdTemperatura);
+        objRutaInspeccion.Fito = obtenerValorRadio(rutainspeccion_rdFito);
+        objRutaInspeccion.PlagasMalControladas = obtenerValorRadio(rutainspeccion_rdPlaga);
+        objRutaInspeccion.MalezaClave = obtenerValorSpinner(rutainspeccion_sMaleza);
+        objRutaInspeccion.EstadoMalezaClave = obtenerValorSpinner(rutainspeccion_sEstadoMaleza);
+        objRutaInspeccion.PlagaClave = obtenerValorSpinner(rutainspeccion_sPlaga);
+        objRutaInspeccion.EstadoPlagaClave = obtenerValorSpinner(rutainspeccion_sEstadoPlaga);
+        objRutaInspeccion.EnfermedadClave = obtenerValorSpinner(rutainspeccion_sEnfermedad);
+        objRutaInspeccion.EstadoEnfermedadClave = obtenerValorSpinner(rutainspeccion_sEstadoEnfermedad);
+        objRutaInspeccion.PotencialRendimientoClave = obtenerValorSpinner(rutainspeccion_sPotencial);
+        objRutaInspeccion.Uso = "S";
+        return objRutaInspeccion;
     }
 
-    private  void guardarRecomendacion () throws IOException, XmlPullParserException{
-        _objRutaInspeccion.RecomendacionOtro="";
+    //Guardar recomendaciones
+    private  void guardarRecomendacion () throws Exception {
+        RutaInspeccion objRutaInspeccion = new RutaInspeccion();
+        Bundle b = getIntent().getExtras();
+        objRutaInspeccion.CicloClave = b.getInt("CicloClave");
+        objRutaInspeccion.UsuarioClave = b.getInt("UsuarioClave");
+        objRutaInspeccion.Folio = b.getInt("Folio");
+        objRutaInspeccion.Fecha = b.getString("Fecha");
+        objRutaInspeccion.RecomendacionOtro="";
         if(rutainspeccion_chbRegar.isChecked())
-            agregarRelacionRecomendacion(1);
+            agregarRelacionRecomendacion(objRutaInspeccion,1);
         else
-            eliminarRelacionRecomendacion(1);
+            eliminarRelacionRecomendacion(objRutaInspeccion,1);
         if(rutainspeccion_chbDesmezclar.isChecked())
-            agregarRelacionRecomendacion(2);
+            agregarRelacionRecomendacion(objRutaInspeccion,2);
         else
-            eliminarRelacionRecomendacion(2);
+            eliminarRelacionRecomendacion(objRutaInspeccion,2);
         if(rutainspeccion_chbFungicida.isChecked())
-            agregarRelacionRecomendacion(3);
+            agregarRelacionRecomendacion(objRutaInspeccion,3);
         else
-            eliminarRelacionRecomendacion(3);
+            eliminarRelacionRecomendacion(objRutaInspeccion,3);
         if(rutainspeccion_chbInsecticida.isChecked())
-            agregarRelacionRecomendacion(4);
+            agregarRelacionRecomendacion(objRutaInspeccion,4);
         else
-            eliminarRelacionRecomendacion(4);
+            eliminarRelacionRecomendacion(objRutaInspeccion,4);
         if(rutainspeccion_chbHerbicida.isChecked())
-            agregarRelacionRecomendacion(5);
+            agregarRelacionRecomendacion(objRutaInspeccion,5);
         else
-            eliminarRelacionRecomendacion(5);
+            eliminarRelacionRecomendacion(objRutaInspeccion,5);
         if(rutainspeccion_chbDesaguar.isChecked())
-            agregarRelacionRecomendacion(6);
+            agregarRelacionRecomendacion(objRutaInspeccion,6);
         else
-            eliminarRelacionRecomendacion(6);
+            eliminarRelacionRecomendacion(objRutaInspeccion,6);
         if(rutainspeccion_chbDescostrar.isChecked())
-            agregarRelacionRecomendacion(7);
+            agregarRelacionRecomendacion(objRutaInspeccion,7);
         else
-            eliminarRelacionRecomendacion(7);
+            eliminarRelacionRecomendacion(objRutaInspeccion,7);
         if(rutainspeccion_chbRecomendacionOtro.isChecked()) {
-            _objRutaInspeccion.RecomendacionOtro=rutainspeccion_txtRecomendacionOtro.getText().toString();
-            agregarRelacionRecomendacion(8);
+            objRutaInspeccion.RecomendacionOtro=rutainspeccion_txtRecomendacionOtro.getText().toString();
+            agregarRelacionRecomendacion(objRutaInspeccion,8);
         }
         else
-            eliminarRelacionRecomendacion(9);
+            eliminarRelacionRecomendacion(objRutaInspeccion,8);
     }
 
-    private void agregarRelacionRecomendacion(int Clave) throws IOException, XmlPullParserException{
-        _objRutaInspeccion.RecomendacionClave = Clave;
-        boolean resul = _objRutaInspeccionBP.InsertRelacionRecomendacion(_objRutaInspeccion);
+    private void agregarRelacionRecomendacion(RutaInspeccion objRutaInspeccion,int Clave) throws IOException, XmlPullParserException{
+        objRutaInspeccion.RecomendacionClave = Clave;
+        RutaInspeccion objTemp = _objRutaInspeccionBP.GetRelacionRecomendacion(objRutaInspeccion);
+        if(objTemp.RecomendacionClave==0)
+            try {
+                _objRutaInspeccionBP.InsertRelacionRecomendacion(objRutaInspeccion);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
     }
 
-    private void eliminarRelacionRecomendacion(int Clave) throws IOException, XmlPullParserException{
-        _objRutaInspeccion.RecomendacionClave = Clave;
-        boolean resul = _objRutaInspeccionBP.DeleteRelacionRecomendacion(_objRutaInspeccion);
+    private void eliminarRelacionRecomendacion(RutaInspeccion objRutaInspeccion,int Clave) throws Exception {
+        objRutaInspeccion.RecomendacionClave = Clave;
+        _objRutaInspeccionBP.DeleteRelacionRecomendacion(objRutaInspeccion);
+    }
+
+    //Guardar tipos de riego
+    private  void guardarRiego () throws Exception {
+        RutaInspeccion objRutaInspeccion = new RutaInspeccion();
+        Bundle b = getIntent().getExtras();
+        objRutaInspeccion.CicloClave = b.getInt("CicloClave");
+        objRutaInspeccion.UsuarioClave = b.getInt("UsuarioClave");
+        objRutaInspeccion.Folio = b.getInt("Folio");
+        objRutaInspeccion.Fecha = b.getString("Fecha");
+        objRutaInspeccion.TipoRiegoOtro="";
+        objRutaInspeccion.Capacidad=0;
+        if(rutainspeccion_chbPozo.isChecked()) {
+            objRutaInspeccion.Capacidad = Integer.valueOf(rutainspeccion_txtCapacidad.getText().toString());
+            agregarRelacionRiego(objRutaInspeccion, 1);
+        }
+        else
+            eliminarRelacionRiego(objRutaInspeccion, 1);
+        if(rutainspeccion_chbGravedad.isChecked())
+            agregarRelacionRiego(objRutaInspeccion, 2);
+        else
+            eliminarRelacionRiego(objRutaInspeccion,2);
+        if(rutainspeccion_chbAspersion.isChecked())
+            agregarRelacionRiego(objRutaInspeccion, 3);
+        else
+            eliminarRelacionRiego(objRutaInspeccion, 3);
+        if(rutainspeccion_chbGoteo.isChecked())
+            agregarRelacionRiego(objRutaInspeccion, 4);
+        else
+            eliminarRelacionRiego(objRutaInspeccion, 4);
+        if(rutainspeccion_chbCanal.isChecked())
+            agregarRelacionRiego(objRutaInspeccion, 5);
+        else
+            eliminarRelacionRiego(objRutaInspeccion, 5);
+        if(rutainspeccion_chbRiegoOtro.isChecked()) {
+            objRutaInspeccion.TipoRiegoOtro = rutainspeccion_txtRiegoOtro.getText().toString();
+            agregarRelacionRiego(objRutaInspeccion, 6);
+        }
+        else
+            eliminarRelacionRiego(objRutaInspeccion, 6);
+    }
+
+    private void agregarRelacionRiego(RutaInspeccion objRutaInspeccion,int Clave) throws Exception {
+        objRutaInspeccion.TipoRiegoClave = Clave;
+        RutaInspeccion objTemp = _objRutaInspeccionBP.GetRelacionRiego(objRutaInspeccion);
+        if(objTemp.TipoRiegoClave==0)
+            _objRutaInspeccionBP.InsertRelacionRiego(objRutaInspeccion);
+    }
+
+    private void eliminarRelacionRiego(RutaInspeccion objRutaInspeccion,int Clave) throws Exception {
+        objRutaInspeccion.TipoRiegoClave = Clave;
+        _objRutaInspeccionBP.DeleteRelacionRiego(objRutaInspeccion);
     }
 
     public void llenarCombos() {
@@ -483,16 +557,45 @@ public class InspeccionCampo extends ActionBarActivity {
         rutainspeccion_txtPredio.setText(_objPlaneacionFiltro.PredioNombre);
         rutainspeccion_txtLote.setText(_objPlaneacionFiltro.LoteNombre);
         rutainspeccion_txtFecha.setText(_objPlaneacionFiltro.Fecha);
-        if (_objPlaneacionFiltro.Estatus.equals("G"))
+        if (_objPlaneacionFiltro.Estatus.equals("G") || _objPlaneacionFiltro.Estatus.equals("E"))
             cargarInspeccionCampo();
     }
 
     private void cargarInspeccionCampo() {
         RutaInspeccion objRutaInspeccion = _objRutaInspeccionBP.GetRutaInspeccion(_objRutaInspeccion);
-        RutaInspeccion[] listaRutaInspeccion = _objRutaInspeccionBP.GetAllRelacionRecomendacion(_objRutaInspeccion);
-        for (int i = 0; i < listaRutaInspeccion.length; i++) {
+        seleccionarValorRadio(rutainspeccion_rdRecomendacion, objRutaInspeccion.RecomendacionTecnica);
+        seleccionarValorSpinner(rutainspeccion_sSistemaProduccion, objRutaInspeccion.SistemaProduccionClave);
+        seleccionarValorSpinner(rutainspeccion_sArregloTopologico, objRutaInspeccion.ArregloTopologicoClave);
+        seleccionarValorRadio(rutainspeccion_rdAdecuada, objRutaInspeccion.ProfundidadSiembra);
+        seleccionarValorRadio(rutainspeccion_rdSurco,objRutaInspeccion.ProfundidadSurco);
+        seleccionarValorRadio(rutainspeccion_rdManejo, objRutaInspeccion.ManejoAdecuado);
+        seleccionarValorSpinner(rutainspeccion_sEtapa, objRutaInspeccion.EtapaFenologicaClave);
+        seleccionarValorRadio(rutainspeccion_rdExposicion, objRutaInspeccion.Exposicion);
+        seleccionarValorSpinner(rutainspeccion_sCondicionDesarrollo, objRutaInspeccion.CondicionDesarrolloClave);
+        seleccionarValorRadio(rutainspeccion_rdOrden, objRutaInspeccion.OrdenCorrecto);
+        seleccionarValorRadio(rutainspeccion_rdRegula,objRutaInspeccion.RegulaPh);
+        seleccionarValorRadio(rutainspeccion_rdUso, objRutaInspeccion.UsoAdecuado);
+        seleccionarValorRadio(rutainspeccion_rdHora, objRutaInspeccion.HoraAplicacion);
+        seleccionarValorRadio(rutainspeccion_rdAgua, objRutaInspeccion.AguaCanal);
+        seleccionarValorRadio(rutainspeccion_rdInundacion,objRutaInspeccion.Inundacion);
+        seleccionarValorRadio(rutainspeccion_rdPoblacion, objRutaInspeccion.BajaPoblacion);
+        seleccionarValorRadio(rutainspeccion_rdProblema,objRutaInspeccion.AplicacionNutrientes);
+        seleccionarValorRadio(rutainspeccion_rdAlteracion,objRutaInspeccion.AlteracionCiclo);
+        seleccionarValorRadio(rutainspeccion_rdAplicacion, objRutaInspeccion.AplicacionAgroquimicos);
+        seleccionarValorRadio(rutainspeccion_rdTemperatura,objRutaInspeccion.AltasTemperaturas);
+        seleccionarValorRadio(rutainspeccion_rdFito,objRutaInspeccion.Fito);
+        seleccionarValorRadio(rutainspeccion_rdPlaga,objRutaInspeccion.PlagasMalControladas);
+        seleccionarValorSpinner(rutainspeccion_sMaleza,objRutaInspeccion.MalezaClave);
+        seleccionarValorSpinner(rutainspeccion_sEstadoMaleza,objRutaInspeccion.EstadoMalezaClave);
+        seleccionarValorSpinner(rutainspeccion_sPlaga,objRutaInspeccion.PlagaClave);
+        seleccionarValorSpinner(rutainspeccion_sEstadoPlaga,objRutaInspeccion.EstadoPlagaClave);
+        seleccionarValorSpinner(rutainspeccion_sEnfermedad,objRutaInspeccion.EnfermedadClave);
+        seleccionarValorSpinner(rutainspeccion_sEstadoEnfermedad,objRutaInspeccion.EstadoEnfermedadClave);
+        seleccionarValorSpinner(rutainspeccion_sPotencial, objRutaInspeccion.PotencialRendimientoClave);
+        RutaInspeccion[] listaRelacionRecomendacion = _objRutaInspeccionBP.GetAllRelacionRecomendacion(_objRutaInspeccion);
+        for (int i = 0; i < listaRelacionRecomendacion.length; i++) {
             RutaInspeccion objTemp = new RutaInspeccion();
-            objTemp = (RutaInspeccion) listaRutaInspeccion[i];
+            objTemp = (RutaInspeccion) listaRelacionRecomendacion[i];
             switch (objTemp.RecomendacionClave) {
                 case 1:
                     rutainspeccion_chbRegar.setChecked(true);
@@ -522,7 +625,35 @@ public class InspeccionCampo extends ActionBarActivity {
                     break;
             }
         }
-
+        RutaInspeccion[] listaRelacionRiego = _objRutaInspeccionBP.GetAllRelacionRiego(_objRutaInspeccion);
+        for (int i = 0; i < listaRelacionRiego.length; i++) {
+            RutaInspeccion objTemp = new RutaInspeccion();
+            objTemp = (RutaInspeccion) listaRelacionRiego[i];
+            switch (objTemp.TipoRiegoClave) {
+                case 1:
+                    rutainspeccion_chbPozo.setChecked(true);
+                    rutainspeccion_txtCapacidad.setEnabled(true);
+                    rutainspeccion_txtCapacidad.setText(String.valueOf(objTemp.Capacidad));
+                    break;
+                case 2:
+                    rutainspeccion_chbGravedad.setChecked(true);
+                    break;
+                case 3:
+                    rutainspeccion_chbAspersion.setChecked(true);
+                    break;
+                case 4:
+                    rutainspeccion_chbGoteo.setChecked(true);
+                    break;
+                case 5:
+                    rutainspeccion_chbCanal.setChecked(true);
+                    break;
+                case 6:
+                    rutainspeccion_chbRiegoOtro.setChecked(true);
+                    rutainspeccion_txtRiegoOtro.setEnabled(true);
+                    rutainspeccion_txtRiegoOtro.setText(objTemp.TipoRiegoOtro);
+                    break;
+            }
+        }
     }
 
     private void seleccionarValorSpinner(Spinner _objSpinner, int valor) {
@@ -540,8 +671,20 @@ public class InspeccionCampo extends ActionBarActivity {
         return objRadioButton.getText().toString().charAt(0);
     }
 
+    private void seleccionarValorRadio(RadioGroup objRadioGroup, Character valor) {
+        int count = objRadioGroup.getChildCount();
+        for (int i = 0; i < count; i++) {
+            View o = objRadioGroup.getChildAt(i);
+            if (o instanceof RadioButton) {
+                RadioButton objRadioButton =  (RadioButton)o;
+                if(objRadioButton.getText().toString().charAt(0)==valor)
+                    objRadioButton.setChecked(true);
+            }
+        }
+    }
+
     private int obtenerValorSpinner(Spinner _objSpinner) {
-        Combo objCombo = (Combo) rutainspeccion_sSistemaProduccion.getSelectedItem();
+        Combo objCombo = (Combo) _objSpinner.getSelectedItem();
         return objCombo.getClave();
     }
 

@@ -22,7 +22,7 @@ public class WebServiceBP {
         _objWebServiceDA = new WebServiceDA(context);
     }
 
-    public boolean getCatalogos(String usuario) throws IOException, XmlPullParserException {
+    public boolean getCatalogos(String usuario) throws Exception {
         try {
             boolean resul = _objWebServiceDA.getCatalogos(usuario);
             return resul;
@@ -31,7 +31,7 @@ public class WebServiceBP {
         }
     }
 
-    public boolean getPlaneacionRuta(String usuario, int usuarioCve, String fecha) throws IOException, XmlPullParserException {
+    public boolean getPlaneacionRuta(String usuario, int usuarioCve, String fecha) throws Exception {
         try {
             boolean resul = _objWebServiceDA.getPlaneacionRuta(usuario, usuarioCve, fecha);
             return resul;
@@ -40,7 +40,7 @@ public class WebServiceBP {
         }
     }
 
-    public Usuario getLogin(Usuario objUsuario) throws IOException, XmlPullParserException {
+    public Usuario getLogin(Usuario objUsuario) throws Exception {
         try {
             Usuario resul = _objWebServiceDA.getLogin(objUsuario);
             return resul;
@@ -49,7 +49,7 @@ public class WebServiceBP {
         }
     }
 
-    public boolean insertRutaInspeccion(RutaInspeccion objRutaInspeccion) throws IOException, XmlPullParserException {
+    public boolean insertRutaInspeccion(RutaInspeccion objRutaInspeccion) throws Exception {
         try {
             boolean resul = _objWebServiceDA.insertRutaInspeccion(objRutaInspeccion);
             return resul;

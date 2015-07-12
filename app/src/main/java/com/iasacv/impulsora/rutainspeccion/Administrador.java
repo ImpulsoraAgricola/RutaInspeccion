@@ -1,5 +1,6 @@
 package com.iasacv.impulsora.rutainspeccion;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -36,10 +37,18 @@ import com.iasacv.impulsora.rutainspeccion.Servicios.WebServicePlaneacion;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 /**
  * Created by Administrator on 28/06/2015.
@@ -72,45 +81,52 @@ public class Administrador extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_administrador);
+        try {
+            _objCatalogosBP = new CatalogosBP(Administrador.this);
+            _objComunBP = new ComunBP(Administrador.this);
+            _objRutaInspeccionBP = new RutaInspeccionBP(Administrador.this);
+            _objWebServiceBP = new WebServiceBP(Administrador.this);
 
-        _objCatalogosBP = new CatalogosBP(this);
-        _objComunBP = new ComunBP(this);
-        _objRutaInspeccionBP = new RutaInspeccionBP(this);
-        _objWebServiceBP = new WebServiceBP(this);
+            gridView = (GridView) findViewById(R.id.gridView);
 
-        gridView = (GridView) findViewById(R.id.gridView);
+            //Obtener usuario
+            getPreferences();
 
-        //Obtener usuario
-        getPreferences();
+            //Llenar grid
+            getPlaneacionRuta();
 
-        //Crear el refrescar al momento de deslizar
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                getPlaneacionRuta();
-                mSwipeRefreshLayout.setRefreshing(false);
-            }
-        });
+            //Iniciar servicio
+            callService();
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                try {
-                    Item objItem = listaRutaInspeccion.get(position);
-                    confirmDialogStart(objItem);
-                } catch (Exception e) {
-                    _objComunBP.Mensaje(e.toString(), Administrador.this);
+            //Crear el refrescar al momento de deslizar
+            mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+            mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    try {
+                        getPlaneacionRuta();
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    } catch (Exception e) {
+                        _objComunBP.Mensaje(e.toString(), Administrador.this);
+                    }
                 }
-            }
-        });
+            });
 
-        //Llenar grid
-        getPlaneacionRuta();
-
-        //Iniciar servicio
-        callService();
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+                    try {
+                        Item objItem = listaRutaInspeccion.get(position);
+                        confirmDialogStart(objItem);
+                    } catch (Exception e) {
+                        _objComunBP.Mensaje(e.toString(), Administrador.this);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            _objComunBP.Mensaje(e.toString(), Administrador.this);
+        }
     }
 
     @Override
@@ -201,15 +217,10 @@ public class Administrador extends ActionBarActivity {
         protected Boolean doInBackground(String... params) {
             boolean result = true;
             try {
-                try {
-                    result = _objWebServiceBP.getPlaneacionRuta(_objUsuario.RFC, _objUsuario.Clave, currentDateandTime);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                }
+                _objWebServiceBP = new WebServiceBP(Administrador.this);
+                result = _objWebServiceBP.getPlaneacionRuta(_objUsuario.RFC, _objUsuario.Clave, currentDateandTime);
             } catch (Exception e) {
-                _objComunBP.Mensaje(e.toString(), Administrador.this);
+                e.printStackTrace();
             }
             return result;
         }
@@ -252,8 +263,8 @@ public class Administrador extends ActionBarActivity {
     }
 
     public void callService() {
-        resultReceiver = new MyResultReceiver(null);
-        intent = new Intent(this, WebServicePlaneacion.class);
+        resultReceiver = new MyResultReceiver(new Handler());
+        intent = new Intent(Administrador.this, WebServicePlaneacion.class);
         intent.putExtra("receiver", resultReceiver);
         intent.putExtra("Clave", _objUsuario.Clave);
         intent.putExtra("RFC", _objUsuario.RFC);
@@ -360,7 +371,7 @@ public class Administrador extends ActionBarActivity {
                                     if (objTemp.Folio == 0) {
                                         _objRutaInspeccionBP.InsertRutaInspeccion(objRutaInspeccion);
                                         iniciarRutaInspeccion(objItem);
-                                    } else if (objTemp.Estatus.equals("C")) {
+                                    } else if (objTemp.Estatus.equals("O")) {
                                         confirmInicio(objItem);
                                     } else
                                         iniciarRutaInspeccion(objItem);

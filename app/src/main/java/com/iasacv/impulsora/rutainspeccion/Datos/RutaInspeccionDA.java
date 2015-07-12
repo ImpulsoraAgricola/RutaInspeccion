@@ -6,8 +6,12 @@ import android.database.SQLException;
 
 import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
+import com.iasacv.impulsora.rutainspeccion.Modelo.Combo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.PlaneacionRuta;
 import com.iasacv.impulsora.rutainspeccion.Modelo.RutaInspeccion;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 08/07/2015.
@@ -41,6 +45,16 @@ public class RutaInspeccionDA {
         if (entidad.Folio != 0) {
             if (cadena != "") { cadena += " AND "; }
             cadena += "A.PLADEFOL=" + entidad.Folio;
+        }
+        //--Clave recomendacion
+        if (entidad.RecomendacionClave != 0) {
+            if (cadena != "") { cadena += " AND "; }
+            cadena += "A.RECOMCVE=" + entidad.RecomendacionClave;
+        }
+        //--Clave recomendacion
+        if (entidad.TipoRiegoClave != 0) {
+            if (cadena != "") { cadena += " AND "; }
+            cadena += "A.TIRIECVE=" + entidad.TipoRiegoClave;
         }
         return cadena;
     }
@@ -143,6 +157,84 @@ public class RutaInspeccionDA {
         }
     }
 
+    public List<RutaInspeccion> GetAllRutaInspeccion() {
+        try {
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT USUARCVE,CICLOCVE,PLANEFEC,PLADEFOL,RUINSFEI,RUINSFEF," +
+                    "RUINSREC,A.SIPROCVE,SIPRONOM,A.ARTOPCVE,ARTOPNOM,RUINSSIA,RUINSSUA,RUINSMAN,A.ETAFECVE,ETAFENOM," +
+                    "RUINSEXP,A.CONDICVE,CONDINOM,RUINSORD,RUINSREG,RUINSUSA,RUINSHOR,RUINSAGU,RUINSINU,RUINSPOB,RUINSPRO,RUINSALT," +
+                    "RUINSAPL,RUINSTEM,RUINSFIT,RUINSPLA,A.MALEZCVE,MALEZNOM,A.ESTMACVE,ESTMANOM,A.PLAGACVE,PLAGANOM,A.ESTPLCVE," +
+                    "ESTPLNOM,A.ENFERCVE,ENFERNOM,A.ESTENCVE,ESTENNOM,A.POTRECVE,POTRENOM,RUINSSTS,RUINSUSO\n" +
+                    "FROM BATRUINS A LEFT JOIN BACSIPRO B ON (A.SIPROCVE=B.SIPROCVE)\n" +
+                    "LEFT JOIN BACARTOP C ON (A.ARTOPCVE=C.ARTOPCVE)\n" +
+                    "LEFT JOIN BACETAFE D ON (A.ETAFECVE=D.ETAFECVE)\n" +
+                    "LEFT JOIN BACCONDI E ON (A.CONDICVE=E.CONDICVE)\n" +
+                    "LEFT JOIN BPCMALEZ F ON (A.MALEZCVE=F.MALEZCVE)\n" +
+                    "LEFT JOIN BACESTMA G ON (A.ESTMACVE=G.ESTMACVE)\n" +
+                    "LEFT JOIN BLCPLAGA H ON (A.PLAGACVE=H.PLAGACVE)\n" +
+                    "LEFT JOIN BACESTPL I ON (A.ESTPLCVE=I.ESTPLCVE)\n" +
+                    "LEFT JOIN BECENFER J ON (A.ENFERCVE=J.ENFERCVE)\n" +
+                    "LEFT JOIN BACESTEN K ON (A.ESTENCVE=K.ESTENCVE)\n" +
+                    "LEFT JOIN BACPOTRE L ON (A.POTRECVE=L.POTRECVE) " +
+                    "WHERE RUINSSTS=\"E\"");
+            List<RutaInspeccion> listRutaInspeccion = new ArrayList<RutaInspeccion>();
+            while (objCursor.moveToNext()) {
+                RutaInspeccion objRutaInspeccion = new RutaInspeccion();
+                objRutaInspeccion.UsuarioClave = objCursor.getInt(0);
+                objRutaInspeccion.CicloClave = objCursor.getInt(1);
+                objRutaInspeccion.Fecha = objCursor.getString(2);
+                objRutaInspeccion.Folio = objCursor.getInt(3);
+                objRutaInspeccion.FechaInicio = objCursor.getString(4);
+                objRutaInspeccion.FechaFin = objCursor.getString(5);
+                objRutaInspeccion.RecomendacionTecnica = objCursor.getString(6).charAt(0);
+                objRutaInspeccion.SistemaProduccionClave = objCursor.getInt(7);
+                objRutaInspeccion.SistemaProduccionNombre = objCursor.getString(8);
+                objRutaInspeccion.ArregloTopologicoClave = objCursor.getInt(9);
+                objRutaInspeccion.ArregloTopologicoNombre = objCursor.getString(10);
+                objRutaInspeccion.ProfundidadSiembra = objCursor.getString(11).charAt(0);
+                objRutaInspeccion.ProfundidadSurco = objCursor.getString(12).charAt(0);
+                objRutaInspeccion.ManejoAdecuado = objCursor.getString(13).charAt(0);
+                objRutaInspeccion.EtapaFenologicaClave = objCursor.getInt(14);
+                objRutaInspeccion.EtapaFenologicaNombre = objCursor.getString(15);
+                objRutaInspeccion.Exposicion = objCursor.getString(16).charAt(0);
+                objRutaInspeccion.CondicionDesarrolloClave = objCursor.getInt(17);
+                objRutaInspeccion.CondicionDesarrolloNombre = objCursor.getString(18);
+                objRutaInspeccion.OrdenCorrecto = objCursor.getString(19).charAt(0);
+                objRutaInspeccion.RegulaPh = objCursor.getString(20).charAt(0);
+                objRutaInspeccion.UsoAdecuado = objCursor.getString(21).charAt(0);
+                objRutaInspeccion.HoraAplicacion = objCursor.getString(22).charAt(0);
+                objRutaInspeccion.AguaCanal = objCursor.getString(23).charAt(0);
+                objRutaInspeccion.Inundacion = objCursor.getString(24).charAt(0);
+                objRutaInspeccion.BajaPoblacion = objCursor.getString(25).charAt(0);
+                objRutaInspeccion.AplicacionNutrientes = objCursor.getString(26).charAt(0);
+                objRutaInspeccion.AlteracionCiclo = objCursor.getString(27).charAt(0);
+                objRutaInspeccion.AplicacionAgroquimicos = objCursor.getString(28).charAt(0);
+                objRutaInspeccion.AltasTemperaturas = objCursor.getString(29).charAt(0);
+                objRutaInspeccion.Fito = objCursor.getString(30).charAt(0);
+                objRutaInspeccion.PlagasMalControladas = objCursor.getString(31).charAt(0);
+                objRutaInspeccion.MalezaClave = objCursor.getInt(32);
+                objRutaInspeccion.MalezaNombre = objCursor.getString(33);
+                objRutaInspeccion.EstadoMalezaClave = objCursor.getInt(34);
+                objRutaInspeccion.EstadoMalezaNombre = objCursor.getString(35);
+                objRutaInspeccion.PlagaClave = objCursor.getInt(36);
+                objRutaInspeccion.PlagaNombre = objCursor.getString(37);
+                objRutaInspeccion.EstadoPlagaClave = objCursor.getInt(38);
+                objRutaInspeccion.EstadoPlagaNombre = objCursor.getString(39);
+                objRutaInspeccion.EnfermedadClave = objCursor.getInt(40);
+                objRutaInspeccion.EnfermedadNombre = objCursor.getString(41);
+                objRutaInspeccion.EstadoEnfermedadClave = objCursor.getInt(42);
+                objRutaInspeccion.EstadoEnfermedadNombre = objCursor.getString(43);
+                objRutaInspeccion.PotencialRendimientoClave = objCursor.getInt(44);
+                objRutaInspeccion.PotencialRendimientoNombre = objCursor.getString(45);
+                objRutaInspeccion.Estatus = objCursor.getString(46);
+                objRutaInspeccion.Uso = objCursor.getString(47);
+                listRutaInspeccion.add(objRutaInspeccion);
+            }
+            return listRutaInspeccion;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
     public boolean InsertRutaInspeccionInicio(RutaInspeccion objRutaInspeccion) {
         try {
             boolean resul = true;
@@ -207,6 +299,31 @@ public class RutaInspeccionDA {
     }
 
     //Relacion riego
+    public RutaInspeccion GetRelacionRiego(RutaInspeccion objFiltro) {
+        try {
+            String filtro = ArmaFiltro(objFiltro);
+            RutaInspeccion objRutaInspeccion = new RutaInspeccion();
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT USUARCVE,CICLOCVE,PLANEFEC,PLADEFOL,A.TIRIECVE," +
+                    "TIRIENOM,RIEGOCAP,RIEGOOTR \n" +
+                    "FROM BARRIEGO A INNER JOIN BACTIRIE B ON (A.TIRIECVE=B.TIRIECVE) "+
+                    "WHERE " + filtro);
+            while (objCursor.moveToNext()) {
+                objRutaInspeccion.UsuarioClave = objCursor.getInt(0);
+                objRutaInspeccion.CicloClave = objCursor.getInt(1);
+                objRutaInspeccion.Fecha = objCursor.getString(2);
+                objRutaInspeccion.Folio = objCursor.getInt(3);
+                objRutaInspeccion.TipoRiegoClave = objCursor.getInt(4);
+                objRutaInspeccion.TipoRiegoNombre = objCursor.getString(5);
+                objRutaInspeccion.Capacidad = objCursor.getInt(6);
+                objRutaInspeccion.TipoRiegoOtro = objCursor.getString(7);
+            }
+            objCursor.close();
+            return objRutaInspeccion;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
     public RutaInspeccion[] GetAllRelacionRiego(RutaInspeccion objFiltro) {
         try {
             String filtro = ArmaFiltro(objFiltro);
@@ -244,9 +361,23 @@ public class RutaInspeccionDA {
                     + objRutaInspeccion.Folio + "," +
                     + objRutaInspeccion.TipoRiegoClave + "," +
                     + objRutaInspeccion.Capacidad + "," +
-                    "'" + objRutaInspeccion.TipoRiegoOtro + "'," +
-                    "'" + objRutaInspeccion.Estatus + "'," +
-                    "'" + objRutaInspeccion.Uso + "')";
+                    "'" + objRutaInspeccion.TipoRiegoOtro + "')";
+            objEntLibTools.insert(query);
+            return resul;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
+    public boolean DeleteRelacionRiego(RutaInspeccion objRutaInspeccion) {
+        try {
+            boolean resul = true;
+            String query = "DELETE FROM BARRIEGO WHERE " +
+                    "USUARCVE=" + objRutaInspeccion.UsuarioClave +
+                    " AND CICLOCVE="+ objRutaInspeccion.CicloClave +
+                    " AND PLANEFEC='" + objRutaInspeccion.Fecha +"'"+
+                    " AND PLADEFOL="+ objRutaInspeccion.Folio +
+                    " AND TIRIECVE="+ objRutaInspeccion.TipoRiegoClave + ";";
             objEntLibTools.insert(query);
             return resul;
         } catch (SQLException e) {
@@ -255,6 +386,30 @@ public class RutaInspeccionDA {
     }
 
     //Relacion recomendacion
+    public RutaInspeccion GetRelacionRecomendacion(RutaInspeccion objFiltro) {
+        try {
+            String filtro = ArmaFiltro(objFiltro);
+            RutaInspeccion objRutaInspeccion = new RutaInspeccion();
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT USUARCVE,CICLOCVE,PLANEFEC,PLADEFOL,A.RECOMCVE," +
+                    "RECOMNOM,RECOMOTR\n" +
+                    "FROM BARRECOM A INNER JOIN BACRECOM B ON (A.RECOMCVE=B.RECOMCVE) "+
+                    "WHERE " + filtro);
+            while (objCursor.moveToNext()) {
+                objRutaInspeccion.UsuarioClave = objCursor.getInt(0);
+                objRutaInspeccion.CicloClave = objCursor.getInt(1);
+                objRutaInspeccion.Fecha = objCursor.getString(2);
+                objRutaInspeccion.Folio = objCursor.getInt(3);
+                objRutaInspeccion.RecomendacionClave = objCursor.getInt(4);
+                objRutaInspeccion.RecomendacionNombre = objCursor.getString(5);
+                objRutaInspeccion.RecomendacionOtro = objCursor.getString(6);
+            }
+            objCursor.close();
+            return objRutaInspeccion;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
     public RutaInspeccion[] GetAllRelacionRecomendacion(RutaInspeccion objFiltro) {
         try {
             String filtro = ArmaFiltro(objFiltro);
@@ -302,10 +457,10 @@ public class RutaInspeccionDA {
         try {
             boolean resul = true;
             String query = "DELETE FROM BARRECOM WHERE " +
-                    "USUARCVE=" + objRutaInspeccion.UsuarioClave + "," +
-                    " AND CICLOCVE="+ objRutaInspeccion.CicloClave + "," +
-                    " AND PLANEFEC='" + objRutaInspeccion.Fecha + "'," +
-                    " AND PLADEFOL="+ objRutaInspeccion.Folio + "," +
+                    "USUARCVE=" + objRutaInspeccion.UsuarioClave +
+                    " AND CICLOCVE="+ objRutaInspeccion.CicloClave +
+                    " AND PLANEFEC='" + objRutaInspeccion.Fecha +"'"+
+                    " AND PLADEFOL="+ objRutaInspeccion.Folio +
                     " AND RECOMCVE="+ objRutaInspeccion.RecomendacionClave + ";";
             objEntLibTools.insert(query);
             return resul;
