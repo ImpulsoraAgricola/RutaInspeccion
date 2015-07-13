@@ -31,6 +31,7 @@ public class TipoArticuloDA {
             while (objCursor.moveToNext()) {
                 listTipoArticulo.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }
+            objCursor.close();
             return listTipoArticulo;
         } catch (SQLException e) {
             throw e;

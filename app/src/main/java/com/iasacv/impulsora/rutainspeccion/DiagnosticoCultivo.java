@@ -154,7 +154,7 @@ public class DiagnosticoCultivo extends ActionBarActivity {
         }
     }
 
-    private class insertRutaInspeccion extends AsyncTask<String, Integer, Boolean> {
+    /*private class insertRutaInspeccion extends AsyncTask<String, Integer, Boolean> {
 
         ProgressDialog loadProgressDialog;
 
@@ -185,7 +185,7 @@ public class DiagnosticoCultivo extends ActionBarActivity {
             }
             loadProgressDialog.dismiss();
         }
-    }
+    }*/
 
     //Llenar objetos
     public RutaInspeccion creaObjeto() {

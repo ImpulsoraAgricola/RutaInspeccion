@@ -30,6 +30,7 @@ public class RecomendacionDA {
             while (objCursor.moveToNext()) {
                 listRecomendacion.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }
+            objCursor.close();
             return listRecomendacion;
         } catch (SQLException e) {
             throw e;

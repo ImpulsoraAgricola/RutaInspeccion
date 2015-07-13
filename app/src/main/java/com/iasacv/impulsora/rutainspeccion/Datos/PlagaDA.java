@@ -32,6 +32,7 @@ public class PlagaDA {
             while (objCursor.moveToNext()) {
                 listPlaga.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }
+            objCursor.close();
             return listPlaga;
         } catch (SQLException e) {
             throw e;

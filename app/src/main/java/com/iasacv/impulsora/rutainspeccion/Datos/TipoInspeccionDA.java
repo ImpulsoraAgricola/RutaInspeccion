@@ -31,6 +31,7 @@ public class TipoInspeccionDA {
             while (objCursor.moveToNext()) {
                 listTipoInspeccion.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }
+            objCursor.close();
             return listTipoInspeccion;
         } catch (SQLException e) {
             throw e;

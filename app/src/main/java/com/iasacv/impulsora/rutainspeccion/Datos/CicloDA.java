@@ -85,7 +85,6 @@ public class CicloDA{
                 objCiclo.Estatus = objCursor.getString(5);
                 objCiclo.Uso = objCursor.getString(6);
             }
-            objCursor.close();
             return objCiclo;
         } catch (SQLException e) {
             throw e;

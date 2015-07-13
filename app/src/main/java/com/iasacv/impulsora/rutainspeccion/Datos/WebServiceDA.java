@@ -32,6 +32,7 @@ import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by Administrator on 24/06/2015.
@@ -80,8 +81,8 @@ public class WebServiceDA extends Activity {
     }
 
     //Variable para Web Services
-    String NAMESPACE = "http://192.168.10.20:8082/";
-    String URL = "http://192.168.10.20:8082/Service.asmx?wsdl";
+    String NAMESPACE = "http://impulsanetbi.iasacv.com:8081/";
+    String URL = "http://impulsanetbi.iasacv.com:8081/Service.asmx?wsdl";
 
     public boolean getCatalogos(String usuario) throws IOException, XmlPullParserException {
         //Variables
@@ -90,10 +91,10 @@ public class WebServiceDA extends Activity {
         //Se elimina la version anterior de las tablas
         _objEntLibTools.dropTable();
 
-        //Actualizar tabla de usuarios
+        //Actualizar tabla de ciclos
         Ciclo[] listaCiclos;
         String METHOD_NAME = "GetAllCiclos";
-        String SOAP_ACTION = NAMESPACE+"GetAllCiclos";
+        String SOAP_ACTION = NAMESPACE + "GetAllCiclos";
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         request.addProperty("usuario", usuario);
@@ -105,7 +106,7 @@ public class WebServiceDA extends Activity {
             SoapObject resSoap = (SoapObject) envelope.getResponse();
             listaCiclos = new Ciclo[resSoap.getPropertyCount()];
             for (int i = 0; i < listaCiclos.length; i++) {
-                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                SoapObject ic = (SoapObject) resSoap.getProperty(i);
                 Ciclo objCiclo = new Ciclo();
                 objCiclo.Clave = Integer.parseInt(ic.getProperty(0).toString());
                 objCiclo.Nombre = ic.getProperty(1).toString();
@@ -123,7 +124,7 @@ public class WebServiceDA extends Activity {
         //Actualizar tabla de tipo de articulo
         TipoArticulo[] listaTipoArticulo;
         METHOD_NAME = "GetAllTipoArticulo";
-        SOAP_ACTION = NAMESPACE+"GetAllTipoArticulo";
+        SOAP_ACTION = NAMESPACE + "GetAllTipoArticulo";
         request = new SoapObject(NAMESPACE, METHOD_NAME);
         envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         request.addProperty("usuario", usuario);
@@ -135,7 +136,7 @@ public class WebServiceDA extends Activity {
             SoapObject resSoap = (SoapObject) envelope.getResponse();
             listaTipoArticulo = new TipoArticulo[resSoap.getPropertyCount()];
             for (int i = 0; i < listaTipoArticulo.length; i++) {
-                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                SoapObject ic = (SoapObject) resSoap.getProperty(i);
                 TipoArticulo objTipoArticulo = new TipoArticulo();
                 objTipoArticulo.Clave = Integer.parseInt(ic.getProperty(0).toString());
                 objTipoArticulo.Nombre = ic.getProperty(1).toString();
@@ -150,7 +151,7 @@ public class WebServiceDA extends Activity {
         //Actualizar tabla de tipo de inspeccion
         TipoInspeccion[] listaTipoInspeccion;
         METHOD_NAME = "GetAllTipoInspeccion";
-        SOAP_ACTION = NAMESPACE+"GetAllTipoInspeccion";
+        SOAP_ACTION = NAMESPACE + "GetAllTipoInspeccion";
         request = new SoapObject(NAMESPACE, METHOD_NAME);
         envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         request.addProperty("usuario", usuario);
@@ -162,7 +163,7 @@ public class WebServiceDA extends Activity {
             SoapObject resSoap = (SoapObject) envelope.getResponse();
             listaTipoInspeccion = new TipoInspeccion[resSoap.getPropertyCount()];
             for (int i = 0; i < listaTipoInspeccion.length; i++) {
-                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                SoapObject ic = (SoapObject) resSoap.getProperty(i);
                 TipoInspeccion objTipoInspeccion = new TipoInspeccion();
                 objTipoInspeccion.Clave = Integer.parseInt(ic.getProperty(0).toString());
                 objTipoInspeccion.Nombre = ic.getProperty(1).toString();
@@ -177,7 +178,7 @@ public class WebServiceDA extends Activity {
         //Actualizar tabla de etapa fenologica
         EtapaFenologica[] listaEtapaFenologica;
         METHOD_NAME = "GetAllEtapaFenologica";
-        SOAP_ACTION = NAMESPACE+"GetAllEtapaFenologica";
+        SOAP_ACTION = NAMESPACE + "GetAllEtapaFenologica";
         request = new SoapObject(NAMESPACE, METHOD_NAME);
         envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         request.addProperty("usuario", usuario);
@@ -189,7 +190,7 @@ public class WebServiceDA extends Activity {
             SoapObject resSoap = (SoapObject) envelope.getResponse();
             listaEtapaFenologica = new EtapaFenologica[resSoap.getPropertyCount()];
             for (int i = 0; i < listaEtapaFenologica.length; i++) {
-                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                SoapObject ic = (SoapObject) resSoap.getProperty(i);
                 EtapaFenologica objEtapaFenologica = new EtapaFenologica();
                 objEtapaFenologica.Clave = Integer.parseInt(ic.getProperty(0).toString());
                 objEtapaFenologica.Nombre = ic.getProperty(1).toString();
@@ -204,7 +205,7 @@ public class WebServiceDA extends Activity {
         //Actualizar tabla de potencial de rendimiento
         PotencialRendimiento[] listaPotencialRendimiento;
         METHOD_NAME = "GetAllPotencialRendimiento";
-        SOAP_ACTION = NAMESPACE+"GetAllPotencialRendimiento";
+        SOAP_ACTION = NAMESPACE + "GetAllPotencialRendimiento";
         request = new SoapObject(NAMESPACE, METHOD_NAME);
         envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         request.addProperty("usuario", usuario);
@@ -216,7 +217,7 @@ public class WebServiceDA extends Activity {
             SoapObject resSoap = (SoapObject) envelope.getResponse();
             listaPotencialRendimiento = new PotencialRendimiento[resSoap.getPropertyCount()];
             for (int i = 0; i < listaPotencialRendimiento.length; i++) {
-                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                SoapObject ic = (SoapObject) resSoap.getProperty(i);
                 PotencialRendimiento objPotencialRendimiento = new PotencialRendimiento();
                 objPotencialRendimiento.Clave = Integer.parseInt(ic.getProperty(0).toString());
                 objPotencialRendimiento.Nombre = ic.getProperty(1).toString();
@@ -231,7 +232,7 @@ public class WebServiceDA extends Activity {
         //Actualizar tabla de estado de malezas
         EstadoMPE[] listaEstadoMaleza;
         METHOD_NAME = "GetAllEstadoMaleza";
-        SOAP_ACTION = NAMESPACE+"GetAllEstadoMaleza";
+        SOAP_ACTION = NAMESPACE + "GetAllEstadoMaleza";
         request = new SoapObject(NAMESPACE, METHOD_NAME);
         envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         request.addProperty("usuario", usuario);
@@ -243,7 +244,7 @@ public class WebServiceDA extends Activity {
             SoapObject resSoap = (SoapObject) envelope.getResponse();
             listaEstadoMaleza = new EstadoMPE[resSoap.getPropertyCount()];
             for (int i = 0; i < listaEstadoMaleza.length; i++) {
-                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                SoapObject ic = (SoapObject) resSoap.getProperty(i);
                 EstadoMPE objEstadoMaleza = new EstadoMPE();
                 objEstadoMaleza.Clave = Integer.parseInt(ic.getProperty(0).toString());
                 objEstadoMaleza.Nombre = ic.getProperty(1).toString();
@@ -258,7 +259,7 @@ public class WebServiceDA extends Activity {
         //Actualizar tabla de estado de plaga
         EstadoMPE[] listaEstadoPlaga;
         METHOD_NAME = "GetAllEstadoPlaga";
-        SOAP_ACTION = NAMESPACE+"GetAllEstadoPlaga";
+        SOAP_ACTION = NAMESPACE + "GetAllEstadoPlaga";
         request = new SoapObject(NAMESPACE, METHOD_NAME);
         envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         request.addProperty("usuario", usuario);
@@ -270,7 +271,7 @@ public class WebServiceDA extends Activity {
             SoapObject resSoap = (SoapObject) envelope.getResponse();
             listaEstadoPlaga = new EstadoMPE[resSoap.getPropertyCount()];
             for (int i = 0; i < listaEstadoPlaga.length; i++) {
-                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                SoapObject ic = (SoapObject) resSoap.getProperty(i);
                 EstadoMPE objEstadoPlaga = new EstadoMPE();
                 objEstadoPlaga.Clave = Integer.parseInt(ic.getProperty(0).toString());
                 objEstadoPlaga.Nombre = ic.getProperty(1).toString();
@@ -285,7 +286,7 @@ public class WebServiceDA extends Activity {
         //Actualizar tabla de estado de enfermedad
         EstadoMPE[] listaEstadoEnfermedad;
         METHOD_NAME = "GetAllEstadoEnfermedad";
-        SOAP_ACTION = NAMESPACE+"GetAllEstadoEnfermedad";
+        SOAP_ACTION = NAMESPACE + "GetAllEstadoEnfermedad";
         request = new SoapObject(NAMESPACE, METHOD_NAME);
         envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         request.addProperty("usuario", usuario);
@@ -297,7 +298,7 @@ public class WebServiceDA extends Activity {
             SoapObject resSoap = (SoapObject) envelope.getResponse();
             listaEstadoEnfermedad = new EstadoMPE[resSoap.getPropertyCount()];
             for (int i = 0; i < listaEstadoEnfermedad.length; i++) {
-                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                SoapObject ic = (SoapObject) resSoap.getProperty(i);
                 EstadoMPE objEstadoEnfermedad = new EstadoMPE();
                 objEstadoEnfermedad.Clave = Integer.parseInt(ic.getProperty(0).toString());
                 objEstadoEnfermedad.Nombre = ic.getProperty(1).toString();
@@ -312,7 +313,7 @@ public class WebServiceDA extends Activity {
         //Actualizar tabla de sistema de produccion
         SistemaProduccion[] listaSistemaProduccion;
         METHOD_NAME = "GetAllSistemaProduccion";
-        SOAP_ACTION = NAMESPACE+"GetAllSistemaProduccion";
+        SOAP_ACTION = NAMESPACE + "GetAllSistemaProduccion";
         request = new SoapObject(NAMESPACE, METHOD_NAME);
         envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         request.addProperty("usuario", usuario);
@@ -324,7 +325,7 @@ public class WebServiceDA extends Activity {
             SoapObject resSoap = (SoapObject) envelope.getResponse();
             listaSistemaProduccion = new SistemaProduccion[resSoap.getPropertyCount()];
             for (int i = 0; i < listaSistemaProduccion.length; i++) {
-                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                SoapObject ic = (SoapObject) resSoap.getProperty(i);
                 SistemaProduccion objSistemaProduccion = new SistemaProduccion();
                 objSistemaProduccion.Clave = Integer.parseInt(ic.getProperty(0).toString());
                 objSistemaProduccion.Nombre = ic.getProperty(1).toString();
@@ -339,7 +340,7 @@ public class WebServiceDA extends Activity {
         //Actualizar tabla de tipo de riego
         TipoRiego[] listaTipoRiego;
         METHOD_NAME = "GetAllTipoRiego";
-        SOAP_ACTION = NAMESPACE+"GetAllTipoRiego";
+        SOAP_ACTION = NAMESPACE + "GetAllTipoRiego";
         request = new SoapObject(NAMESPACE, METHOD_NAME);
         envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         request.addProperty("usuario", usuario);
@@ -351,7 +352,7 @@ public class WebServiceDA extends Activity {
             SoapObject resSoap = (SoapObject) envelope.getResponse();
             listaTipoRiego = new TipoRiego[resSoap.getPropertyCount()];
             for (int i = 0; i < listaTipoRiego.length; i++) {
-                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                SoapObject ic = (SoapObject) resSoap.getProperty(i);
                 TipoRiego objTipoRiego = new TipoRiego();
                 objTipoRiego.Clave = Integer.parseInt(ic.getProperty(0).toString());
                 objTipoRiego.Nombre = ic.getProperty(1).toString();
@@ -366,7 +367,7 @@ public class WebServiceDA extends Activity {
         //Actualizar tabla de condicion de desarrollo
         CondicionDesarrollo[] listaCondicionDesarrollo;
         METHOD_NAME = "GetAllCondicionDesarrollo";
-        SOAP_ACTION = NAMESPACE+"GetAllCondicionDesarrollo";
+        SOAP_ACTION = NAMESPACE + "GetAllCondicionDesarrollo";
         request = new SoapObject(NAMESPACE, METHOD_NAME);
         envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         request.addProperty("usuario", usuario);
@@ -378,7 +379,7 @@ public class WebServiceDA extends Activity {
             SoapObject resSoap = (SoapObject) envelope.getResponse();
             listaCondicionDesarrollo = new CondicionDesarrollo[resSoap.getPropertyCount()];
             for (int i = 0; i < listaCondicionDesarrollo.length; i++) {
-                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                SoapObject ic = (SoapObject) resSoap.getProperty(i);
                 CondicionDesarrollo objCondicionDesarrollo = new CondicionDesarrollo();
                 objCondicionDesarrollo.Clave = Integer.parseInt(ic.getProperty(0).toString());
                 objCondicionDesarrollo.Nombre = ic.getProperty(1).toString();
@@ -393,7 +394,7 @@ public class WebServiceDA extends Activity {
         //Actualizar tabla de recomendacion
         Recomendacion[] listaRecomendacion;
         METHOD_NAME = "GetAllRecomendacion";
-        SOAP_ACTION = NAMESPACE+"GetAllRecomendacion";
+        SOAP_ACTION = NAMESPACE + "GetAllRecomendacion";
         request = new SoapObject(NAMESPACE, METHOD_NAME);
         envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         request.addProperty("usuario", usuario);
@@ -405,7 +406,7 @@ public class WebServiceDA extends Activity {
             SoapObject resSoap = (SoapObject) envelope.getResponse();
             listaRecomendacion = new Recomendacion[resSoap.getPropertyCount()];
             for (int i = 0; i < listaRecomendacion.length; i++) {
-                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                SoapObject ic = (SoapObject) resSoap.getProperty(i);
                 Recomendacion objRecomendacion = new Recomendacion();
                 objRecomendacion.Clave = Integer.parseInt(ic.getProperty(0).toString());
                 objRecomendacion.Nombre = ic.getProperty(1).toString();
@@ -420,7 +421,7 @@ public class WebServiceDA extends Activity {
         //Actualizar tabla de plaga
         Plaga[] listaPlaga;
         METHOD_NAME = "GetAllPlaga";
-        SOAP_ACTION = NAMESPACE+"GetAllPlaga";
+        SOAP_ACTION = NAMESPACE + "GetAllPlaga";
         request = new SoapObject(NAMESPACE, METHOD_NAME);
         envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         request.addProperty("usuario", usuario);
@@ -432,7 +433,7 @@ public class WebServiceDA extends Activity {
             SoapObject resSoap = (SoapObject) envelope.getResponse();
             listaPlaga = new Plaga[resSoap.getPropertyCount()];
             for (int i = 0; i < listaPlaga.length; i++) {
-                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                SoapObject ic = (SoapObject) resSoap.getProperty(i);
                 Plaga objPlaga = new Plaga();
                 objPlaga.Clave = Integer.parseInt(ic.getProperty(0).toString());
                 objPlaga.Nombre = ic.getProperty(1).toString();
@@ -447,7 +448,7 @@ public class WebServiceDA extends Activity {
         //Actualizar tabla de enfermedad
         Enfermedad[] listaEnfermedad;
         METHOD_NAME = "GetAllEnfermedad";
-        SOAP_ACTION = NAMESPACE+"GetAllEnfermedad";
+        SOAP_ACTION = NAMESPACE + "GetAllEnfermedad";
         request = new SoapObject(NAMESPACE, METHOD_NAME);
         envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         request.addProperty("usuario", usuario);
@@ -459,7 +460,7 @@ public class WebServiceDA extends Activity {
             SoapObject resSoap = (SoapObject) envelope.getResponse();
             listaEnfermedad = new Enfermedad[resSoap.getPropertyCount()];
             for (int i = 0; i < listaEnfermedad.length; i++) {
-                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                SoapObject ic = (SoapObject) resSoap.getProperty(i);
                 Enfermedad objEnfermedad = new Enfermedad();
                 objEnfermedad.Clave = Integer.parseInt(ic.getProperty(0).toString());
                 objEnfermedad.Nombre = ic.getProperty(1).toString();
@@ -474,7 +475,7 @@ public class WebServiceDA extends Activity {
         //Actualizar tabla de maleza
         Maleza[] listaMaleza;
         METHOD_NAME = "GetAllMaleza";
-        SOAP_ACTION = NAMESPACE+"GetAllMaleza";
+        SOAP_ACTION = NAMESPACE + "GetAllMaleza";
         request = new SoapObject(NAMESPACE, METHOD_NAME);
         envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         request.addProperty("usuario", usuario);
@@ -486,7 +487,7 @@ public class WebServiceDA extends Activity {
             SoapObject resSoap = (SoapObject) envelope.getResponse();
             listaMaleza = new Maleza[resSoap.getPropertyCount()];
             for (int i = 0; i < listaMaleza.length; i++) {
-                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                SoapObject ic = (SoapObject) resSoap.getProperty(i);
                 Maleza objMaleza = new Maleza();
                 objMaleza.Clave = Integer.parseInt(ic.getProperty(0).toString());
                 objMaleza.Nombre = ic.getProperty(1).toString();
@@ -501,7 +502,7 @@ public class WebServiceDA extends Activity {
         //Actualizar tabla de arreglo topologico
         ArregloTopologico[] listaArregloTopologico;
         METHOD_NAME = "GetAllArregloTopologico";
-        SOAP_ACTION = NAMESPACE+"GetAllArregloTopologico";
+        SOAP_ACTION = NAMESPACE + "GetAllArregloTopologico";
         request = new SoapObject(NAMESPACE, METHOD_NAME);
         envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         request.addProperty("usuario", usuario);
@@ -513,7 +514,7 @@ public class WebServiceDA extends Activity {
             SoapObject resSoap = (SoapObject) envelope.getResponse();
             listaArregloTopologico = new ArregloTopologico[resSoap.getPropertyCount()];
             for (int i = 0; i < listaArregloTopologico.length; i++) {
-                SoapObject ic = (SoapObject)resSoap.getProperty(i);
+                SoapObject ic = (SoapObject) resSoap.getProperty(i);
                 ArregloTopologico objArregloTopologico = new ArregloTopologico();
                 objArregloTopologico.Clave = Integer.parseInt(ic.getProperty(0).toString());
                 objArregloTopologico.Nombre = ic.getProperty(1).toString();
@@ -547,11 +548,11 @@ public class WebServiceDA extends Activity {
         try {
             transporte.call(SOAP_ACTION, envelope);
             SoapObject resSoap = (SoapObject) envelope.getResponse();
-            _objEntLibTools.executeQuery("DELETE FROM BATPLADE WHERE PLADESTS!=\"O\"");
+            _objEntLibTools.executeQuery("DELETE FROM BATPLADE WHERE PLADESTS NOT IN(\"O\",\"G\",\"E\")");
             listaPlaneacionRuta = new PlaneacionRuta[resSoap.getPropertyCount()];
             for (int i = 0; i < listaPlaneacionRuta.length; i++) {
                 SoapObject ic = (SoapObject) resSoap.getProperty(i);
-                if(Integer.parseInt(ic.getProperty(0).toString())== -1)
+                if (Integer.parseInt(ic.getProperty(0).toString()) == -1)
                     resul = false;
                 else {
                     //Se elimina la version anterior de las tablas
@@ -584,73 +585,11 @@ public class WebServiceDA extends Activity {
                     objPlaneacionRuta.ArticuloCosecharNombre = ic.getProperty(25).toString();
                     objPlaneacionRuta.Estatus = ic.getProperty(26).toString();
                     objPlaneacionRuta.Uso = ic.getProperty(27).toString();
-                    resul = _objPlaneacionRutaDA.InsertPlaneacionRuta(objPlaneacionRuta);
-                }
-            }
-        } catch (Exception e) {
-            throw e;
-        }
-        return resul;
-    }
-
-    public boolean getPlaneacionRuta(String usuario, int usuarioCve, String fecha) throws IOException, XmlPullParserException {
-
-        //Variables
-        boolean resul = true;
-
-        //Actualizar tabla de planeacion de ruta de inspeccion
-        PlaneacionRuta[] listaPlaneacionRuta;
-        String METHOD_NAME = "GetAllPlaneacionRuta";
-        String SOAP_ACTION = NAMESPACE + "GetAllPlaneacionRuta";
-        SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-        request.addProperty("usuario", usuario);
-        request.addProperty("usuarioCve", usuarioCve);
-        request.addProperty("fecha", fecha);
-        envelope.dotNet = true;
-        envelope.setOutputSoapObject(request);
-        HttpTransportSE transporte = new HttpTransportSE(URL);
-        try {
-            transporte.call(SOAP_ACTION, envelope);
-            SoapObject resSoap = (SoapObject) envelope.getResponse();
-            _objEntLibTools.executeQuery("DELETE FROM BATPLADE WHERE PLADESTS!=\"O\"");
-            listaPlaneacionRuta = new PlaneacionRuta[resSoap.getPropertyCount()];
-            for (int i = 0; i < listaPlaneacionRuta.length; i++) {
-                SoapObject ic = (SoapObject) resSoap.getProperty(i);
-                if(Integer.parseInt(ic.getProperty(0).toString())== -1)
-                    resul = false;
-                else {
-                    //Se elimina la version anterior de las tablas
-                    PlaneacionRuta objPlaneacionRuta = new PlaneacionRuta();
-                    objPlaneacionRuta.UsuarioClave = Integer.parseInt(ic.getProperty(0).toString());
-                    objPlaneacionRuta.UsuarioNombre = ic.getProperty(1).toString();
-                    objPlaneacionRuta.CicloClave = Integer.parseInt(ic.getProperty(2).toString());
-                    objPlaneacionRuta.CicloNombre = ic.getProperty(3).toString();
-                    objPlaneacionRuta.Fecha = ic.getProperty(4).toString();
-                    objPlaneacionRuta.Folio = Integer.parseInt(ic.getProperty(5).toString());
-                    objPlaneacionRuta.TipoInspeccionClave = Integer.parseInt(ic.getProperty(6).toString());
-                    objPlaneacionRuta.TipoInspeccionNombre = ic.getProperty(7).toString();
-                    objPlaneacionRuta.TipoArticuloClave = Integer.parseInt(ic.getProperty(8).toString());
-                    objPlaneacionRuta.TipoArticuloNombre = ic.getProperty(9).toString();
-                    objPlaneacionRuta.ClienteClave = Integer.parseInt(ic.getProperty(10).toString());
-                    objPlaneacionRuta.ClienteNombre = ic.getProperty(11).toString();
-                    objPlaneacionRuta.ProductorClave = Integer.parseInt(ic.getProperty(12).toString());
-                    objPlaneacionRuta.ProductorNombre = ic.getProperty(13).toString();
-                    objPlaneacionRuta.PredioClave = Integer.parseInt(ic.getProperty(14).toString());
-                    objPlaneacionRuta.PredioNombre = ic.getProperty(15).toString();
-                    objPlaneacionRuta.PredioLatitud = Double.parseDouble(ic.getProperty(16).toString());
-                    objPlaneacionRuta.PredioLongitud = Double.parseDouble(ic.getProperty(17).toString());
-                    objPlaneacionRuta.LoteClave = Integer.parseInt(ic.getProperty(18).toString());
-                    objPlaneacionRuta.LoteNombre = ic.getProperty(19).toString();
-                    objPlaneacionRuta.LoteLatitud = Double.parseDouble(ic.getProperty(20).toString());
-                    objPlaneacionRuta.LoteLongitud = Double.parseDouble(ic.getProperty(21).toString());
-                    objPlaneacionRuta.ArticuloSembrarClave = Integer.parseInt(ic.getProperty(22).toString());
-                    objPlaneacionRuta.ArticuloSembrarNombre = ic.getProperty(23).toString();
-                    objPlaneacionRuta.ArticuloCosecharClave = Integer.parseInt(ic.getProperty(24).toString());
-                    objPlaneacionRuta.ArticuloCosecharNombre = ic.getProperty(25).toString();
-                    objPlaneacionRuta.Estatus = ic.getProperty(26).toString();
-                    objPlaneacionRuta.Uso = ic.getProperty(27).toString();
-                    resul = _objPlaneacionRutaDA.InsertPlaneacionRuta(objPlaneacionRuta);
+                    PlaneacionRuta objTemp = _objPlaneacionRutaDA.GetPlaneacionRuta(objPlaneacionRuta);
+                    if(objTemp.Folio==0)
+                        resul = _objPlaneacionRutaDA.InsertPlaneacionRuta(objPlaneacionRuta);
+                    else
+                        resul = true;
                 }
             }
         } catch (Exception e) {
@@ -664,7 +603,7 @@ public class WebServiceDA extends Activity {
         Usuario _objUsuario = new Usuario();
 
         String METHOD_NAME = "GetLogin";
-        String SOAP_ACTION = "http://192.168.10.20:8082/GetLogin";
+        String SOAP_ACTION = NAMESPACE + "GetLogin";
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
         PropertyInfo pi = new PropertyInfo();
         pi.setName("entidad");
@@ -674,12 +613,11 @@ public class WebServiceDA extends Activity {
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.dotNet = true;
         envelope.setOutputSoapObject(request);
-        envelope.addMapping(NAMESPACE,"Usuario",new Usuario().getClass());
-        AndroidHttpTransport transporte = new AndroidHttpTransport (URL);
-        try
-        {
+        envelope.addMapping(NAMESPACE, "Usuario", new Usuario().getClass());
+        AndroidHttpTransport transporte = new AndroidHttpTransport(URL);
+        try {
             transporte.call(SOAP_ACTION, envelope);
-            SoapObject ic = (SoapObject)envelope.getResponse();
+            SoapObject ic = (SoapObject) envelope.getResponse();
             _objUsuario.Clave = Integer.parseInt(ic.getProperty(0).toString());
             _objUsuario.Nombre = ic.getProperty(1).toString();
             _objUsuario.RolClave = Integer.parseInt(ic.getProperty(2).toString());
@@ -690,21 +628,20 @@ public class WebServiceDA extends Activity {
             _objUsuario.Email = ic.getProperty(7).toString();
             _objUsuario.Estatus = ic.getProperty(8).toString();
             _objUsuario.Uso = ic.getProperty(9).toString();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             throw e;
         }
         return _objUsuario;
     }
 
-    public boolean insertRutaInspeccion(RutaInspeccion objRutaInspeccion) throws IOException, XmlPullParserException {
-        boolean resul = true;
+    public Boolean insertRutaInspeccion(String usuario,RutaInspeccion objRutaInspeccion) throws IOException, XmlPullParserException {
+        int resul;
         String METHOD_NAME = "InsertRutaInspeccion";
-        String SOAP_ACTION = "http://192.168.10.20:8082/InsertRutaInspeccion";
+        String SOAP_ACTION = NAMESPACE +"InsertRutaInspeccion";
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+        request.addProperty("usuario", usuario);
         PropertyInfo pi = new PropertyInfo();
-        pi.setName("entidad");
+        pi.setName("objRutaInspeccion");
         pi.setValue(objRutaInspeccion);
         pi.setType(RutaInspeccion.class);
         request.addProperty(pi);
@@ -717,12 +654,15 @@ public class WebServiceDA extends Activity {
         {
             transporte.call(SOAP_ACTION, envelope);
             SoapPrimitive response = (SoapPrimitive)envelope.getResponse();
-            resul = Boolean.valueOf(response.toString());
+            resul = Integer.valueOf(response.toString());
+            if(resul==0)
+                return true;
+            else
+                return false;
         }
         catch (Exception e)
         {
             throw e;
         }
-        return resul;
     }
 }

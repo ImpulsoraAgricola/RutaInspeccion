@@ -118,7 +118,16 @@ public class Administrador extends ActionBarActivity {
                                         int position, long id) {
                     try {
                         Item objItem = listaRutaInspeccion.get(position);
-                        confirmDialogStart(objItem);
+                        RutaInspeccion objRutaInspeccion = creaObjeto(objItem);
+                        RutaInspeccion objTemp = _objRutaInspeccionBP.GetRutaInspeccionCabecero(objRutaInspeccion);
+                        if(objTemp.Estatus!= null) {
+                            if (objTemp.Estatus.equals("G") || objTemp.Estatus.equals("E"))
+                                iniciarRutaInspeccion(objItem);
+                            else
+                                confirmDialogStart(objItem);
+                        }
+                        else
+                            confirmDialogStart(objItem);
                     } catch (Exception e) {
                         _objComunBP.Mensaje(e.toString(), Administrador.this);
                     }
@@ -217,7 +226,6 @@ public class Administrador extends ActionBarActivity {
         protected Boolean doInBackground(String... params) {
             boolean result = true;
             try {
-                _objWebServiceBP = new WebServiceBP(Administrador.this);
                 result = _objWebServiceBP.getPlaneacionRuta(_objUsuario.RFC, _objUsuario.Clave, currentDateandTime);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -373,8 +381,7 @@ public class Administrador extends ActionBarActivity {
                                         iniciarRutaInspeccion(objItem);
                                     } else if (objTemp.Estatus.equals("O")) {
                                         confirmInicio(objItem);
-                                    } else
-                                        iniciarRutaInspeccion(objItem);
+                                    }
                                 } else {
                                     _objComunBP.Mensaje("Error: Su localizacion para registrar la ruta de inspeccion no es correcta", Administrador.this);
                                 }

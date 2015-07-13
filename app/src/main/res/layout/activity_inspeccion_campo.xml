@@ -230,6 +230,7 @@
             <Spinner
                 android:id="@+id/rutainspeccion_sSistemaProduccion"
                 android:layout_width="fill_parent"
+                style="@style/spinner_style"
                 android:layout_height="wrap_content"
                 android:typeface="sans" />
 
@@ -1230,21 +1231,38 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
-
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom">
             <Button
                 android:id="@+id/rutainspeccion_btnGuardar"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_btnGuardar" />
             <Button
+                android:id="@+id/rutainspeccion_btnFotografia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                android:text="@string/activity_ruta_inspeccion_btnFotografia" />
+            <Button
                 android:id="@+id/rutainspeccion_btnEnviar"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="invisible"
                 android:text="@string/activity_ruta_inspeccion_btnEnviar" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/imageView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </ImageView>
 
         </LinearLayout>
     </LinearLayout>

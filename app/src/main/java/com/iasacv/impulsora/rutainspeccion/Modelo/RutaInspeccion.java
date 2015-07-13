@@ -21,32 +21,32 @@ public class RutaInspeccion implements KvmSerializable{
     public String FechaFin;
     public String HoraFin;
     public String Tiempo;
-    public char RecomendacionTecnica;
+    public String RecomendacionTecnica;
     public int SistemaProduccionClave;
     public String SistemaProduccionNombre;
     public int ArregloTopologicoClave;
     public String ArregloTopologicoNombre;
-    public char ProfundidadSiembra;
-    public char ProfundidadSurco;
-    public char ManejoAdecuado;
+    public String ProfundidadSiembra;
+    public String ProfundidadSurco;
+    public String ManejoAdecuado;
     public int EtapaFenologicaClave;
     public String EtapaFenologicaNombre;
-    public char Exposicion;
+    public String Exposicion;
     public int CondicionDesarrolloClave;
     public String CondicionDesarrolloNombre;
-    public char OrdenCorrecto;
-    public char RegulaPh;
-    public char UsoAdecuado;
-    public char HoraAplicacion;
-    public char AguaCanal;
-    public char Inundacion;
-    public char BajaPoblacion;
-    public char AplicacionNutrientes;
-    public char AlteracionCiclo;
-    public char AplicacionAgroquimicos;
-    public char AltasTemperaturas;
-    public char Fito;
-    public char PlagasMalControladas;
+    public String OrdenCorrecto;
+    public String RegulaPh;
+    public String UsoAdecuado;
+    public String HoraAplicacion;
+    public String AguaCanal;
+    public String Inundacion;
+    public String BajaPoblacion;
+    public String AplicacionNutrientes;
+    public String AlteracionCiclo;
+    public String AplicacionAgroquimicos;
+    public String AltasTemperaturas;
+    public String Fito;
+    public String PlagasMalControladas;
     public int MalezaClave;
     public String MalezaNombre;
     public int EstadoMalezaClave;
@@ -484,7 +484,7 @@ public class RutaInspeccion implements KvmSerializable{
                 Tiempo = val.toString();
                 break;
             case 9:
-                RecomendacionTecnica = val.toString().charAt(0);
+                RecomendacionTecnica = val.toString();
                 break;
             case 10:
                 SistemaProduccionClave = Integer.parseInt(val.toString());
@@ -493,61 +493,61 @@ public class RutaInspeccion implements KvmSerializable{
                 ArregloTopologicoClave = Integer.parseInt(val.toString());
                 break;
             case 12:
-                ProfundidadSiembra = val.toString().charAt(0);
+                ProfundidadSiembra = val.toString();
                 break;
             case 13:
-                ProfundidadSurco = val.toString().charAt(0);
+                ProfundidadSurco = val.toString();
                 break;
             case 14:
-                ManejoAdecuado = val.toString().charAt(0);
+                ManejoAdecuado = val.toString();
                 break;
             case 15:
                 EtapaFenologicaClave = Integer.parseInt(val.toString());
                 break;
             case 16:
-                Exposicion = val.toString().charAt(0);
+                Exposicion = val.toString();
                 break;
             case 17:
                 CondicionDesarrolloClave = Integer.parseInt(val.toString());
                 break;
             case 18:
-                OrdenCorrecto = val.toString().charAt(0);
+                OrdenCorrecto = val.toString();
                 break;
             case 19:
-                RegulaPh = val.toString().charAt(0);
+                RegulaPh = val.toString();
                 break;
             case 20:
-                UsoAdecuado = val.toString().charAt(0);
+                UsoAdecuado = val.toString();
                 break;
             case 21:
-                HoraAplicacion = val.toString().charAt(0);
+                HoraAplicacion = val.toString();
                 break;
             case 22:
-                AguaCanal = val.toString().charAt(0);
+                AguaCanal = val.toString();
                 break;
             case 23:
-                Inundacion = val.toString().charAt(0);
+                Inundacion = val.toString();
                 break;
             case 24:
-                BajaPoblacion = val.toString().charAt(0);
+                BajaPoblacion = val.toString();
                 break;
             case 25:
-                AplicacionNutrientes = val.toString().charAt(0);
+                AplicacionNutrientes = val.toString();
                 break;
             case 26:
-                AlteracionCiclo = val.toString().charAt(0);
+                AlteracionCiclo = val.toString();
                 break;
             case 27:
-                AplicacionAgroquimicos = val.toString().charAt(0);
+                AplicacionAgroquimicos = val.toString();
                 break;
             case 28:
-                AltasTemperaturas = val.toString().charAt(0);
+                AltasTemperaturas = val.toString();
                 break;
             case 29:
-                Fito = val.toString().charAt(0);
+                Fito = val.toString();
                 break;
             case 30:
-                PlagasMalControladas = val.toString().charAt(0);
+                PlagasMalControladas = val.toString();
                 break;
             case 31:
                 MalezaClave = Integer.parseInt(val.toString());

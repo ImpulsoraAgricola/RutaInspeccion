@@ -123,7 +123,8 @@ public class Login extends ActionBarActivity {
                 else
                     result = false;
             } catch (Exception e) {
-                e.printStackTrace();
+                result =false;
+                _objComunBP.Mensaje(e.toString(),Login.this);
             }
             return result;
         }

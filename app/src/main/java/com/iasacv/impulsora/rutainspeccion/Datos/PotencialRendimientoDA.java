@@ -31,6 +31,7 @@ public class PotencialRendimientoDA {
             while (objCursor.moveToNext()) {
                 listPotencialRendimiento.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }
+            objCursor.close();
             return listPotencialRendimiento;
         } catch (SQLException e) {
             throw e;

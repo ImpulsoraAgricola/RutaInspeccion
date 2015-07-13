@@ -50,7 +50,7 @@ public class WebServicePlaneacion extends Service {
             resultReceiver = intent.getParcelableExtra("receiver");
             getValues(intent);
             timerTask = new MyTimerTask();
-            timer.scheduleAtFixedRate(timerTask, 15 * 60 * 1000, 15 * 60 * 1000);
+            timer.scheduleAtFixedRate(timerTask, 1 * 60 * 1000, 10 * 60 * 1000);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -97,34 +97,15 @@ public class WebServicePlaneacion extends Service {
                 try {
                     try {
                         result = _objWebServiceBP.getPlaneacionRuta(_objUsuario.RFC, _objUsuario.Clave, currentDateandTime);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (XmlPullParserException e) {
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                }
-                return result;
-            }
-
-            protected void onPostExecute(Boolean result) {
-                if (result) {
-                    resultReceiver.send(0, null);
-                }
-            }
-        }
-
-        private class sendRutaInspeccion extends AsyncTask<String, Integer, Boolean> {
-            //Variables
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String currentDateandTime = sdf.format(new Date());
-
-            protected Boolean doInBackground(String... params) {
-                boolean result = true;
-                try {
-                    try {
                         List<RutaInspeccion> listRutaInspeccion = _objRutaInspeccionDA.GetAllRutaInspeccion();
-                        result = _objWebServiceBP.getPlaneacionRuta(_objUsuario.RFC, _objUsuario.Clave, currentDateandTime);
+                        if(listRutaInspeccion.size()>0) {
+                            for (int i = 0; i < listRutaInspeccion.size(); i++) {
+                                if (result = true) {
+                                    RutaInspeccion objRutaInspeccion = (RutaInspeccion)listRutaInspeccion.get(i);
+                                    result = _objWebServiceBP.insertRutaInspeccion(_objUsuario.RFC, objRutaInspeccion);
+                                }
+                            }
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (XmlPullParserException e) {

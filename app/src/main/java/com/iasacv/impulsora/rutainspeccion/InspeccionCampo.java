@@ -2,21 +2,32 @@ package com.iasacv.impulsora.rutainspeccion;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.iasacv.impulsora.rutainspeccion.Conexion.GPSTracker;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Combo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.PlaneacionRuta;
@@ -29,11 +40,16 @@ import com.iasacv.impulsora.rutainspeccion.Negocios.WebServiceBP;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -114,6 +130,7 @@ public class InspeccionCampo extends ActionBarActivity {
     //Potencial de rendimiento
     private Spinner rutainspeccion_sPotencial;
     private Button rutainspeccion_btnGuardar;
+    private Button rutainspeccion_btnFotografia;
     private Button rutainspeccion_btnEnviar;
 
     //Variables clases
@@ -135,6 +152,20 @@ public class InspeccionCampo extends ActionBarActivity {
     String Fecha;
 
     static final int DATE_DIALOG_ID = 0;
+
+    //Variables camara
+    private static final int CAMERA_REQUEST = 1888;
+    static String str_Camera_Photo_ImagePath = "";
+    private static File f;
+    private static int Take_Photo = 2;
+    private static String str_randomnumber = "";
+    static String str_Camera_Photo_ImageName = "";
+    public static String str_SaveFolderName;
+    private static File wallpaperDirectory;
+    Bitmap bitmap;
+    int storeposition = 0;
+    public static GridView gridview;
+    public static ImageView imageView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -174,7 +205,7 @@ public class InspeccionCampo extends ActionBarActivity {
                             guardarRiego();
                             if (resul) {
                                 _objComunBP.Mensaje("La informaci\u00F3n se guardo correctamente", InspeccionCampo.this);
-                                rutainspeccion_btnEnviar.setVisibility(View.VISIBLE);
+                                rutainspeccion_btnFotografia.setVisibility(View.VISIBLE);
                             }
                         }
                     } catch (IOException e) {
@@ -194,9 +225,13 @@ public class InspeccionCampo extends ActionBarActivity {
                         if (validar()) {
                             RutaInspeccion objRutaInspeccion = creaObjeto();
                             objRutaInspeccion.Estatus = "E";
+                            _objPlaneacionRuta.Estatus = "E";
+                            _objRutaInspeccionBP.UpdatePlaneacionRutaEstatus(_objPlaneacionRuta);
                             boolean resul = _objRutaInspeccionBP.UpdateRutaInspeccion(objRutaInspeccion);
                             _objComunBP.Mensaje("La informaci\u00F3n se enviara a IASA", InspeccionCampo.this);
                             rutainspeccion_btnEnviar.setVisibility(View.INVISIBLE);
+                            rutainspeccion_btnFotografia.setVisibility(View.INVISIBLE);
+                            rutainspeccion_btnGuardar.setVisibility(View.INVISIBLE);
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -208,12 +243,40 @@ public class InspeccionCampo extends ActionBarActivity {
                 }
             });
 
+            rutainspeccion_btnFotografia.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (validar()) {
+                        str_SaveFolderName = Environment
+                                .getExternalStorageDirectory()
+                                .getAbsolutePath()
+                                + "/RutaInspeccion";
+                        str_randomnumber = String.valueOf(nextSessionId());
+                        wallpaperDirectory = new File(str_SaveFolderName);
+                        if (!wallpaperDirectory.exists())
+                            wallpaperDirectory.mkdirs();
+                        str_Camera_Photo_ImageName = str_randomnumber
+                                + ".jpg";
+                        str_Camera_Photo_ImagePath = str_SaveFolderName
+                                + "/" + str_randomnumber + ".jpg";
+                        System.err.println(" str_Camera_Photo_ImagePath  "
+                                + str_Camera_Photo_ImagePath);
+                        f = new File(str_Camera_Photo_ImagePath);
+                        startActivityForResult(new Intent(
+                                        MediaStore.ACTION_IMAGE_CAPTURE).putExtra(
+                                        MediaStore.EXTRA_OUTPUT, Uri.fromFile(f)),
+                                Take_Photo);
+                        System.err.println("f  " + f);
+                    }
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private class insertRutaInspeccion extends AsyncTask<String, Integer, Boolean> {
+    /*private class insertRutaInspeccion extends AsyncTask<String, Integer, Boolean> {
 
         ProgressDialog loadProgressDialog;
 
@@ -244,10 +307,10 @@ public class InspeccionCampo extends ActionBarActivity {
             }
             loadProgressDialog.dismiss();
         }
-    }
+    }*/
 
     //Llenar objetos
-    public RutaInspeccion creaObjeto() throws IOException{
+    public RutaInspeccion creaObjeto() throws IOException {
         RutaInspeccion objRutaInspeccion = new RutaInspeccion();
         Bundle b = getIntent().getExtras();
         objRutaInspeccion.CicloClave = b.getInt("CicloClave");
@@ -289,54 +352,53 @@ public class InspeccionCampo extends ActionBarActivity {
     }
 
     //Guardar recomendaciones
-    private  void guardarRecomendacion () throws Exception {
+    private void guardarRecomendacion() throws Exception {
         RutaInspeccion objRutaInspeccion = new RutaInspeccion();
         Bundle b = getIntent().getExtras();
         objRutaInspeccion.CicloClave = b.getInt("CicloClave");
         objRutaInspeccion.UsuarioClave = b.getInt("UsuarioClave");
         objRutaInspeccion.Folio = b.getInt("Folio");
         objRutaInspeccion.Fecha = b.getString("Fecha");
-        objRutaInspeccion.RecomendacionOtro="";
-        if(rutainspeccion_chbRegar.isChecked())
-            agregarRelacionRecomendacion(objRutaInspeccion,1);
+        objRutaInspeccion.RecomendacionOtro = "";
+        if (rutainspeccion_chbRegar.isChecked())
+            agregarRelacionRecomendacion(objRutaInspeccion, 1);
         else
-            eliminarRelacionRecomendacion(objRutaInspeccion,1);
-        if(rutainspeccion_chbDesmezclar.isChecked())
-            agregarRelacionRecomendacion(objRutaInspeccion,2);
+            eliminarRelacionRecomendacion(objRutaInspeccion, 1);
+        if (rutainspeccion_chbDesmezclar.isChecked())
+            agregarRelacionRecomendacion(objRutaInspeccion, 2);
         else
-            eliminarRelacionRecomendacion(objRutaInspeccion,2);
-        if(rutainspeccion_chbFungicida.isChecked())
-            agregarRelacionRecomendacion(objRutaInspeccion,3);
+            eliminarRelacionRecomendacion(objRutaInspeccion, 2);
+        if (rutainspeccion_chbFungicida.isChecked())
+            agregarRelacionRecomendacion(objRutaInspeccion, 3);
         else
-            eliminarRelacionRecomendacion(objRutaInspeccion,3);
-        if(rutainspeccion_chbInsecticida.isChecked())
-            agregarRelacionRecomendacion(objRutaInspeccion,4);
+            eliminarRelacionRecomendacion(objRutaInspeccion, 3);
+        if (rutainspeccion_chbInsecticida.isChecked())
+            agregarRelacionRecomendacion(objRutaInspeccion, 4);
         else
-            eliminarRelacionRecomendacion(objRutaInspeccion,4);
-        if(rutainspeccion_chbHerbicida.isChecked())
-            agregarRelacionRecomendacion(objRutaInspeccion,5);
+            eliminarRelacionRecomendacion(objRutaInspeccion, 4);
+        if (rutainspeccion_chbHerbicida.isChecked())
+            agregarRelacionRecomendacion(objRutaInspeccion, 5);
         else
-            eliminarRelacionRecomendacion(objRutaInspeccion,5);
-        if(rutainspeccion_chbDesaguar.isChecked())
-            agregarRelacionRecomendacion(objRutaInspeccion,6);
+            eliminarRelacionRecomendacion(objRutaInspeccion, 5);
+        if (rutainspeccion_chbDesaguar.isChecked())
+            agregarRelacionRecomendacion(objRutaInspeccion, 6);
         else
-            eliminarRelacionRecomendacion(objRutaInspeccion,6);
-        if(rutainspeccion_chbDescostrar.isChecked())
-            agregarRelacionRecomendacion(objRutaInspeccion,7);
+            eliminarRelacionRecomendacion(objRutaInspeccion, 6);
+        if (rutainspeccion_chbDescostrar.isChecked())
+            agregarRelacionRecomendacion(objRutaInspeccion, 7);
         else
-            eliminarRelacionRecomendacion(objRutaInspeccion,7);
-        if(rutainspeccion_chbRecomendacionOtro.isChecked()) {
-            objRutaInspeccion.RecomendacionOtro=rutainspeccion_txtRecomendacionOtro.getText().toString();
-            agregarRelacionRecomendacion(objRutaInspeccion,8);
-        }
-        else
-            eliminarRelacionRecomendacion(objRutaInspeccion,8);
+            eliminarRelacionRecomendacion(objRutaInspeccion, 7);
+        if (rutainspeccion_chbRecomendacionOtro.isChecked()) {
+            objRutaInspeccion.RecomendacionOtro = rutainspeccion_txtRecomendacionOtro.getText().toString();
+            agregarRelacionRecomendacion(objRutaInspeccion, 8);
+        } else
+            eliminarRelacionRecomendacion(objRutaInspeccion, 8);
     }
 
-    private void agregarRelacionRecomendacion(RutaInspeccion objRutaInspeccion,int Clave) throws IOException, XmlPullParserException{
+    private void agregarRelacionRecomendacion(RutaInspeccion objRutaInspeccion, int Clave) throws IOException, XmlPullParserException {
         objRutaInspeccion.RecomendacionClave = Clave;
         RutaInspeccion objTemp = _objRutaInspeccionBP.GetRelacionRecomendacion(objRutaInspeccion);
-        if(objTemp.RecomendacionClave==0)
+        if (objTemp.RecomendacionClave == 0)
             try {
                 _objRutaInspeccionBP.InsertRelacionRecomendacion(objRutaInspeccion);
             } catch (Exception e) {
@@ -344,59 +406,57 @@ public class InspeccionCampo extends ActionBarActivity {
             }
     }
 
-    private void eliminarRelacionRecomendacion(RutaInspeccion objRutaInspeccion,int Clave) throws Exception {
+    private void eliminarRelacionRecomendacion(RutaInspeccion objRutaInspeccion, int Clave) throws Exception {
         objRutaInspeccion.RecomendacionClave = Clave;
         _objRutaInspeccionBP.DeleteRelacionRecomendacion(objRutaInspeccion);
     }
 
     //Guardar tipos de riego
-    private  void guardarRiego () throws Exception {
+    private void guardarRiego() throws Exception {
         RutaInspeccion objRutaInspeccion = new RutaInspeccion();
         Bundle b = getIntent().getExtras();
         objRutaInspeccion.CicloClave = b.getInt("CicloClave");
         objRutaInspeccion.UsuarioClave = b.getInt("UsuarioClave");
         objRutaInspeccion.Folio = b.getInt("Folio");
         objRutaInspeccion.Fecha = b.getString("Fecha");
-        objRutaInspeccion.TipoRiegoOtro="";
-        objRutaInspeccion.Capacidad=0;
-        if(rutainspeccion_chbPozo.isChecked()) {
+        objRutaInspeccion.TipoRiegoOtro = "";
+        objRutaInspeccion.Capacidad = 0;
+        if (rutainspeccion_chbPozo.isChecked()) {
             objRutaInspeccion.Capacidad = Integer.valueOf(rutainspeccion_txtCapacidad.getText().toString());
             agregarRelacionRiego(objRutaInspeccion, 1);
-        }
-        else
+        } else
             eliminarRelacionRiego(objRutaInspeccion, 1);
-        if(rutainspeccion_chbGravedad.isChecked())
+        if (rutainspeccion_chbGravedad.isChecked())
             agregarRelacionRiego(objRutaInspeccion, 2);
         else
-            eliminarRelacionRiego(objRutaInspeccion,2);
-        if(rutainspeccion_chbAspersion.isChecked())
+            eliminarRelacionRiego(objRutaInspeccion, 2);
+        if (rutainspeccion_chbAspersion.isChecked())
             agregarRelacionRiego(objRutaInspeccion, 3);
         else
             eliminarRelacionRiego(objRutaInspeccion, 3);
-        if(rutainspeccion_chbGoteo.isChecked())
+        if (rutainspeccion_chbGoteo.isChecked())
             agregarRelacionRiego(objRutaInspeccion, 4);
         else
             eliminarRelacionRiego(objRutaInspeccion, 4);
-        if(rutainspeccion_chbCanal.isChecked())
+        if (rutainspeccion_chbCanal.isChecked())
             agregarRelacionRiego(objRutaInspeccion, 5);
         else
             eliminarRelacionRiego(objRutaInspeccion, 5);
-        if(rutainspeccion_chbRiegoOtro.isChecked()) {
+        if (rutainspeccion_chbRiegoOtro.isChecked()) {
             objRutaInspeccion.TipoRiegoOtro = rutainspeccion_txtRiegoOtro.getText().toString();
             agregarRelacionRiego(objRutaInspeccion, 6);
-        }
-        else
+        } else
             eliminarRelacionRiego(objRutaInspeccion, 6);
     }
 
-    private void agregarRelacionRiego(RutaInspeccion objRutaInspeccion,int Clave) throws Exception {
+    private void agregarRelacionRiego(RutaInspeccion objRutaInspeccion, int Clave) throws Exception {
         objRutaInspeccion.TipoRiegoClave = Clave;
         RutaInspeccion objTemp = _objRutaInspeccionBP.GetRelacionRiego(objRutaInspeccion);
-        if(objTemp.TipoRiegoClave==0)
+        if (objTemp.TipoRiegoClave == 0)
             _objRutaInspeccionBP.InsertRelacionRiego(objRutaInspeccion);
     }
 
-    private void eliminarRelacionRiego(RutaInspeccion objRutaInspeccion,int Clave) throws Exception {
+    private void eliminarRelacionRiego(RutaInspeccion objRutaInspeccion, int Clave) throws Exception {
         objRutaInspeccion.TipoRiegoClave = Clave;
         _objRutaInspeccionBP.DeleteRelacionRiego(objRutaInspeccion);
     }
@@ -545,7 +605,98 @@ public class InspeccionCampo extends ActionBarActivity {
         //Potencial de rendimiento
         rutainspeccion_sPotencial = (Spinner) findViewById(R.id.rutainspeccion_sPotencial);
         rutainspeccion_btnGuardar = (Button) findViewById(R.id.rutainspeccion_btnGuardar);
+        rutainspeccion_btnFotografia = (Button) findViewById(R.id.rutainspeccion_btnFotografia);
         rutainspeccion_btnEnviar = (Button) findViewById(R.id.rutainspeccion_btnEnviar);
+        //Mostrar imagen
+        imageView = (ImageView) this.findViewById(R.id.imageView1);
+    }
+
+    private void bloquearControles() {
+        //Datos generales
+        rutainspeccion_txtFolio.setEnabled(false);
+        rutainspeccion_sCiclo.setClickable(false);
+        rutainspeccion_sCiclo.setEnabled(false);
+        rutainspeccion_txtCliente = (EditText) findViewById(R.id.rutainspeccion_txtCliente);
+        rutainspeccion_txtProductor = (EditText) findViewById(R.id.rutainspeccion_txtProductor);
+        rutainspeccion_txtPredio = (EditText) findViewById(R.id.rutainspeccion_txtPredio);
+        rutainspeccion_txtLote = (EditText) findViewById(R.id.rutainspeccion_txtLote);
+        rutainspeccion_txtFecha = (EditText) findViewById(R.id.rutainspeccion_txtFecha);
+        //Ruta de inspeccion
+        bloquearRadioGroup(rutainspeccion_rdRecomendacion);
+        //Siembra
+        rutainspeccion_sSistemaProduccion.setClickable(false);
+        rutainspeccion_sSistemaProduccion.setEnabled(false);
+        rutainspeccion_sArregloTopologico.setClickable(false);
+        rutainspeccion_sArregloTopologico.setEnabled(false);
+        //Condiciones de la siembra
+        bloquearRadioGroup(rutainspeccion_rdAdecuada);
+        bloquearRadioGroup(rutainspeccion_rdSurco);
+        bloquearRadioGroup(rutainspeccion_rdManejo);
+        //Riego
+        rutainspeccion_chbCanal.setEnabled(false);
+        rutainspeccion_chbGravedad.setEnabled(false);
+        rutainspeccion_chbAspersion.setEnabled(false);
+        rutainspeccion_chbGoteo.setEnabled(false);
+        rutainspeccion_chbPozo.setEnabled(false);
+        rutainspeccion_txtCapacidad.setEnabled(false);
+        rutainspeccion_chbRiegoOtro.setEnabled(false);
+        rutainspeccion_txtRiegoOtro.setEnabled(false);
+        //Etapa fenologica
+        rutainspeccion_sEtapa.setClickable(false);
+        rutainspeccion_sEtapa.setEnabled(false);
+        bloquearRadioGroup(rutainspeccion_rdExposicion);
+        //Condiciones de desarrollo
+        rutainspeccion_sCondicionDesarrollo.setClickable(false);
+        rutainspeccion_sCondicionDesarrollo.setEnabled(false);
+        //Recomendaciones
+        rutainspeccion_chbRegar.setEnabled(false);
+        rutainspeccion_chbDesmezclar.setEnabled(false);
+        rutainspeccion_chbFungicida.setEnabled(false);
+        rutainspeccion_chbInsecticida.setEnabled(false);
+        rutainspeccion_chbHerbicida.setEnabled(false);
+        rutainspeccion_chbDesaguar.setEnabled(false);
+        rutainspeccion_chbDescostrar.setEnabled(false);
+        rutainspeccion_chbRecomendacionOtro.setEnabled(false);
+        rutainspeccion_txtRecomendacionOtro.setEnabled(false);
+        //Manejo de agroquimico
+        bloquearRadioGroup(rutainspeccion_rdOrden);
+        bloquearRadioGroup(rutainspeccion_rdRegula);
+        bloquearRadioGroup(rutainspeccion_rdUso);
+        bloquearRadioGroup(rutainspeccion_rdHora);
+        bloquearRadioGroup(rutainspeccion_rdAgua);
+        //Problemas
+        bloquearRadioGroup(rutainspeccion_rdInundacion);
+        bloquearRadioGroup(rutainspeccion_rdPoblacion);
+        bloquearRadioGroup(rutainspeccion_rdProblema);
+        bloquearRadioGroup(rutainspeccion_rdAlteracion);
+        bloquearRadioGroup(rutainspeccion_rdAplicacion);
+        bloquearRadioGroup(rutainspeccion_rdTemperatura);
+        bloquearRadioGroup(rutainspeccion_rdFito);
+        bloquearRadioGroup(rutainspeccion_rdPlaga);
+        rutainspeccion_sMaleza.setClickable(false);
+        rutainspeccion_sMaleza.setEnabled(false);
+        rutainspeccion_sEstadoMaleza.setClickable(false);
+        rutainspeccion_sEstadoMaleza.setEnabled(false);
+        rutainspeccion_sPlaga.setClickable(false);
+        rutainspeccion_sPlaga.setEnabled(false);
+        rutainspeccion_sEstadoPlaga.setClickable(false);
+        rutainspeccion_sEstadoPlaga.setEnabled(false);
+        rutainspeccion_sEnfermedad.setClickable(false);
+        rutainspeccion_sEnfermedad.setEnabled(false);
+        rutainspeccion_sEstadoEnfermedad.setClickable(false);
+        rutainspeccion_sEstadoEnfermedad.setEnabled(false);
+        //Potencial de rendimiento
+        rutainspeccion_sPotencial.setClickable(false);
+        rutainspeccion_sPotencial.setEnabled(false);
+        rutainspeccion_btnGuardar.setVisibility(View.INVISIBLE);
+        rutainspeccion_btnFotografia.setVisibility(View.INVISIBLE);
+        rutainspeccion_btnEnviar.setVisibility(View.INVISIBLE);
+    }
+
+    public void bloquearRadioGroup(RadioGroup objRadioGroup){
+        for (int i = 0; i < objRadioGroup.getChildCount(); i++) {
+            objRadioGroup.getChildAt(i).setEnabled(false);
+        }
     }
 
     private void cargarCabecero() {
@@ -557,8 +708,17 @@ public class InspeccionCampo extends ActionBarActivity {
         rutainspeccion_txtPredio.setText(_objPlaneacionFiltro.PredioNombre);
         rutainspeccion_txtLote.setText(_objPlaneacionFiltro.LoteNombre);
         rutainspeccion_txtFecha.setText(_objPlaneacionFiltro.Fecha);
-        if (_objPlaneacionFiltro.Estatus.equals("G") || _objPlaneacionFiltro.Estatus.equals("E"))
+        if (_objPlaneacionFiltro.Estatus.equals("G") || _objPlaneacionFiltro.Estatus.equals("E")) {
             cargarInspeccionCampo();
+            rutainspeccion_btnFotografia.setVisibility(View.VISIBLE);
+        }
+        if (_objPlaneacionFiltro.Estatus.equals("G")) {
+            rutainspeccion_btnFotografia.setVisibility(View.VISIBLE);
+            rutainspeccion_btnEnviar.setVisibility(View.INVISIBLE);
+        }
+        if (_objPlaneacionFiltro.Estatus.equals("E")) {
+            bloquearControles();
+        }
     }
 
     private void cargarInspeccionCampo() {
@@ -567,30 +727,30 @@ public class InspeccionCampo extends ActionBarActivity {
         seleccionarValorSpinner(rutainspeccion_sSistemaProduccion, objRutaInspeccion.SistemaProduccionClave);
         seleccionarValorSpinner(rutainspeccion_sArregloTopologico, objRutaInspeccion.ArregloTopologicoClave);
         seleccionarValorRadio(rutainspeccion_rdAdecuada, objRutaInspeccion.ProfundidadSiembra);
-        seleccionarValorRadio(rutainspeccion_rdSurco,objRutaInspeccion.ProfundidadSurco);
+        seleccionarValorRadio(rutainspeccion_rdSurco, objRutaInspeccion.ProfundidadSurco);
         seleccionarValorRadio(rutainspeccion_rdManejo, objRutaInspeccion.ManejoAdecuado);
         seleccionarValorSpinner(rutainspeccion_sEtapa, objRutaInspeccion.EtapaFenologicaClave);
         seleccionarValorRadio(rutainspeccion_rdExposicion, objRutaInspeccion.Exposicion);
         seleccionarValorSpinner(rutainspeccion_sCondicionDesarrollo, objRutaInspeccion.CondicionDesarrolloClave);
         seleccionarValorRadio(rutainspeccion_rdOrden, objRutaInspeccion.OrdenCorrecto);
-        seleccionarValorRadio(rutainspeccion_rdRegula,objRutaInspeccion.RegulaPh);
+        seleccionarValorRadio(rutainspeccion_rdRegula, objRutaInspeccion.RegulaPh);
         seleccionarValorRadio(rutainspeccion_rdUso, objRutaInspeccion.UsoAdecuado);
         seleccionarValorRadio(rutainspeccion_rdHora, objRutaInspeccion.HoraAplicacion);
         seleccionarValorRadio(rutainspeccion_rdAgua, objRutaInspeccion.AguaCanal);
-        seleccionarValorRadio(rutainspeccion_rdInundacion,objRutaInspeccion.Inundacion);
+        seleccionarValorRadio(rutainspeccion_rdInundacion, objRutaInspeccion.Inundacion);
         seleccionarValorRadio(rutainspeccion_rdPoblacion, objRutaInspeccion.BajaPoblacion);
-        seleccionarValorRadio(rutainspeccion_rdProblema,objRutaInspeccion.AplicacionNutrientes);
-        seleccionarValorRadio(rutainspeccion_rdAlteracion,objRutaInspeccion.AlteracionCiclo);
+        seleccionarValorRadio(rutainspeccion_rdProblema, objRutaInspeccion.AplicacionNutrientes);
+        seleccionarValorRadio(rutainspeccion_rdAlteracion, objRutaInspeccion.AlteracionCiclo);
         seleccionarValorRadio(rutainspeccion_rdAplicacion, objRutaInspeccion.AplicacionAgroquimicos);
-        seleccionarValorRadio(rutainspeccion_rdTemperatura,objRutaInspeccion.AltasTemperaturas);
-        seleccionarValorRadio(rutainspeccion_rdFito,objRutaInspeccion.Fito);
-        seleccionarValorRadio(rutainspeccion_rdPlaga,objRutaInspeccion.PlagasMalControladas);
-        seleccionarValorSpinner(rutainspeccion_sMaleza,objRutaInspeccion.MalezaClave);
-        seleccionarValorSpinner(rutainspeccion_sEstadoMaleza,objRutaInspeccion.EstadoMalezaClave);
-        seleccionarValorSpinner(rutainspeccion_sPlaga,objRutaInspeccion.PlagaClave);
-        seleccionarValorSpinner(rutainspeccion_sEstadoPlaga,objRutaInspeccion.EstadoPlagaClave);
-        seleccionarValorSpinner(rutainspeccion_sEnfermedad,objRutaInspeccion.EnfermedadClave);
-        seleccionarValorSpinner(rutainspeccion_sEstadoEnfermedad,objRutaInspeccion.EstadoEnfermedadClave);
+        seleccionarValorRadio(rutainspeccion_rdTemperatura, objRutaInspeccion.AltasTemperaturas);
+        seleccionarValorRadio(rutainspeccion_rdFito, objRutaInspeccion.Fito);
+        seleccionarValorRadio(rutainspeccion_rdPlaga, objRutaInspeccion.PlagasMalControladas);
+        seleccionarValorSpinner(rutainspeccion_sMaleza, objRutaInspeccion.MalezaClave);
+        seleccionarValorSpinner(rutainspeccion_sEstadoMaleza, objRutaInspeccion.EstadoMalezaClave);
+        seleccionarValorSpinner(rutainspeccion_sPlaga, objRutaInspeccion.PlagaClave);
+        seleccionarValorSpinner(rutainspeccion_sEstadoPlaga, objRutaInspeccion.EstadoPlagaClave);
+        seleccionarValorSpinner(rutainspeccion_sEnfermedad, objRutaInspeccion.EnfermedadClave);
+        seleccionarValorSpinner(rutainspeccion_sEstadoEnfermedad, objRutaInspeccion.EstadoEnfermedadClave);
         seleccionarValorSpinner(rutainspeccion_sPotencial, objRutaInspeccion.PotencialRendimientoClave);
         RutaInspeccion[] listaRelacionRecomendacion = _objRutaInspeccionBP.GetAllRelacionRecomendacion(_objRutaInspeccion);
         for (int i = 0; i < listaRelacionRecomendacion.length; i++) {
@@ -665,19 +825,19 @@ public class InspeccionCampo extends ActionBarActivity {
         }
     }
 
-    private Character obtenerValorRadio(RadioGroup objRadioGroup) {
+    private String obtenerValorRadio(RadioGroup objRadioGroup) {
         int id = objRadioGroup.getCheckedRadioButtonId();
         RadioButton objRadioButton = (RadioButton) findViewById(id);
-        return objRadioButton.getText().toString().charAt(0);
+        return String.valueOf(objRadioButton.getText().toString().charAt(0));
     }
 
-    private void seleccionarValorRadio(RadioGroup objRadioGroup, Character valor) {
+    private void seleccionarValorRadio(RadioGroup objRadioGroup, String valor) {
         int count = objRadioGroup.getChildCount();
         for (int i = 0; i < count; i++) {
             View o = objRadioGroup.getChildAt(i);
             if (o instanceof RadioButton) {
-                RadioButton objRadioButton =  (RadioButton)o;
-                if(objRadioButton.getText().toString().charAt(0)==valor)
+                RadioButton objRadioButton = (RadioButton) o;
+                if (objRadioButton.getText().toString().charAt(0) == valor.charAt(0))
                     objRadioButton.setChecked(true);
             }
         }
@@ -922,6 +1082,124 @@ public class InspeccionCampo extends ActionBarActivity {
                     rutainspeccion_txtRecomendacionOtro.setText("");
                 }
                 break;
+        }
+    }
+
+    //Eventos camara
+    //Crear numero aleatorio
+    public String nextSessionId() {
+        SecureRandom random = new SecureRandom();
+        return new BigInteger(130, random).toString(32);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Take_Photo && resultCode == RESULT_OK) {
+            String filePath = null;
+            filePath = str_Camera_Photo_ImagePath;
+            if (filePath != null) {
+                GPSTracker gpsTracker = new GPSTracker(InspeccionCampo.this);
+                if (gpsTracker.getIsGPSTrackingEnabled()) {
+                    addGeo(gpsTracker.getLatitude(),gpsTracker.getLongitude(),filePath);
+                }
+                Bitmap faceView = (new_decode(new File(
+                        filePath)));
+                imageView.setImageBitmap(faceView);
+                rutainspeccion_btnEnviar.setVisibility(View.VISIBLE);
+            } else {
+                bitmap = null;
+            }
+        }
+    }
+
+    public static Bitmap new_decode(File f) {
+        //Tamano de la imagen
+        BitmapFactory.Options o = new BitmapFactory.Options();
+        o.inJustDecodeBounds = true;
+        o.inDither = false; // Disable Dithering mode
+        o.inPurgeable = true; // Tell to gc that whether it needs free memory,
+        // the Bitmap can be cleared
+        o.inInputShareable = true; // Which kind of reference will be used to
+        // recover the Bitmap data after being
+        // clear, when it will be used in the future
+        try {
+            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+        } catch (FileNotFoundException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        // Find the correct scale value. It should be the power of 2.
+        final int REQUIRED_SIZE = 300;
+        int width_tmp = o.outWidth, height_tmp = o.outHeight;
+        int scale = 1;
+        while (true) {
+            if (width_tmp / 1.5 < REQUIRED_SIZE && height_tmp / 1.5 < REQUIRED_SIZE)
+                break;
+            width_tmp /= 1.5;
+            height_tmp /= 1.5;
+            scale *= 1.5;
+        }
+        // decode with inSampleSize
+        BitmapFactory.Options o2 = new BitmapFactory.Options();
+        // o2.inSampleSize=scale;
+        o.inDither = false; // Disable Dithering mode
+        o.inPurgeable = true; // Tell to gc that whether it needs free memory,
+        // the Bitmap can be cleared
+        o.inInputShareable = true; // Which kind of reference will be used to
+        // recover the Bitmap data after being
+        // clear, when it will be used in the future
+        // return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+        try {
+//          return BitmapFactory.decodeStream(new FileInputStream(f), null,
+//                  null);
+            Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(f), null, null);
+            System.out.println(" IW " + width_tmp);
+            System.out.println("IHH " + height_tmp);
+            int iW = width_tmp;
+            int iH = height_tmp;
+            return Bitmap.createScaledBitmap(bitmap, iW, iH, true);
+        } catch (OutOfMemoryError e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            // clearCache();
+            // System.out.println("bitmap creating success");
+            System.gc();
+            return null;
+            // System.runFinalization();
+            // Runtime.getRuntime().gc();
+            // System.gc();
+            // decodeFile(f);
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void addGeo(double latitude, double longitude, String location) {
+        ExifInterface exif;
+        try {
+            exif = new ExifInterface(location);
+            int num1Lat = (int) Math.floor(latitude);
+            int num2Lat = (int) Math.floor((latitude - num1Lat) * 60);
+            double num3Lat = (latitude - ((double) num1Lat + ((double) num2Lat / 60))) * 3600000;
+            int num1Lon = (int) Math.floor(longitude);
+            int num2Lon = (int) Math.floor((longitude - num1Lon) * 60);
+            double num3Lon = (longitude - ((double) num1Lon + ((double) num2Lon / 60))) * 3600000;
+            exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, num1Lat + "/1," + num2Lat + "/1," + num3Lat + "/1000");
+            exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE, num1Lon + "/1," + num2Lon + "/1," + num3Lon + "/1000");
+            if (latitude > 0) {
+                exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, "N");
+            } else {
+                exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE_REF, "S");
+            }
+            if (longitude > 0) {
+                exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, "E");
+            } else {
+                exif.setAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF, "W");
+            }
+            exif.saveAttributes();
+        } catch (IOException e) {
+            Log.e("PictureActivity", e.getLocalizedMessage());
         }
     }
 }

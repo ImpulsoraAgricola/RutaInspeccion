@@ -31,6 +31,7 @@ public class EstadoPlagaDA {
             while (objCursor.moveToNext()) {
                 listEstadoPlaga.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }
+            objCursor.close();
             return listEstadoPlaga;
         } catch (SQLException e) {
             throw e;

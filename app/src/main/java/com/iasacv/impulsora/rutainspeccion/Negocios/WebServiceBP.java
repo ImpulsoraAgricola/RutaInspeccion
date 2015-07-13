@@ -9,6 +9,7 @@ import com.iasacv.impulsora.rutainspeccion.Modelo.Usuario;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by Administrator on 26/06/2015.
@@ -49,9 +50,9 @@ public class WebServiceBP {
         }
     }
 
-    public boolean insertRutaInspeccion(RutaInspeccion objRutaInspeccion) throws Exception {
+    public Boolean insertRutaInspeccion(String usuario,RutaInspeccion objRutaInspeccion) throws Exception {
         try {
-            boolean resul = _objWebServiceDA.insertRutaInspeccion(objRutaInspeccion);
+            Boolean resul = _objWebServiceDA.insertRutaInspeccion(usuario,objRutaInspeccion);
             return resul;
         } catch (Exception e) {
             throw e;

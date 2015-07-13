@@ -32,6 +32,7 @@ public class SistemaProduccionDA {
             while (objCursor.moveToNext()) {
                 listSistemaProduccion.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }
+            objCursor.close();
             return listSistemaProduccion;
         } catch (SQLException e) {
             throw e;

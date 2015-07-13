@@ -126,6 +126,7 @@ public class PlaneacionRutaDA {
                 objPlaneacionRuta.Estatus = objCursor.getString(5);
                 listaPlaneacionRuta.add(objPlaneacionRuta);
             }
+            objCursor.close();
             return listaPlaneacionRuta;
         } catch (SQLException e) {
             throw e;
@@ -147,6 +148,7 @@ public class PlaneacionRutaDA {
                 if(i==5)
                     i=0;
             }
+            objCursor.close();
             return listaPlaneacionRuta;
         } catch (SQLException e) {
             throw e;

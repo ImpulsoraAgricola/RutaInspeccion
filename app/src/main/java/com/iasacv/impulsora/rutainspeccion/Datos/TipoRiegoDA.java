@@ -30,6 +30,7 @@ public class TipoRiegoDA {
             while (objCursor.moveToNext()) {
                 listTipoRiego.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }
+            objCursor.close();
             return listTipoRiego;
         } catch (SQLException e) {
             throw e;
