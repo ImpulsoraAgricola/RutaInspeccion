@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".DiagnosticoCultivo">
+    android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/fondo"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:context=".DiagnosticoCultivo">
 
         <TextView
             style="?android:attr/listSeparatorTextViewStyle"
@@ -18,7 +16,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical|center_horizontal"
             android:text="@string/activity_ruta_inspeccion_title_sDatosGenerales"
-            android:textSize="15dp"
+            android:textSize="20dp"
             android:typeface="sans" />
 
         <LinearLayout
@@ -27,6 +25,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_txtFolio"
@@ -34,11 +33,11 @@
 
             <EditText
                 android:id="@+id/rutainspeccion_txtFolio"
-                android:layout_width="match_parent"
+                style="@style/EditTextRespuesta"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:enabled="false"
-                android:inputType="number"
-                android:typeface="sans" />
+                android:inputType="number"/>
         </LinearLayout>
 
         <LinearLayout
@@ -47,6 +46,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_sCiclo"
@@ -54,11 +54,11 @@
 
             <Spinner
                 android:id="@+id/rutainspeccion_sCiclo"
+                style="@style/Spinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:clickable="false"
-                android:enabled="false"
-                android:typeface="sans" />
+                android:enabled="false"/>
 
         </LinearLayout>
 
@@ -68,6 +68,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_txtCliente"
@@ -75,11 +76,11 @@
 
             <EditText
                 android:id="@+id/rutainspeccion_txtCliente"
+                style="@style/EditTextRespuesta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
-                android:inputType="textPersonName"
-                android:typeface="sans" />
+                android:inputType="textPersonName"/>
 
         </LinearLayout>
 
@@ -89,6 +90,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_txtProductor"
@@ -96,11 +98,11 @@
 
             <EditText
                 android:id="@+id/rutainspeccion_txtProductor"
+                style="@style/EditTextRespuesta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
-                android:inputType="textPersonName"
-                android:typeface="sans" />
+                android:inputType="textPersonName"/>
 
         </LinearLayout>
 
@@ -110,6 +112,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_txtPredio"
@@ -117,10 +120,10 @@
 
             <EditText
                 android:id="@+id/rutainspeccion_txtPredio"
+                style="@style/EditTextRespuesta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="false"
-                android:typeface="sans" />
+                android:enabled="false"/>
 
         </LinearLayout>
 
@@ -130,6 +133,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_txtLote"
@@ -137,10 +141,10 @@
 
             <EditText
                 android:id="@+id/rutainspeccion_txtLote"
+                style="@style/EditTextRespuesta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="false"
-                android:typeface="sans" />
+                android:enabled="false"/>
 
         </LinearLayout>
 
@@ -150,6 +154,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_txtFecha"
@@ -157,11 +162,11 @@
 
             <EditText
                 android:id="@+id/rutainspeccion_txtFecha"
+                style="@style/EditTextRespuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:enabled="false"
-                android:inputType="date"
-                android:typeface="sans"></EditText>
+                android:inputType="date"></EditText>
 
 
         </LinearLayout>
@@ -172,42 +177,8 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical|center_horizontal"
             android:text=" "
-            android:textSize="15dp"
+            android:textSize="20dp"
             android:typeface="sans" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_ruta_recomendacion_tecnica"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        </LinearLayout>
-
-        <RadioGroup
-            android:id="@+id/rutainspeccion_rdRecomendacion"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rRecomendacionSi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rSi" />
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rRecomendacionNo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rNo" />
-        </RadioGroup>
 
         <TextView
             style="?android:attr/listSeparatorTextViewStyle"
@@ -215,7 +186,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical|center_horizontal"
             android:text="@string/activity_ruta_inspeccion_title_sSiembra"
-            android:textSize="15dp"
+            android:textSize="20dp"
             android:typeface="sans" />
 
         <LinearLayout
@@ -224,6 +195,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_SistemaProduccion"
@@ -231,6 +203,7 @@
 
             <Spinner
                 android:id="@+id/rutainspeccion_sSistemaProduccion"
+                style="@style/Spinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:typeface="sans" />
@@ -243,6 +216,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_ArregloTopologico"
@@ -250,6 +224,7 @@
 
             <Spinner
                 android:id="@+id/rutainspeccion_sArregloTopologico"
+                style="@style/Spinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:typeface="sans" />
@@ -262,7 +237,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical|center_horizontal"
             android:text="@string/activity_ruta_inspeccion_title_sCondicionesSiembra"
-            android:textSize="15dp"
+            android:textSize="20dp"
             android:typeface="sans" />
 
         <LinearLayout
@@ -271,6 +246,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_profundidad"
@@ -286,6 +262,7 @@
 
             <RadioButton
                 android:id="@+id/rutainspeccion_rAdecuadaSi"
+                style="@style/EditTextRespuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onRadioButtonClicked"
@@ -293,6 +270,7 @@
 
             <RadioButton
                 android:id="@+id/rutainspeccion_rAdecuadaNo"
+                style="@style/EditTextRespuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onRadioButtonClicked"
@@ -305,6 +283,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_surco"
@@ -320,6 +299,7 @@
 
             <RadioButton
                 android:id="@+id/rutainspeccion_rSurcoSi"
+                style="@style/EditTextRespuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onRadioButtonClicked"
@@ -327,40 +307,7 @@
 
             <RadioButton
                 android:id="@+id/rutainspeccion_rSurcoNo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rNo" />
-        </RadioGroup>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_ruta_inspeccion_manejo"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        </LinearLayout>
-
-        <RadioGroup
-            android:id="@+id/rutainspeccion_rdManejo"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rManejoSi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rSi" />
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rManejoNo"
+                style="@style/EditTextRespuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onRadioButtonClicked"
@@ -373,16 +320,17 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical|center_horizontal"
             android:text="@string/activity_ruta_inspeccion_title_sRiego"
-            android:textSize="15dp"
+            android:textSize="20dp"
             android:typeface="sans" />
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <CheckBox
                 android:id="@+id/rutainspeccion_chbCanal"
+                style="@style/EditTextRespuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onCheckboxClicked"
@@ -390,6 +338,7 @@
 
             <CheckBox
                 android:id="@+id/rutainspeccion_chbGravedad"
+                style="@style/EditTextRespuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onCheckboxClicked"
@@ -397,6 +346,7 @@
 
             <CheckBox
                 android:id="@+id/rutainspeccion_chbAspersion"
+                style="@style/EditTextRespuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onCheckboxClicked"
@@ -404,47 +354,60 @@
 
             <CheckBox
                 android:id="@+id/rutainspeccion_chbGoteo"
+                style="@style/EditTextRespuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onCheckboxClicked"
                 android:text="@string/activity_ruta_inspeccion_goteo" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <CheckBox
-                android:id="@+id/rutainspeccion_chbPozo"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:onClick="onCheckboxClicked"
-                android:text="@string/activity_ruta_inspeccion_pozo" />
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/rutainspeccion_txtCapacidad"
-                android:layout_width="95dp"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                android:inputType="numberDecimal"
-                android:typeface="sans" />
+                <CheckBox
+                    android:id="@+id/rutainspeccion_chbPozo"
+                    style="@style/EditTextRespuesta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onCheckboxClicked"
+                    android:text="@string/activity_ruta_inspeccion_pozo" />
 
-            <CheckBox
-                android:id="@+id/rutainspeccion_chbRiegoOtro"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onCheckboxClicked"
-                android:text="@string/activity_ruta_inspeccion_riego_otro" />
+                <EditText
+                    android:id="@+id/rutainspeccion_txtCapacidad"
+                    style="@style/EditTextRespuesta"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="@string/activity_ruta_inspeccion_capacidad"
+                    android:inputType="number"
+                    android:typeface="sans" />
 
-            <EditText
-                android:id="@+id/rutainspeccion_txtRiegoOtro"
-                android:layout_width="95dp"
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:enabled="false"
-                android:inputType="text"
-                android:typeface="sans" />
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/rutainspeccion_chbRiegoOtro"
+                    style="@style/EditTextRespuesta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onCheckboxClicked"
+                    android:text="@string/activity_ruta_inspeccion_riego_otro" />
+
+                <EditText
+                    android:id="@+id/rutainspeccion_txtRiegoOtro"
+                    style="@style/EditTextRespuesta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:inputType="text"
+                    android:typeface="sans" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <TextView
@@ -453,7 +416,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical|center_horizontal"
             android:text="@string/activity_ruta_inspeccion_title_sEtapa"
-            android:textSize="15dp"
+            android:textSize="20dp"
             android:typeface="sans" />
 
         <LinearLayout
@@ -462,6 +425,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_etapa"
@@ -469,59 +433,30 @@
 
             <Spinner
                 android:id="@+id/rutainspeccion_sEtapa"
+                style="@style/Spinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:typeface="sans" />
 
         </LinearLayout>
 
-        <LinearLayout
+        <TextView
+            style="?android:attr/listSeparatorTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_ruta_inspeccion_exposicion"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        </LinearLayout>
-
-        <RadioGroup
-            android:id="@+id/rutainspeccion_rdExposicion"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rExposicionSi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rSi" />
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rExposicionNo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rNo" />
-        </RadioGroup>
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/activity_ruta_inspeccion_title_sCondicionesDesarrollo"
+            android:textSize="20dp"
+            android:typeface="sans" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_ruta_inspeccion_title_sCondicionesDesarrollo"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <Spinner
                 android:id="@+id/rutainspeccion_sCondicionDesarrollo"
+                style="@style/Spinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:typeface="sans" />
@@ -534,16 +469,17 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical|center_horizontal"
             android:text="@string/activity_ruta_inspeccion_title_sRecomendaciones"
-            android:textSize="15dp"
+            android:textSize="20dp"
             android:typeface="sans" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <CheckBox
                 android:id="@+id/rutainspeccion_chbRegar"
+                style="@style/EditTextRespuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onCheckboxClicked"
@@ -551,6 +487,7 @@
 
             <CheckBox
                 android:id="@+id/rutainspeccion_chbDesmezclar"
+                style="@style/EditTextRespuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onCheckboxClicked"
@@ -558,20 +495,15 @@
 
             <CheckBox
                 android:id="@+id/rutainspeccion_chbFungicida"
+                style="@style/EditTextRespuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onCheckboxClicked"
                 android:text="@string/activity_ruta_inspeccion_fungicida" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
             <CheckBox
                 android:id="@+id/rutainspeccion_chbInsecticida"
+                style="@style/EditTextRespuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onCheckboxClicked"
@@ -579,225 +511,52 @@
 
             <CheckBox
                 android:id="@+id/rutainspeccion_chbHerbicida"
+                style="@style/EditTextRespuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onCheckboxClicked"
                 android:text="@string/activity_ruta_inspeccion_herbicida" />
 
             <CheckBox
-                android:id="@+id/rutainspeccion_chbDesaguar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onCheckboxClicked"
-                android:text="@string/activity_ruta_inspeccion_desaguar" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <CheckBox
                 android:id="@+id/rutainspeccion_chbDescostrar"
+                style="@style/EditTextRespuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onCheckboxClicked"
                 android:text="@string/activity_ruta_inspeccion_descostrar" />
 
             <CheckBox
-                android:id="@+id/rutainspeccion_chbRecomendacionOtro"
+                android:id="@+id/rutainspeccion_chbDesaguar"
+                style="@style/EditTextRespuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onCheckboxClicked"
-                android:text="@string/activity_ruta_inspeccion_recomendacion_otro" />
+                android:text="@string/activity_ruta_inspeccion_desaguar" />
 
-            <EditText
-                android:id="@+id/rutainspeccion_txtRecomendacionOtro"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:enabled="false"
-                android:inputType="text"
-                android:typeface="sans" />
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/rutainspeccion_chbRecomendacionOtro"
+                    style="@style/EditTextRespuesta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="onCheckboxClicked"
+                    android:text="@string/activity_ruta_inspeccion_recomendacion_otro" />
+
+                <EditText
+                    android:id="@+id/rutainspeccion_txtRecomendacionOtro"
+                    style="@style/EditTextRespuesta"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:inputType="text"
+                    android:typeface="sans" />
+
+            </LinearLayout>
         </LinearLayout>
-
-        <TextView
-            style="?android:attr/listSeparatorTextViewStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="@string/activity_ruta_inspeccion_title_sManejo"
-            android:textSize="15dp"
-            android:typeface="sans" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_ruta_inspeccion_orden"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        </LinearLayout>
-
-        <RadioGroup
-            android:id="@+id/rutainspeccion_rdOrden"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rOrdenSi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rSi" />
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rOrdenNo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rNo" />
-        </RadioGroup>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_ruta_inspeccion_regula"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        </LinearLayout>
-
-        <RadioGroup
-            android:id="@+id/rutainspeccion_rdRegula"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rRegulaSi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rSi" />
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rRegulaNo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rNo" />
-        </RadioGroup>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_ruta_inspeccion_uso"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        </LinearLayout>
-
-        <RadioGroup
-            android:id="@+id/rutainspeccion_rdUso"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rUsoSi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rSi" />
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rUsoNo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rNo" />
-        </RadioGroup>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_ruta_inspeccion_hora"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        </LinearLayout>
-
-        <RadioGroup
-            android:id="@+id/rutainspeccion_rdHora"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rHoraSi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rSi" />
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rHoraNo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rNo" />
-        </RadioGroup>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_ruta_inspeccion_agua"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        </LinearLayout>
-
-        <RadioGroup
-            android:id="@+id/rutainspeccion_rdAgua"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rAguaSi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rSi" />
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rAguaNo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rNo" />
-        </RadioGroup>
 
         <TextView
             style="?android:attr/listSeparatorTextViewStyle"
@@ -805,7 +564,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical|center_horizontal"
             android:text="@string/activity_ruta_inspeccion_title_sProblemas"
-            android:textSize="15dp"
+            android:textSize="20dp"
             android:typeface="sans" />
 
         <LinearLayout
@@ -814,6 +573,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_inundacion"
@@ -829,6 +589,7 @@
 
             <RadioButton
                 android:id="@+id/rutainspeccion_rInundacionSi"
+                style="@style/EditTextRespuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onRadioButtonClicked"
@@ -836,6 +597,7 @@
 
             <RadioButton
                 android:id="@+id/rutainspeccion_rInundacionNo"
+                style="@style/EditTextRespuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onRadioButtonClicked"
@@ -848,6 +610,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_poblacion"
@@ -863,6 +626,7 @@
 
             <RadioButton
                 android:id="@+id/rutainspeccion_rPoblacionSi"
+                style="@style/EditTextRespuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onRadioButtonClicked"
@@ -870,6 +634,7 @@
 
             <RadioButton
                 android:id="@+id/rutainspeccion_rPoblacionNo"
+                style="@style/EditTextRespuesta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onRadioButtonClicked"
@@ -882,210 +647,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_ruta_inspeccion_problema"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        </LinearLayout>
-
-        <RadioGroup
-            android:id="@+id/rutainspeccion_rdProblema"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rProblemaSi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rSi" />
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rProblemaNo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rNo" />
-        </RadioGroup>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_ruta_inspeccion_alteracion"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        </LinearLayout>
-
-        <RadioGroup
-            android:id="@+id/rutainspeccion_rdAlteracion"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rAlteracionSi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rSi" />
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rAlteracionNo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rNo" />
-        </RadioGroup>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_ruta_inspeccion_aplicacion"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        </LinearLayout>
-
-        <RadioGroup
-            android:id="@+id/rutainspeccion_rdAplicacion"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rAplicacionSi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rSi" />
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rAplicacionNo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rNo" />
-        </RadioGroup>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_ruta_inspeccion_temperatura"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        </LinearLayout>
-
-        <RadioGroup
-            android:id="@+id/rutainspeccion_rdTemperatura"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rTemperaturaSi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rSi" />
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rTemperaturaNo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rNo" />
-        </RadioGroup>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_ruta_inspeccion_fito"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        </LinearLayout>
-
-        <RadioGroup
-            android:id="@+id/rutainspeccion_rdFito"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rFitoSi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rSi" />
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rFitoNo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rNo" />
-        </RadioGroup>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_ruta_inspeccion_plaga_mal"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        </LinearLayout>
-
-        <RadioGroup
-            android:id="@+id/rutainspeccion_rdPlaga"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rPlagaSi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rSi" />
-
-            <RadioButton
-                android:id="@+id/rutainspeccion_rPlagaNo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/activity_rutainspeccion_rNo" />
-        </RadioGroup>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_maleza"
@@ -1093,6 +655,7 @@
 
             <Spinner
                 android:id="@+id/rutainspeccion_sMaleza"
+                style="@style/Spinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:typeface="sans" />
@@ -1105,6 +668,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_estado"
@@ -1112,6 +676,7 @@
 
             <Spinner
                 android:id="@+id/rutainspeccion_sEstadoMaleza"
+                style="@style/Spinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:typeface="sans" />
@@ -1124,6 +689,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_insecto"
@@ -1131,6 +697,7 @@
 
             <Spinner
                 android:id="@+id/rutainspeccion_sPlaga"
+                style="@style/Spinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:typeface="sans" />
@@ -1143,6 +710,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_estado"
@@ -1150,6 +718,7 @@
 
             <Spinner
                 android:id="@+id/rutainspeccion_sEstadoPlaga"
+                style="@style/Spinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:typeface="sans" />
@@ -1162,6 +731,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_enfermedad"
@@ -1169,6 +739,7 @@
 
             <Spinner
                 android:id="@+id/rutainspeccion_sEnfermedad"
+                style="@style/Spinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:typeface="sans" />
@@ -1181,6 +752,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_estado"
@@ -1194,19 +766,23 @@
 
         </LinearLayout>
 
+        <TextView
+            style="?android:attr/listSeparatorTextViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/activity_ruta_inspeccion_potencial"
+            android:textSize="20dp"
+            android:typeface="sans" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_ruta_inspeccion_potencial"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
             <Spinner
                 android:id="@+id/rutainspeccion_sPotencial"
+                style="@style/Spinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:typeface="sans" />
@@ -1215,14 +791,47 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center">
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/rutainspeccion_btnGuardar"
+                android:layout_width="78dp"
+                android:layout_height="78dp"
+                android:background="@drawable/save"
+                android:text="@string/activity_ruta_inspeccion_btnGuardar"
+                android:typeface="sans" />
+
+            <ImageButton
+                android:id="@+id/rutainspeccion_btnFotografia"
+                android:layout_width="78dp"
+                android:layout_height="78dp"
+                android:background="@drawable/camera"
+                android:text="@string/activity_ruta_inspeccion_btnFotografia"
+                android:typeface="sans"
+                android:visibility="invisible" />
+
+            <ImageButton
+                android:id="@+id/rutainspeccion_btnEnviar"
+                android:layout_width="78dp"
+                android:layout_height="78dp"
+                android:background="@drawable/send"
+                android:text="@string/activity_ruta_inspeccion_btnEnviar"
+                android:typeface="sans"
+                android:visibility="invisible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageView1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_ruta_inspeccion_btnGuardar" />
+                android:layout_height="match_parent"></ImageView>
 
         </LinearLayout>
     </LinearLayout>

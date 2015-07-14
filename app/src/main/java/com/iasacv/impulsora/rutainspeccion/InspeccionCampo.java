@@ -1,7 +1,6 @@
 package com.iasacv.impulsora.rutainspeccion;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -20,7 +18,6 @@ import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -29,12 +26,10 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.iasacv.impulsora.rutainspeccion.Conexion.GPSTracker;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Combo;
-import com.iasacv.impulsora.rutainspeccion.Modelo.Item;
 import com.iasacv.impulsora.rutainspeccion.Modelo.PlaneacionRuta;
 import com.iasacv.impulsora.rutainspeccion.Modelo.RutaInspeccion;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Usuario;
@@ -49,19 +44,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 /**
  * Created by Administrator on 19/06/2015.
@@ -230,20 +215,33 @@ public class InspeccionCampo extends ActionBarActivity {
                 public void onClick(View v) {
                     try {
                         if (validar()) {
-                            RutaInspeccion objRutaInspeccion = creaObjeto();
-                            objRutaInspeccion.Estatus = "E";
-                            _objPlaneacionRuta.Estatus = "E";
-                            _objRutaInspeccionBP.UpdatePlaneacionRutaEstatus(_objPlaneacionRuta);
-                            boolean resul = _objRutaInspeccionBP.UpdateRutaInspeccion(objRutaInspeccion);
-                            _objComunBP.Mensaje("La informaci\u00F3n se enviara a IASA", InspeccionCampo.this);
-                            rutainspeccion_btnEnviar.setVisibility(View.INVISIBLE);
-                            rutainspeccion_btnFotografia.setVisibility(View.INVISIBLE);
-                            rutainspeccion_btnGuardar.setVisibility(View.INVISIBLE);
+                            final AlertDialog alert = new AlertDialog.Builder(
+                                    new ContextThemeWrapper(InspeccionCampo.this, android.R.style.Theme_Dialog))
+                                    .create();
+                            alert.setTitle("Mensaje");
+                            alert.setMessage("\u00BFDeseas enviar la informaci\u00F3n a IASA?");
+                            alert.setCancelable(false);
+                            alert.setIcon(R.drawable.info);
+                            alert.setCanceledOnTouchOutside(false);
+                            alert.setButton(DialogInterface.BUTTON_POSITIVE, "Si",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            try {
+                                                enviarInformacion();
+                                                alert.dismiss();
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
+                            alert.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            alert.dismiss();
+                                        }
+                                    });
+                            alert.show();
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (XmlPullParserException e) {
-                        e.printStackTrace();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -264,11 +262,11 @@ public class InspeccionCampo extends ActionBarActivity {
                             if (!wallpaperDirectory.exists())
                                 wallpaperDirectory.mkdirs();
                             str_Camera_Photo_ImageName = _objRutaInspeccion.UsuarioClave + _objRutaInspeccion.CicloClave +
-                                    _objRutaInspeccion.Fecha +_objRutaInspeccion.Folio+ str_randomnumber
+                                    _objRutaInspeccion.Fecha + _objRutaInspeccion.Folio + str_randomnumber
                                     + ".jpg";
                             str_Camera_Photo_ImagePath = str_SaveFolderName
-                                    + "/"+ _objRutaInspeccion.UsuarioClave + _objRutaInspeccion.CicloClave +
-                                    _objRutaInspeccion.Fecha +_objRutaInspeccion.Folio+ str_randomnumber + ".jpg";
+                                    + "/" + _objRutaInspeccion.UsuarioClave + _objRutaInspeccion.CicloClave +
+                                    _objRutaInspeccion.Fecha + _objRutaInspeccion.Folio + str_randomnumber + ".jpg";
                             System.err.println(" str_Camera_Photo_ImagePath  "
                                     + str_Camera_Photo_ImagePath);
                             f = new File(str_Camera_Photo_ImagePath);
@@ -278,8 +276,7 @@ public class InspeccionCampo extends ActionBarActivity {
                                     Take_Photo);
                             System.err.println("f  " + f);
                         }
-                    }
-                    else
+                    } else
                         _objComunBP.Mensaje("Error: Favor de habilitar GPS", InspeccionCampo.this);
                 }
             });
@@ -407,6 +404,7 @@ public class InspeccionCampo extends ActionBarActivity {
             agregarRelacionRiego(objRutaInspeccion, 1);
         } else
             eliminarRelacionRiego(objRutaInspeccion, 1);
+        objRutaInspeccion.Capacidad = 0;
         if (rutainspeccion_chbGravedad.isChecked())
             agregarRelacionRiego(objRutaInspeccion, 2);
         else
@@ -445,62 +443,62 @@ public class InspeccionCampo extends ActionBarActivity {
     public void llenarCombos() {
         //Ciclo
         List<Combo> listaCiclos = _objCatalogosBP.GetAllCicloCombo();
-        ArrayAdapter<Combo> adapterCiclo = new ArrayAdapter<Combo>(InspeccionCampo.this, android.R.layout.simple_spinner_item, listaCiclos);
+        ArrayAdapter<Combo> adapterCiclo = new ArrayAdapter<Combo>(InspeccionCampo.this, R.layout.activity_spinner, listaCiclos);
         rutainspeccion_sCiclo.setAdapter(adapterCiclo);
 
         //Sistema de produccion
         List<Combo> listaSistemaProduccion = _objCatalogosBP.GetAllSistemaProduccionCombo();
-        ArrayAdapter<Combo> adapterSistemaProduccion = new ArrayAdapter<Combo>(InspeccionCampo.this, android.R.layout.simple_spinner_item, listaSistemaProduccion);
+        ArrayAdapter<Combo> adapterSistemaProduccion = new ArrayAdapter<Combo>(InspeccionCampo.this, R.layout.activity_spinner, listaSistemaProduccion);
         rutainspeccion_sSistemaProduccion.setAdapter(adapterSistemaProduccion);
 
         //Arreglo topologico
         List<Combo> listaArregloTopologico = _objCatalogosBP.GetAllArregloTopologicoCombo();
-        ArrayAdapter<Combo> adapterArregloTopologico = new ArrayAdapter<Combo>(InspeccionCampo.this, android.R.layout.simple_spinner_item, listaArregloTopologico);
+        ArrayAdapter<Combo> adapterArregloTopologico = new ArrayAdapter<Combo>(InspeccionCampo.this, R.layout.activity_spinner, listaArregloTopologico);
         rutainspeccion_sArregloTopologico.setAdapter(adapterArregloTopologico);
 
         //Etapa fenologica
         List<Combo> listaEtapaFenologica = _objCatalogosBP.GetAllEtapaFenologicaCombo();
-        ArrayAdapter<Combo> adapterEtapaFenologica = new ArrayAdapter<Combo>(InspeccionCampo.this, android.R.layout.simple_spinner_item, listaEtapaFenologica);
+        ArrayAdapter<Combo> adapterEtapaFenologica = new ArrayAdapter<Combo>(InspeccionCampo.this, R.layout.activity_spinner, listaEtapaFenologica);
         rutainspeccion_sEtapa.setAdapter(adapterEtapaFenologica);
 
         //Condiciones de desarrollo
         List<Combo> listaCondicionDesarrollo = _objCatalogosBP.GetAllCondicionDesarrolloCombo();
-        ArrayAdapter<Combo> adapterCondicionDesarrollo = new ArrayAdapter<Combo>(InspeccionCampo.this, android.R.layout.simple_spinner_item, listaCondicionDesarrollo);
+        ArrayAdapter<Combo> adapterCondicionDesarrollo = new ArrayAdapter<Combo>(InspeccionCampo.this, R.layout.activity_spinner, listaCondicionDesarrollo);
         rutainspeccion_sCondicionDesarrollo.setAdapter(adapterCondicionDesarrollo);
 
         //Plagas
         List<Combo> listaPlaga = _objCatalogosBP.GetAllPlagaCombo();
-        ArrayAdapter<Combo> adapterPlaga = new ArrayAdapter<Combo>(InspeccionCampo.this, android.R.layout.simple_spinner_item, listaPlaga);
+        ArrayAdapter<Combo> adapterPlaga = new ArrayAdapter<Combo>(InspeccionCampo.this, R.layout.activity_spinner, listaPlaga);
         rutainspeccion_sPlaga.setAdapter(adapterPlaga);
 
         //Malezas
         List<Combo> listaMaleza = _objCatalogosBP.GetAllMalezaCombo();
-        ArrayAdapter<Combo> adapterMaleza = new ArrayAdapter<Combo>(InspeccionCampo.this, android.R.layout.simple_spinner_item, listaMaleza);
+        ArrayAdapter<Combo> adapterMaleza = new ArrayAdapter<Combo>(InspeccionCampo.this, R.layout.activity_spinner, listaMaleza);
         rutainspeccion_sMaleza.setAdapter(adapterMaleza);
 
         //Enfermedades
         List<Combo> listaEnfermedad = _objCatalogosBP.GetAllEnfermedadCombo();
-        ArrayAdapter<Combo> adapterEnfermedad = new ArrayAdapter<Combo>(InspeccionCampo.this, android.R.layout.simple_spinner_item, listaEnfermedad);
+        ArrayAdapter<Combo> adapterEnfermedad = new ArrayAdapter<Combo>(InspeccionCampo.this, R.layout.activity_spinner, listaEnfermedad);
         rutainspeccion_sEnfermedad.setAdapter(adapterEnfermedad);
 
         //Estado plagas
         List<Combo> listaEstadoPlaga = _objCatalogosBP.GetAllEstadoPlagaCombo();
-        ArrayAdapter<Combo> adapterEstadoPlaga = new ArrayAdapter<Combo>(InspeccionCampo.this, android.R.layout.simple_spinner_item, listaEstadoPlaga);
+        ArrayAdapter<Combo> adapterEstadoPlaga = new ArrayAdapter<Combo>(InspeccionCampo.this, R.layout.activity_spinner, listaEstadoPlaga);
         rutainspeccion_sEstadoPlaga.setAdapter(adapterEstadoPlaga);
 
         //Estado malezas
         List<Combo> listaEstadoMaleza = _objCatalogosBP.GetAllEstadoMalezaCombo();
-        ArrayAdapter<Combo> adapterEstadoMaleza = new ArrayAdapter<Combo>(InspeccionCampo.this, android.R.layout.simple_spinner_item, listaEstadoMaleza);
+        ArrayAdapter<Combo> adapterEstadoMaleza = new ArrayAdapter<Combo>(InspeccionCampo.this, R.layout.activity_spinner, listaEstadoMaleza);
         rutainspeccion_sEstadoMaleza.setAdapter(adapterEstadoMaleza);
 
         //Estado enfermedades
         List<Combo> listaEstadoEnfermedad = _objCatalogosBP.GetAllEstadoEnfermedadCombo();
-        ArrayAdapter<Combo> adapterEstadoEnfermedad = new ArrayAdapter<Combo>(InspeccionCampo.this, android.R.layout.simple_spinner_item, listaEstadoEnfermedad);
+        ArrayAdapter<Combo> adapterEstadoEnfermedad = new ArrayAdapter<Combo>(InspeccionCampo.this, R.layout.activity_spinner, listaEstadoEnfermedad);
         rutainspeccion_sEstadoEnfermedad.setAdapter(adapterEstadoEnfermedad);
 
         //Potencial de rendimiento
         List<Combo> listaPotencialRendimiento = _objCatalogosBP.GetAllPotencialRendimientoCombo();
-        ArrayAdapter<Combo> adapterPotencialRendimiento = new ArrayAdapter<Combo>(InspeccionCampo.this, android.R.layout.simple_spinner_item, listaPotencialRendimiento);
+        ArrayAdapter<Combo> adapterPotencialRendimiento = new ArrayAdapter<Combo>(InspeccionCampo.this, R.layout.activity_spinner, listaPotencialRendimiento);
         rutainspeccion_sPotencial.setAdapter(adapterPotencialRendimiento);
     }
 
@@ -1199,7 +1197,9 @@ public class InspeccionCampo extends ActionBarActivity {
 
     @Override
     public void onBackPressed() {
-            final AlertDialog alert = new AlertDialog.Builder(
+        final AlertDialog alert;
+        if (rutainspeccion_btnGuardar.getVisibility() == View.VISIBLE) {
+            alert = new AlertDialog.Builder(
                     new ContextThemeWrapper(this, android.R.style.Theme_Dialog))
                     .create();
             alert.setTitle("Mensaje");
@@ -1221,5 +1221,19 @@ public class InspeccionCampo extends ActionBarActivity {
                         }
                     });
             alert.show();
+        } else
+            finish();
+    }
+
+    private void enviarInformacion() throws Exception {
+        RutaInspeccion objRutaInspeccion = creaObjeto();
+        objRutaInspeccion.Estatus = "E";
+        _objPlaneacionRuta.Estatus = "E";
+        _objRutaInspeccionBP.UpdatePlaneacionRutaEstatus(_objPlaneacionRuta);
+        boolean resul = _objRutaInspeccionBP.UpdateRutaInspeccion(objRutaInspeccion);
+        _objComunBP.Mensaje("La informaci\u00F3n se enviara a IASA", InspeccionCampo.this);
+        rutainspeccion_btnEnviar.setVisibility(View.INVISIBLE);
+        rutainspeccion_btnFotografia.setVisibility(View.INVISIBLE);
+        rutainspeccion_btnGuardar.setVisibility(View.INVISIBLE);
     }
 }

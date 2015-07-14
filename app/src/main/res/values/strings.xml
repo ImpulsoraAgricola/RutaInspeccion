@@ -21,7 +21,7 @@
 
     <!-- Captura de ruta de inspección. -->
     <string name="title_activity_ruta_inspeccion">Captura de ruta de inspección</string>
-    <string name="activity_ruta_inspeccion_title_sDatosGenerales">Datos generales</string>
+    <string name="activity_ruta_inspeccion_title_sDatosGenerales">Lotes de reproducción de semilla</string>
     <string name="activity_ruta_inspeccion_txtFolio">Folio:</string>
     <string name="activity_ruta_inspeccion_sCiclo">Ciclo:</string>
     <string name="activity_ruta_inspeccion_txtCliente">Cliente:</string>
@@ -57,7 +57,7 @@
     <string name="activity_ruta_inspeccion_etapa">Etapa principal Zadoks:</string>
     <string name="activity_ruta_inspeccion_exposicion">Exposición de la excersión:</string>
     <string name="activity_ruta_inspeccion_title_sCondicionesDesarrollo">Condiciones de desarrollo:</string>
-    <string name="activity_ruta_inspeccion_title_sRecomendaciones">Recomendaciones</string>
+    <string name="activity_ruta_inspeccion_title_sRecomendaciones">Recomendaciones y observaciones</string>
     <string name="activity_ruta_inspeccion_regar">Regar</string>
     <string name="activity_ruta_inspeccion_desmezclar">Desmezclar</string>
     <string name="activity_ruta_inspeccion_fungicida">Aplicar fungicida</string>
@@ -88,7 +88,7 @@
     <string name="activity_ruta_inspeccion_enfermedad">11. Enfermedad (principal)</string>
     <string name="activity_ruta_inspeccion_estado">Grado de infestación:</string>
 
-    <string name="activity_ruta_inspeccion_potencial">Potencial de rendimiento del cultivo:</string>
+    <string name="activity_ruta_inspeccion_potencial">6.- Potencial de rendimiento del cultivo</string>
 
     <string name="activity_ruta_inspeccion_btnGuardar">Guardar</string>
     <string name="activity_ruta_inspeccion_btnFotografia">Tomar fotografia</string>
