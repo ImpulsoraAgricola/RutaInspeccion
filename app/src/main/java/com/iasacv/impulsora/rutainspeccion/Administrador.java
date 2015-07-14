@@ -121,7 +121,7 @@ public class Administrador extends ActionBarActivity {
                         RutaInspeccion objRutaInspeccion = creaObjeto(objItem);
                         RutaInspeccion objTemp = _objRutaInspeccionBP.GetRutaInspeccionCabecero(objRutaInspeccion);
                         if(objTemp.Estatus!= null) {
-                            if (objTemp.Estatus.equals("G") || objTemp.Estatus.equals("E"))
+                            if (objTemp.Estatus.equals("G") || objTemp.Estatus.equals("E") || objTemp.Estatus.equals("F")|| objTemp.Estatus.equals("R"))
                                 iniciarRutaInspeccion(objItem);
                             else
                                 confirmDialogStart(objItem);
@@ -449,5 +449,31 @@ public class Administrador extends ActionBarActivity {
             i.putExtra("Fecha", objItem.getFecha());
             startActivity(i);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        final AlertDialog alert = new AlertDialog.Builder(
+                new ContextThemeWrapper(this, android.R.style.Theme_Dialog))
+                .create();
+        alert.setTitle("Mensaje");
+        alert.setMessage("\u00BFDeseas salir de la captura de la ruta de inpecci\u00F3n?");
+        alert.setCancelable(false);
+        alert.setIcon(R.drawable.info);
+        alert.setCanceledOnTouchOutside(false);
+        alert.setButton(DialogInterface.BUTTON_POSITIVE, "Si",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        alert.dismiss();
+                        finish();
+                    }
+                });
+        alert.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        alert.dismiss();
+                    }
+                });
+        alert.show();
     }
 }

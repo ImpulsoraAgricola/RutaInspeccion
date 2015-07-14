@@ -4,4 +4,5 @@
     <color name="colorPrimary">#FB7600</color>
     <color name="primary_dark">#5D4037</color>
     <color name="textColor">#000000</color>
+    <color name="textColorAlert">#ffff1109</color>
 </resources>

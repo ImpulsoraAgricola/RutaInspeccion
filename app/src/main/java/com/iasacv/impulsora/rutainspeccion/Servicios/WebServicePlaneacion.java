@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.ResultReceiver;
 
+import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
 import com.iasacv.impulsora.rutainspeccion.Datos.RutaInspeccionDA;
 import com.iasacv.impulsora.rutainspeccion.Modelo.PlaneacionRuta;
 import com.iasacv.impulsora.rutainspeccion.Modelo.RutaInspeccion;
@@ -41,12 +42,14 @@ public class WebServicePlaneacion extends Service {
 
     WebServiceBP _objWebServiceBP;
     RutaInspeccionDA _objRutaInspeccionDA;
+    EntLibDBTools _objEntLibDBTools;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
             _objWebServiceBP = new WebServiceBP(this);
             _objRutaInspeccionDA = new RutaInspeccionDA(this);
+            _objEntLibDBTools = new EntLibDBTools(this);
             resultReceiver = intent.getParcelableExtra("receiver");
             getValues(intent);
             timerTask = new MyTimerTask();
@@ -91,33 +94,49 @@ public class WebServicePlaneacion extends Service {
             //Variables
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String currentDateandTime = sdf.format(new Date());
+            List<RutaInspeccion> listRutaInspeccion;
+            List<RutaInspeccion> listRelacionRiego;
+            List<RutaInspeccion> listRelacionRecomendacion;
 
             protected Boolean doInBackground(String... params) {
                 boolean result = true;
                 try {
-                    try {
-                        result = _objWebServiceBP.getPlaneacionRuta(_objUsuario.RFC, _objUsuario.Clave, currentDateandTime);
-                        List<RutaInspeccion> listRutaInspeccion = _objRutaInspeccionDA.GetAllRutaInspeccion();
-                        if(listRutaInspeccion.size()>0) {
-                            for (int i = 0; i < listRutaInspeccion.size(); i++) {
-                                if (result = true) {
-                                    RutaInspeccion objRutaInspeccion = (RutaInspeccion)listRutaInspeccion.get(i);
-                                    result = _objWebServiceBP.insertRutaInspeccion(_objUsuario.RFC, objRutaInspeccion);
-                                }
-                            }
+                    result = _objWebServiceBP.getPlaneacionRuta(_objUsuario.RFC, _objUsuario.Clave, currentDateandTime);
+                    listRutaInspeccion = _objRutaInspeccionDA.GetAllRutaInspeccion();
+                    listRelacionRiego = _objRutaInspeccionDA.GetAllRelacionRiego();
+                    listRelacionRecomendacion = _objRutaInspeccionDA.GetAllRelacionRecomendacion();
+                    if (listRutaInspeccion.size() > 0) {
+                        for (int i = 0; i < listRutaInspeccion.size(); i++) {
+                            RutaInspeccion objRutaInspeccion = (RutaInspeccion) listRutaInspeccion.get(i);
+                            result = _objWebServiceBP.insertRutaInspeccion(_objUsuario.RFC, objRutaInspeccion);
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (XmlPullParserException e) {
-                        e.printStackTrace();
-                    }
+                        for (int i = 0; i < listRelacionRiego.size(); i++) {
+                            RutaInspeccion objRutaInspeccion = (RutaInspeccion) listRelacionRiego.get(i);
+                            result = _objWebServiceBP.insertRelacionTipoRiego(_objUsuario.RFC, objRutaInspeccion);
+                        }
+                        for (int i = 0; i < listRelacionRecomendacion.size(); i++) {
+                            RutaInspeccion objRutaInspeccion = (RutaInspeccion) listRelacionRecomendacion.get(i);
+                            result = _objWebServiceBP.insertRelacionRecomendacion(_objUsuario.RFC, objRutaInspeccion);
+                        }
+                    } else
+                        result = false;
                 } catch (Exception e) {
+                    result = false;
+                    e.printStackTrace();
                 }
                 return result;
             }
 
             protected void onPostExecute(Boolean result) {
                 if (result) {
+                    _objEntLibDBTools.exportDataBase();
+                    if (listRutaInspeccion.size() > 0) {
+                        for (int i = 0; i < listRutaInspeccion.size(); i++) {
+                            RutaInspeccion objRutaInspeccion = (RutaInspeccion) listRutaInspeccion.get(i);
+                            objRutaInspeccion.Estatus = "R";
+                            boolean resul = _objRutaInspeccionDA.UpdateRutaInspeccion(objRutaInspeccion);
+                        }
+                    }
                     resultReceiver.send(0, null);
                 }
             }

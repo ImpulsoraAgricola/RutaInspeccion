@@ -548,7 +548,7 @@ public class WebServiceDA extends Activity {
         try {
             transporte.call(SOAP_ACTION, envelope);
             SoapObject resSoap = (SoapObject) envelope.getResponse();
-            _objEntLibTools.executeQuery("DELETE FROM BATPLADE WHERE PLADESTS NOT IN(\"O\",\"G\",\"E\")");
+            _objEntLibTools.executeQuery("DELETE FROM BATPLADE WHERE PLADESTS NOT IN(\"O\",\"G\",\"F\",\"E\")");
             listaPlaneacionRuta = new PlaneacionRuta[resSoap.getPropertyCount()];
             for (int i = 0; i < listaPlaneacionRuta.length; i++) {
                 SoapObject ic = (SoapObject) resSoap.getProperty(i);
@@ -634,6 +634,38 @@ public class WebServiceDA extends Activity {
         return _objUsuario;
     }
 
+    /*public Boolean insertRutaInspeccion(String usuario,RutaInspeccion objRutaInspeccion) throws IOException, XmlPullParserException {
+        int resul;
+        String METHOD_NAME = "InsertRutaInspeccion";
+        String SOAP_ACTION = NAMESPACE +"InsertRutaInspeccion";
+        SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+        request.addProperty("usuario", usuario);
+        PropertyInfo pi = new PropertyInfo();
+        pi.setName("objRutaInspeccion");
+        pi.setValue(objRutaInspeccion);
+        pi.setType(RutaInspeccion.class);
+        request.addProperty(pi);
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(request);
+        envelope.addMapping(NAMESPACE,"RutaInspeccion",new RutaInspeccion().getClass());
+        AndroidHttpTransport transporte = new AndroidHttpTransport (URL);
+        try
+        {
+            transporte.call(SOAP_ACTION, envelope);
+            SoapPrimitive response = (SoapPrimitive)envelope.getResponse();
+            resul = Integer.valueOf(response.toString());
+            if(resul==objRutaInspeccion.UsuarioClave)
+                return true;
+            else
+                return false;
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+    }*/
+
     public Boolean insertRutaInspeccion(String usuario,RutaInspeccion objRutaInspeccion) throws IOException, XmlPullParserException {
         int resul;
         String METHOD_NAME = "InsertRutaInspeccion";
@@ -655,10 +687,65 @@ public class WebServiceDA extends Activity {
             transporte.call(SOAP_ACTION, envelope);
             SoapPrimitive response = (SoapPrimitive)envelope.getResponse();
             resul = Integer.valueOf(response.toString());
-            if(resul==0)
-                return true;
-            else
-                return false;
+            return true;
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+    }
+
+    public Boolean insertRelacionRecomendacion(String usuario,RutaInspeccion objRutaInspeccion) throws IOException, XmlPullParserException {
+        int resul;
+        String METHOD_NAME = "InsertRelacionRecomendacion";
+        String SOAP_ACTION = NAMESPACE +"InsertRelacionRecomendacion";
+        SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+        request.addProperty("usuario", usuario);
+        PropertyInfo pi = new PropertyInfo();
+        pi.setName("objRutaInspeccion");
+        pi.setValue(objRutaInspeccion);
+        pi.setType(RutaInspeccion.class);
+        request.addProperty(pi);
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(request);
+        envelope.addMapping(NAMESPACE,"RutaInspeccion",new RutaInspeccion().getClass());
+        AndroidHttpTransport transporte = new AndroidHttpTransport (URL);
+        try
+        {
+            transporte.call(SOAP_ACTION, envelope);
+            SoapPrimitive response = (SoapPrimitive)envelope.getResponse();
+            resul = Integer.valueOf(response.toString());
+            return true;
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
+    }
+
+    public Boolean insertRelacionTipoRiego(String usuario,RutaInspeccion objRutaInspeccion) throws IOException, XmlPullParserException {
+        int resul;
+        String METHOD_NAME = "InsertRelacionRiego";
+        String SOAP_ACTION = NAMESPACE +"InsertRelacionRiego";
+        SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+        request.addProperty("usuario", usuario);
+        PropertyInfo pi = new PropertyInfo();
+        pi.setName("objRutaInspeccion");
+        pi.setValue(objRutaInspeccion);
+        pi.setType(RutaInspeccion.class);
+        request.addProperty(pi);
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(request);
+        envelope.addMapping(NAMESPACE,"RutaInspeccion",new RutaInspeccion().getClass());
+        AndroidHttpTransport transporte = new AndroidHttpTransport (URL);
+        try
+        {
+            transporte.call(SOAP_ACTION, envelope);
+            SoapPrimitive response = (SoapPrimitive)envelope.getResponse();
+            resul = Integer.valueOf(response.toString());
+            return true;
         }
         catch (Exception e)
         {

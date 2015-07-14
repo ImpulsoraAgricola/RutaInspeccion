@@ -8,7 +8,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="android:textColor">@color/textColor</item>
-        <item name="android:textColorAlertDialogListItem">@color/textColor</item>
+        <item name="android:textColorAlertDialogListItem">@color/textColorAlert</item>
         <item name="android:typeface">sans</item>
     </style>
 
@@ -17,19 +17,30 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="android:textColor">@color/textColor</item>
-        <item name="android:textColorAlertDialogListItem">@color/textColor</item>
+        <item name="android:textColorAlertDialogListItem">@color/textColorAlert</item>
         <item name="android:typeface">sans</item>
     </style>
 
-    <style name="spinner_style">
-        <item name="android:layout_marginLeft">10dp</item>
-        <item name="android:layout_marginRight">10dp</item>
-        <item name="android:layout_marginBottom">10dp</item>
-        <item name="android:layout_marginTop">10dp</item>
-        <item name="android:paddingLeft">8dp</item>
-        <item name="android:paddingTop">5dp</item>
-        <item name="android:paddingBottom">5dp</item>
-        <item name="android:textSize">15dp</item>
+    <style name="Spinner">
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="EditText">
+        <item name="android:textColor">#ff000000</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:typeface">sans</item>
+    </style>
+
+    <style name="EditTextNormal">
+        <item name="android:textColor">#ff000000</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:typeface">sans</item>
+    </style>
+
+    <style name="GridView">
+        <item name="android:textColor">#ffffffff</item>
+        <item name="android:typeface">sans</item>
+    </style>
 </resources>

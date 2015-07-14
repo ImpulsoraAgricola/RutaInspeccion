@@ -180,16 +180,11 @@ public class RutaInspeccionDA {
             while (objCursor.moveToNext()) {
                 RutaInspeccion objRutaInspeccion = new RutaInspeccion();
                 objRutaInspeccion.UsuarioClave = objCursor.getInt(0);
-                objRutaInspeccion.UsuarioNombre=" ";
                 objRutaInspeccion.CicloClave = objCursor.getInt(1);
-                objRutaInspeccion.CicloNombre=" ";
                 objRutaInspeccion.Fecha = objCursor.getString(2);
                 objRutaInspeccion.Folio = objCursor.getInt(3);
                 objRutaInspeccion.FechaInicio = objCursor.getString(4);
-                objRutaInspeccion.HoraInicio = " ";
                 objRutaInspeccion.FechaFin = objCursor.getString(5);
-                objRutaInspeccion.HoraFin = " ";
-                objRutaInspeccion.Tiempo = " ";
                 objRutaInspeccion.RecomendacionTecnica = objCursor.getString(6);
                 objRutaInspeccion.SistemaProduccionClave = objCursor.getInt(7);
                 objRutaInspeccion.SistemaProduccionNombre = objCursor.getString(8);
@@ -230,13 +225,6 @@ public class RutaInspeccionDA {
                 objRutaInspeccion.EstadoEnfermedadNombre = objCursor.getString(43);
                 objRutaInspeccion.PotencialRendimientoClave = objCursor.getInt(44);
                 objRutaInspeccion.PotencialRendimientoNombre = objCursor.getString(45);
-                objRutaInspeccion.TipoRiegoClave=0;
-                objRutaInspeccion.TipoRiegoNombre=" ";
-                objRutaInspeccion.Capacidad=0;
-                objRutaInspeccion.TipoRiegoOtro=" ";
-                objRutaInspeccion.RecomendacionClave=0;
-                objRutaInspeccion.RecomendacionNombre=" ";
-                objRutaInspeccion.RecomendacionOtro=" ";
                 objRutaInspeccion.Estatus = objCursor.getString(46);
                 objRutaInspeccion.Uso = objCursor.getString(47);
                 listRutaInspeccion.add(objRutaInspeccion);
@@ -312,6 +300,30 @@ public class RutaInspeccionDA {
     }
 
     //Relacion riego
+    public List<RutaInspeccion> GetAllRelacionRiego() {
+        try {
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT A.USUARCVE,A.CICLOCVE,A.PLANEFEC,A.PLADEFOL,TIRIECVE,RIEGOCAP,RIEGOOTR \n" +
+                    "FROM BATRUINS A INNER JOIN BARRIEGO B ON(A.USUARCVE=B.USUARCVE AND A.CICLOCVE=B.CICLOCVE AND A.PLANEFEC=B.PLANEFEC AND A.PLADEFOL=B.PLADEFOL) " +
+                    "WHERE RUINSSTS=\"E\"");
+            List<RutaInspeccion> listRelacionRiego = new ArrayList<RutaInspeccion>();
+            while (objCursor.moveToNext()) {
+                RutaInspeccion objRutaInspeccion = new RutaInspeccion();
+                objRutaInspeccion.UsuarioClave = objCursor.getInt(0);
+                objRutaInspeccion.CicloClave = objCursor.getInt(1);
+                objRutaInspeccion.Fecha = objCursor.getString(2);
+                objRutaInspeccion.Folio = objCursor.getInt(3);
+                objRutaInspeccion.TipoRiegoClave=objCursor.getInt(4);
+                objRutaInspeccion.Capacidad=objCursor.getInt(5);
+                objRutaInspeccion.TipoRiegoOtro=objCursor.getString(6);
+                listRelacionRiego.add(objRutaInspeccion);
+            }
+            objCursor.close();
+            return listRelacionRiego;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
     public RutaInspeccion GetRelacionRiego(RutaInspeccion objFiltro) {
         try {
             String filtro = ArmaFiltro(objFiltro);
@@ -342,7 +354,7 @@ public class RutaInspeccionDA {
             String filtro = ArmaFiltro(objFiltro);
             Cursor objCursor = objEntLibTools.executeCursor("SELECT USUARCVE,CICLOCVE,PLANEFEC,PLADEFOL,A.TIRIECVE," +
                     "TIRIENOM,RIEGOCAP,RIEGOOTR \n" +
-                    "FROM BARRIEGO A INNER JOIN BACTIRIE B ON (A.TIRIECVE=B.TIRIECVE) "+
+                    "FROM BARRIEGO A INNER JOIN BACTIRIE B ON (A.TIRIECVE=B.TIRIECVE) " +
                     "WHERE " + filtro);
             RutaInspeccion[] listaRutaInspeccion = new RutaInspeccion[objCursor.getCount()];
             int i = 0;
@@ -400,6 +412,29 @@ public class RutaInspeccionDA {
     }
 
     //Relacion recomendacion
+    public List<RutaInspeccion> GetAllRelacionRecomendacion() {
+        try {
+            Cursor objCursor = objEntLibTools.executeCursor("SELECT A.USUARCVE,A.CICLOCVE,A.PLANEFEC,A.PLADEFOL,RECOMCVE,RECOMOTR\n" +
+                    "FROM BATRUINS A INNER JOIN BARRECOM B ON(A.USUARCVE=B.USUARCVE AND A.CICLOCVE=B.CICLOCVE AND A.PLANEFEC=B.PLANEFEC AND A.PLADEFOL=B.PLADEFOL) " +
+                    "WHERE RUINSSTS=\"E\"");
+            List<RutaInspeccion> listRelacionRecomendacion = new ArrayList<RutaInspeccion>();
+            while (objCursor.moveToNext()) {
+                RutaInspeccion objRutaInspeccion = new RutaInspeccion();
+                objRutaInspeccion.UsuarioClave = objCursor.getInt(0);
+                objRutaInspeccion.CicloClave = objCursor.getInt(1);
+                objRutaInspeccion.Fecha = objCursor.getString(2);
+                objRutaInspeccion.Folio = objCursor.getInt(3);
+                objRutaInspeccion.RecomendacionClave=objCursor.getInt(4);
+                objRutaInspeccion.RecomendacionOtro=objCursor.getString(5);
+                listRelacionRecomendacion.add(objRutaInspeccion);
+            }
+            objCursor.close();
+            return listRelacionRecomendacion;
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+
     public RutaInspeccion GetRelacionRecomendacion(RutaInspeccion objFiltro) {
         try {
             String filtro = ArmaFiltro(objFiltro);

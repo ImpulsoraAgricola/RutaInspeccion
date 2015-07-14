@@ -144,7 +144,7 @@ public class Login extends ActionBarActivity {
                 startActivity(i);
                 finish();
             } else {
-                _objComunBP.Mensaje("Error: Usuario incorrecto",Login.this);
+                _objComunBP.Mensaje("Error: Usuario y/o contraseña incorrecto",Login.this);
             }
             loadProgressDialog.dismiss();
         }
@@ -196,8 +196,8 @@ public class Login extends ActionBarActivity {
         final AlertDialog alert = new AlertDialog.Builder(
                 new ContextThemeWrapper(this,android.R.style.Theme_Dialog))
                 .create();
-        alert.setTitle("Mensaje");
-        alert.setMessage("\u00BFDeseas salir de la aplicaci\u00F3n?");
+        alert.setTitle("Rutas de Inspecci\u00F3n");
+        alert.setMessage("\u00BFDeseas salir de la aplicaci\u00d1n?");
         alert.setCancelable(false);
         alert.setIcon(R.drawable.shutdown);
         alert.setCanceledOnTouchOutside(false);
@@ -233,5 +233,31 @@ public class Login extends ActionBarActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        final AlertDialog alert = new AlertDialog.Builder(
+                new ContextThemeWrapper(this, android.R.style.Theme_Dialog))
+                .create();
+        alert.setTitle("Rutas de Inspecci\u00F3n");
+        alert.setMessage("\u00BFDeseas salir de la captura de la ruta de inpecci\u00F3n?");
+        alert.setCancelable(false);
+        alert.setIcon(R.drawable.info);
+        alert.setCanceledOnTouchOutside(false);
+        alert.setButton(DialogInterface.BUTTON_POSITIVE, "Si",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        alert.dismiss();
+                        finish();
+                    }
+                });
+        alert.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        alert.dismiss();
+                    }
+                });
+        alert.show();
     }
 }

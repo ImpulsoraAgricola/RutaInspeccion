@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical|center_horizontal"
             android:text="@string/activity_ruta_inspeccion_title_sDatosGenerales"
-            android:textSize="15dp"
+            android:textSize="20dp"
             android:typeface="sans" />
 
         <LinearLayout
@@ -25,12 +25,14 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_txtFolio"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
+                style="@style/EditTextNormal"
                 android:id="@+id/rutainspeccion_txtFolio"
                 android:layout_width="50dp"
                 android:layout_height="wrap_content"
@@ -45,6 +47,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/EditTextNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_ruta_inspeccion_sCiclo"
@@ -52,6 +55,7 @@
 
             <Spinner
                 android:id="@+id/rutainspeccion_sCiclo"
+                style="@style/Spinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:clickable="false"
@@ -230,7 +234,7 @@
             <Spinner
                 android:id="@+id/rutainspeccion_sSistemaProduccion"
                 android:layout_width="fill_parent"
-                style="@style/spinner_style"
+                style="@style/Spinner"
                 android:layout_height="wrap_content"
                 android:typeface="sans" />
 
@@ -1231,37 +1235,51 @@
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="bottom">
-            <Button
+
+            <ImageButton
                 android:id="@+id/rutainspeccion_btnGuardar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/activity_ruta_inspeccion_btnGuardar" />
-            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/activity_ruta_inspeccion_btnGuardar"
+                android:typeface="sans"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/save"
+                android:layout_weight="0.18" />
+            <ImageButton
                 android:id="@+id/rutainspeccion_btnFotografia"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/activity_ruta_inspeccion_btnFotografia"
+                android:typeface="sans"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/camera"
                 android:visibility="invisible"
-                android:text="@string/activity_ruta_inspeccion_btnFotografia" />
-            <Button
+                android:layout_weight="0.18" />
+            <ImageButton
                 android:id="@+id/rutainspeccion_btnEnviar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/activity_ruta_inspeccion_btnEnviar"
+                android:typeface="sans"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/send"
                 android:visibility="invisible"
-                android:text="@string/activity_ruta_inspeccion_btnEnviar" />
+                android:layout_weight="0.18" />
         </LinearLayout>
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_vertical|center_horizontal">
 
             <ImageView
                 android:id="@+id/imageView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
             </ImageView>
 
         </LinearLayout>

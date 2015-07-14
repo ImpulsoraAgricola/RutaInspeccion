@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:paddingLeft="@dimen/login_padding_right"
     android:paddingRight="@dimen/login_padding_right"
-    android:paddingTop="@dimen/login_vertical_margin"
+    android:paddingTop="@dimen/login_vertical_margin_land"
     android:weightSum="1">
 
     <LinearLayout

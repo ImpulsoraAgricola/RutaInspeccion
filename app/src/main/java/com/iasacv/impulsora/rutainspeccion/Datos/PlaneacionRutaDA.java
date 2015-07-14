@@ -26,12 +26,13 @@ public class PlaneacionRutaDA {
 
     public PlaneacionRutaDA(Context context) {
         objEntLibTools = new EntLibDBTools(context);
-        objImagen = new Bitmap[5];
+        objImagen = new Bitmap[6];
         objImagen[0] = BitmapFactory.decodeResource(context.getResources(), R.drawable.cebada1);
         objImagen[1] = BitmapFactory.decodeResource(context.getResources(), R.drawable.cebada2);
         objImagen[2] = BitmapFactory.decodeResource(context.getResources(), R.drawable.cebada3);
         objImagen[3] = BitmapFactory.decodeResource(context.getResources(), R.drawable.cebada4);
         objImagen[4] = BitmapFactory.decodeResource(context.getResources(), R.drawable.cebada5);
+        objImagen[5] = BitmapFactory.decodeResource(context.getResources(), R.drawable.cebada6);
     }
 
     public String ArmaFiltro(PlaneacionRuta entidad) {
@@ -145,7 +146,7 @@ public class PlaneacionRutaDA {
                         "Folio: " + objCursor.getString(2) + "\nCliente: " + objCursor.getString(5) + "\nProductor: " + objCursor.getString(6) +
                                 "\nPredio: " + objCursor.getString(7) + "\nLote: " + objCursor.getString(8) + "\nTipo de inspecci\u00F3n: " + objCursor.getString(4)));
                 i++;
-                if(i==5)
+                if(i==6)
                     i=0;
             }
             objCursor.close();

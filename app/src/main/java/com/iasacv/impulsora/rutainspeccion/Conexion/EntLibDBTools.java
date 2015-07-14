@@ -1,6 +1,14 @@
 package com.iasacv.impulsora.rutainspeccion.Conexion;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -9,6 +17,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import android.os.Environment;
 
 /**
  * Created by Administrator on 19/06/2015.
@@ -224,6 +233,7 @@ public class EntLibDBTools extends SQLiteOpenHelper {
     //Direccion de la base de datos
     private static String DB_PATH = "/data/data/com.iasacv.impulsora.rutainspeccion/databases/";
     private static String DB_NAME = "COSECHAS";
+    private static File Directory;
     private SQLiteDatabase myDataBase;
     private final Context myContext;
 
@@ -232,36 +242,35 @@ public class EntLibDBTools extends SQLiteOpenHelper {
         this.myContext = context;
     }
 
-    public void CreateDataBase() throws IOException{
+    public void CreateDataBase() throws IOException {
         boolean dbExist = CheckDataBase();
-        if(!dbExist)
-        {
+        if (!dbExist) {
             this.getReadableDatabase();
         }
     }
 
-    public boolean CheckDataBase(){
+    public boolean CheckDataBase() {
         SQLiteDatabase checkDB = null;
-        try{
+        try {
             String myPath = DB_PATH + DB_NAME;
             checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-        }catch(SQLiteException e){
+        } catch (SQLiteException e) {
             //No existe la base de datos
         }
-        if(checkDB != null){
+        if (checkDB != null) {
             checkDB.close();
         }
         return checkDB != null ? true : false;
     }
 
-    public void openDataBase() throws SQLException{
+    public void openDataBase() throws SQLException {
         String myPath = DB_PATH + DB_NAME;
         myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
     }
 
     @Override
     public synchronized void close() {
-        if(myDataBase != null)
+        if (myDataBase != null)
             myDataBase.close();
         super.close();
     }
@@ -296,7 +305,7 @@ public class EntLibDBTools extends SQLiteOpenHelper {
         dropTable();
     }
 
-    public void dropTable(){
+    public void dropTable() {
         myDataBase = this.getReadableDatabase();
         //Se elimina la version anterior de las tablas
         myDataBase.execSQL("DROP TABLE IF EXISTS IGMCICLO");
@@ -351,7 +360,7 @@ public class EntLibDBTools extends SQLiteOpenHelper {
         } catch (Exception e) {
             throw e;
         }
-        return  cursor;
+        return cursor;
     }
 
     public Cursor executeQuery(String query) {
@@ -362,7 +371,7 @@ public class EntLibDBTools extends SQLiteOpenHelper {
         } catch (Exception e) {
             throw e;
         }
-        return  cursor;
+        return cursor;
     }
 
     public void insert(String query) {
@@ -377,6 +386,39 @@ public class EntLibDBTools extends SQLiteOpenHelper {
             myDataBase.close();
         } catch (Exception e) {
             throw e;
+        }
+    }
+
+    public void exportDataBase() {
+        try {
+            final String inFileName = DB_PATH + DB_NAME;
+            File dbFile = new File(inFileName);
+            FileInputStream fis = null;
+            fis = new FileInputStream(dbFile);
+            String backupDBPath = Environment
+                    .getExternalStorageDirectory()
+                    .getAbsolutePath()
+                    + "/RutaInspeccion/BaseDatos";
+            Directory = new File(backupDBPath);
+            if (!Directory.exists())
+                Directory.mkdirs();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+            String currentDateandTime = sdf.format(new Date());
+            String outFileName = backupDBPath + "/"+currentDateandTime+".db";
+            // Open the empty db as the output stream
+            OutputStream output = new FileOutputStream(outFileName);
+            // Transfer bytes from the inputfile to the outputfile
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = fis.read(buffer)) > 0) {
+                output.write(buffer, 0, length);
+            }
+            // Close the streams
+            output.flush();
+            output.close();
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

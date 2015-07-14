@@ -52,7 +52,25 @@ public class WebServiceBP {
 
     public Boolean insertRutaInspeccion(String usuario,RutaInspeccion objRutaInspeccion) throws Exception {
         try {
-            Boolean resul = _objWebServiceDA.insertRutaInspeccion(usuario,objRutaInspeccion);
+            Boolean resul = _objWebServiceDA.insertRutaInspeccion(usuario, objRutaInspeccion);
+            return resul;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public Boolean insertRelacionRecomendacion(String usuario,RutaInspeccion objRutaInspeccion) throws Exception {
+        try {
+            Boolean resul = _objWebServiceDA.insertRelacionRecomendacion(usuario, objRutaInspeccion);
+            return resul;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    public Boolean insertRelacionTipoRiego(String usuario,RutaInspeccion objRutaInspeccion) throws Exception {
+        try {
+            Boolean resul = _objWebServiceDA.insertRelacionTipoRiego(usuario, objRutaInspeccion);
             return resul;
         } catch (Exception e) {
             throw e;

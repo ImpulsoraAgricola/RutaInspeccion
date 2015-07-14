@@ -1,7 +1,9 @@
 package com.iasacv.impulsora.rutainspeccion;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -14,6 +16,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,6 +24,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -30,6 +34,7 @@ import android.widget.Toast;
 import com.iasacv.impulsora.rutainspeccion.Conexion.GPSTracker;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Ciclo;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Combo;
+import com.iasacv.impulsora.rutainspeccion.Modelo.Item;
 import com.iasacv.impulsora.rutainspeccion.Modelo.PlaneacionRuta;
 import com.iasacv.impulsora.rutainspeccion.Modelo.RutaInspeccion;
 import com.iasacv.impulsora.rutainspeccion.Modelo.Usuario;
@@ -129,15 +134,16 @@ public class InspeccionCampo extends ActionBarActivity {
     private Spinner rutainspeccion_sEstadoEnfermedad;
     //Potencial de rendimiento
     private Spinner rutainspeccion_sPotencial;
-    private Button rutainspeccion_btnGuardar;
-    private Button rutainspeccion_btnFotografia;
-    private Button rutainspeccion_btnEnviar;
+    private ImageButton rutainspeccion_btnGuardar;
+    private ImageButton rutainspeccion_btnFotografia;
+    private ImageButton rutainspeccion_btnEnviar;
 
     //Variables clases
     WebServiceBP _objWebServiceBP;
     CatalogosBP _objCatalogosBP;
     RutaInspeccionBP _objRutaInspeccionBP;
     ComunBP _objComunBP;
+    GPSTracker gpsTracker;
 
     //Variables objetos
     Usuario _objUsuario;
@@ -176,6 +182,7 @@ public class InspeccionCampo extends ActionBarActivity {
         _objWebServiceBP = new WebServiceBP(this);
         _objCatalogosBP = new CatalogosBP(this);
         _objRutaInspeccionBP = new RutaInspeccionBP(this);
+        gpsTracker = new GPSTracker(InspeccionCampo.this);
         _objComunBP = new ComunBP(this);
         _objUsuario = new Usuario();
         _objCiclo = new Ciclo();
@@ -246,68 +253,42 @@ public class InspeccionCampo extends ActionBarActivity {
             rutainspeccion_btnFotografia.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (validar()) {
-                        str_SaveFolderName = Environment
-                                .getExternalStorageDirectory()
-                                .getAbsolutePath()
-                                + "/RutaInspeccion";
-                        str_randomnumber = String.valueOf(nextSessionId());
-                        wallpaperDirectory = new File(str_SaveFolderName);
-                        if (!wallpaperDirectory.exists())
-                            wallpaperDirectory.mkdirs();
-                        str_Camera_Photo_ImageName = str_randomnumber
-                                + ".jpg";
-                        str_Camera_Photo_ImagePath = str_SaveFolderName
-                                + "/" + str_randomnumber + ".jpg";
-                        System.err.println(" str_Camera_Photo_ImagePath  "
-                                + str_Camera_Photo_ImagePath);
-                        f = new File(str_Camera_Photo_ImagePath);
-                        startActivityForResult(new Intent(
-                                        MediaStore.ACTION_IMAGE_CAPTURE).putExtra(
-                                        MediaStore.EXTRA_OUTPUT, Uri.fromFile(f)),
-                                Take_Photo);
-                        System.err.println("f  " + f);
+                    if (gpsTracker.getIsGPSTrackingEnabled()) {
+                        if (validar()) {
+                            str_SaveFolderName = Environment
+                                    .getExternalStorageDirectory()
+                                    .getAbsolutePath()
+                                    + "/RutaInspeccion/Fotografias";
+                            str_randomnumber = String.valueOf(nextSessionId());
+                            wallpaperDirectory = new File(str_SaveFolderName);
+                            if (!wallpaperDirectory.exists())
+                                wallpaperDirectory.mkdirs();
+                            str_Camera_Photo_ImageName = _objRutaInspeccion.UsuarioClave + _objRutaInspeccion.CicloClave +
+                                    _objRutaInspeccion.Fecha +_objRutaInspeccion.Folio+ str_randomnumber
+                                    + ".jpg";
+                            str_Camera_Photo_ImagePath = str_SaveFolderName
+                                    + "/"+ _objRutaInspeccion.UsuarioClave + _objRutaInspeccion.CicloClave +
+                                    _objRutaInspeccion.Fecha +_objRutaInspeccion.Folio+ str_randomnumber + ".jpg";
+                            System.err.println(" str_Camera_Photo_ImagePath  "
+                                    + str_Camera_Photo_ImagePath);
+                            f = new File(str_Camera_Photo_ImagePath);
+                            startActivityForResult(new Intent(
+                                            MediaStore.ACTION_IMAGE_CAPTURE).putExtra(
+                                            MediaStore.EXTRA_OUTPUT, Uri.fromFile(f)),
+                                    Take_Photo);
+                            System.err.println("f  " + f);
+                        }
                     }
+                    else
+                        _objComunBP.Mensaje("Error: Favor de habilitar GPS", InspeccionCampo.this);
                 }
             });
+            rutainspeccion_txtFolio.setFocusable(true);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    /*private class insertRutaInspeccion extends AsyncTask<String, Integer, Boolean> {
-
-        ProgressDialog loadProgressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            loadProgressDialog = ProgressDialog.show(InspeccionCampo.this, "", "Insertando informacion...", true, false);
-        }
-
-        protected Boolean doInBackground(String... params) {
-            boolean result = true;
-            try {
-                result = _objWebServiceBP.insertRutaInspeccion(_objRutaInspeccion);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return result;
-        }
-
-        protected void onPostExecute(Boolean result) {
-            if (result) {
-                Toast toastCorrecto = Toast.makeText(getApplicationContext(),
-                        "La informacion se inserto correctamente!!", Toast.LENGTH_LONG);
-                toastCorrecto.show();
-            } else {
-                Toast toastError = Toast.makeText(getApplicationContext(),
-                        "Error: Se produjo un error al insertar la informacion", Toast.LENGTH_LONG);
-                toastError.show();
-            }
-            loadProgressDialog.dismiss();
-        }
-    }*/
 
     //Llenar objetos
     public RutaInspeccion creaObjeto() throws IOException {
@@ -604,9 +585,9 @@ public class InspeccionCampo extends ActionBarActivity {
         rutainspeccion_sEstadoEnfermedad = (Spinner) findViewById(R.id.rutainspeccion_sEstadoEnfermedad);
         //Potencial de rendimiento
         rutainspeccion_sPotencial = (Spinner) findViewById(R.id.rutainspeccion_sPotencial);
-        rutainspeccion_btnGuardar = (Button) findViewById(R.id.rutainspeccion_btnGuardar);
-        rutainspeccion_btnFotografia = (Button) findViewById(R.id.rutainspeccion_btnFotografia);
-        rutainspeccion_btnEnviar = (Button) findViewById(R.id.rutainspeccion_btnEnviar);
+        rutainspeccion_btnGuardar = (ImageButton) findViewById(R.id.rutainspeccion_btnGuardar);
+        rutainspeccion_btnFotografia = (ImageButton) findViewById(R.id.rutainspeccion_btnFotografia);
+        rutainspeccion_btnEnviar = (ImageButton) findViewById(R.id.rutainspeccion_btnEnviar);
         //Mostrar imagen
         imageView = (ImageView) this.findViewById(R.id.imageView1);
     }
@@ -693,7 +674,7 @@ public class InspeccionCampo extends ActionBarActivity {
         rutainspeccion_btnEnviar.setVisibility(View.INVISIBLE);
     }
 
-    public void bloquearRadioGroup(RadioGroup objRadioGroup){
+    public void bloquearRadioGroup(RadioGroup objRadioGroup) {
         for (int i = 0; i < objRadioGroup.getChildCount(); i++) {
             objRadioGroup.getChildAt(i).setEnabled(false);
         }
@@ -708,7 +689,7 @@ public class InspeccionCampo extends ActionBarActivity {
         rutainspeccion_txtPredio.setText(_objPlaneacionFiltro.PredioNombre);
         rutainspeccion_txtLote.setText(_objPlaneacionFiltro.LoteNombre);
         rutainspeccion_txtFecha.setText(_objPlaneacionFiltro.Fecha);
-        if (_objPlaneacionFiltro.Estatus.equals("G") || _objPlaneacionFiltro.Estatus.equals("E")) {
+        if (_objPlaneacionFiltro.Estatus.equals("G") || _objPlaneacionFiltro.Estatus.equals("E") || _objPlaneacionFiltro.Estatus.equals("F") || _objPlaneacionFiltro.Estatus.equals("R")) {
             cargarInspeccionCampo();
             rutainspeccion_btnFotografia.setVisibility(View.VISIBLE);
         }
@@ -716,7 +697,11 @@ public class InspeccionCampo extends ActionBarActivity {
             rutainspeccion_btnFotografia.setVisibility(View.VISIBLE);
             rutainspeccion_btnEnviar.setVisibility(View.INVISIBLE);
         }
-        if (_objPlaneacionFiltro.Estatus.equals("E")) {
+        if (_objPlaneacionFiltro.Estatus.equals("F")) {
+            rutainspeccion_btnFotografia.setVisibility(View.VISIBLE);
+            rutainspeccion_btnEnviar.setVisibility(View.VISIBLE);
+        }
+        if (_objPlaneacionFiltro.Estatus.equals("E") || _objPlaneacionFiltro.Estatus.equals("R")) {
             bloquearControles();
         }
     }
@@ -1089,25 +1074,34 @@ public class InspeccionCampo extends ActionBarActivity {
     //Crear numero aleatorio
     public String nextSessionId() {
         SecureRandom random = new SecureRandom();
-        return new BigInteger(130, random).toString(32);
+        return new BigInteger(60, random).toString(16);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Take_Photo && resultCode == RESULT_OK) {
-            String filePath = null;
-            filePath = str_Camera_Photo_ImagePath;
-            if (filePath != null) {
-                GPSTracker gpsTracker = new GPSTracker(InspeccionCampo.this);
-                if (gpsTracker.getIsGPSTrackingEnabled()) {
-                    addGeo(gpsTracker.getLatitude(),gpsTracker.getLongitude(),filePath);
+        try {
+            if (requestCode == Take_Photo && resultCode == RESULT_OK) {
+                String filePath = null;
+                filePath = str_Camera_Photo_ImagePath;
+                if (filePath != null) {
+                    if (gpsTracker.getIsGPSTrackingEnabled()) {
+                        addGeo(gpsTracker.getLatitude(), gpsTracker.getLongitude(), filePath);
+                    }
+                    Bitmap faceView = (new_decode(new File(filePath)));
+                    imageView.setImageBitmap(faceView);
+                    RutaInspeccion objRutaInspeccion = null;
+                    objRutaInspeccion = creaObjeto();
+                    objRutaInspeccion.Estatus = "F";
+                    boolean resul = _objRutaInspeccionBP.UpdateRutaInspeccion(objRutaInspeccion);
+                    getPreferences();
+                    _objPlaneacionRuta.Estatus = "F";
+                    resul = _objRutaInspeccionBP.UpdatePlaneacionRutaEstatus(_objPlaneacionRuta);
+                    rutainspeccion_btnEnviar.setVisibility(View.VISIBLE);
+                } else {
+                    bitmap = null;
                 }
-                Bitmap faceView = (new_decode(new File(
-                        filePath)));
-                imageView.setImageBitmap(faceView);
-                rutainspeccion_btnEnviar.setVisibility(View.VISIBLE);
-            } else {
-                bitmap = null;
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -1201,5 +1195,31 @@ public class InspeccionCampo extends ActionBarActivity {
         } catch (IOException e) {
             Log.e("PictureActivity", e.getLocalizedMessage());
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+            final AlertDialog alert = new AlertDialog.Builder(
+                    new ContextThemeWrapper(this, android.R.style.Theme_Dialog))
+                    .create();
+            alert.setTitle("Mensaje");
+            alert.setMessage("\u00BFDeseas salir de la captura de la ruta de inpecci\u00F3n?");
+            alert.setCancelable(false);
+            alert.setIcon(R.drawable.info);
+            alert.setCanceledOnTouchOutside(false);
+            alert.setButton(DialogInterface.BUTTON_POSITIVE, "Si",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            alert.dismiss();
+                            finish();
+                        }
+                    });
+            alert.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            alert.dismiss();
+                        }
+                    });
+            alert.show();
     }
 }
