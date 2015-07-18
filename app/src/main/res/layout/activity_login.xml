@@ -50,6 +50,6 @@
             android:layout_height="78dp"
             android:text="@string/activity_login_btnLogin"
             android:layout_gravity="center_horizontal"
-            android:background="@mipmap/login" />
+            android:background="@drawable/contacts" />
     </LinearLayout>
 </LinearLayout>

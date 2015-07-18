@@ -5,4 +5,5 @@
     <color name="primary_dark">#5D4037</color>
     <color name="textColor">#000000</color>
     <color name="textColorAlert">#ffff1109</color>
+    <color name="fondo">#3812d536</color>
 </resources>

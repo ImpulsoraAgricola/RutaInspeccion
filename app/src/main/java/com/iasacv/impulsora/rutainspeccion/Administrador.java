@@ -1,6 +1,5 @@
 package com.iasacv.impulsora.rutainspeccion;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -9,12 +8,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
+import android.provider.Settings;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.ContextThemeWrapper;
@@ -26,6 +27,7 @@ import android.widget.DatePicker;
 import android.widget.GridView;
 
 import com.iasacv.impulsora.rutainspeccion.Adaptador.CustomGridViewAdapter;
+import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
 import com.iasacv.impulsora.rutainspeccion.Conexion.GPSTracker;
 import com.iasacv.impulsora.rutainspeccion.Modelo.*;
 import com.iasacv.impulsora.rutainspeccion.Negocios.CatalogosBP;
@@ -34,21 +36,10 @@ import com.iasacv.impulsora.rutainspeccion.Negocios.RutaInspeccionBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.WebServiceBP;
 import com.iasacv.impulsora.rutainspeccion.Servicios.WebServicePlaneacion;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 /**
  * Created by Administrator on 28/06/2015.
@@ -61,21 +52,24 @@ public class Administrador extends ActionBarActivity {
     RutaInspeccionBP _objRutaInspeccionBP;
     WebServiceBP _objWebServiceBP;
     Usuario _objUsuario;
+    EntLibDBTools _objEntLibDBTools;
+    GPSTracker gpsTracker;
 
     GridView gridView;
     ArrayList<Item> listaRutaInspeccion;
     CustomGridViewAdapter customGridAdapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
-    SimpleDateFormat formatFecha;
-    String currentDate;
 
     Intent intent;
     MyResultReceiver resultReceiver;
+    ProgressDialog loadProgressDialog;
 
     private String mYear;
     private String mMonth;
     private String mDay;
     static final int DATE_DIALOG_ID = 0;
+    public static boolean flagStart = false;
+    public static boolean flagDate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,14 +80,19 @@ public class Administrador extends ActionBarActivity {
             _objComunBP = new ComunBP(Administrador.this);
             _objRutaInspeccionBP = new RutaInspeccionBP(Administrador.this);
             _objWebServiceBP = new WebServiceBP(Administrador.this);
-
+            _objEntLibDBTools = new EntLibDBTools(Administrador.this);
             gridView = (GridView) findViewById(R.id.gridView);
 
             //Obtener usuario
             getPreferences();
 
-            //Llenar grid
-            getPlaneacionRuta();
+            if (!flagStart) {
+                flagStart = true;
+                //Llenar grid
+                getPlaneacionRuta();
+            }
+            else
+                refresh();
 
             //Iniciar servicio
             callService();
@@ -104,10 +103,14 @@ public class Administrador extends ActionBarActivity {
                 @Override
                 public void onRefresh() {
                     try {
+                        Calendar c = Calendar.getInstance();
+                        mYear = String.valueOf(c.get(Calendar.YEAR));
+                        mMonth = String.valueOf(c.get(Calendar.MONTH));
+                        mDay = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
                         getPlaneacionRuta();
                         mSwipeRefreshLayout.setRefreshing(false);
                     } catch (Exception e) {
-                        _objComunBP.Mensaje(e.toString(), Administrador.this);
+                        e.printStackTrace();
                     }
                 }
             });
@@ -120,27 +123,25 @@ public class Administrador extends ActionBarActivity {
                         Item objItem = listaRutaInspeccion.get(position);
                         RutaInspeccion objRutaInspeccion = creaObjeto(objItem);
                         RutaInspeccion objTemp = _objRutaInspeccionBP.GetRutaInspeccionCabecero(objRutaInspeccion);
-                        if(objTemp.Estatus!= null) {
-                            if (objTemp.Estatus.equals("G") || objTemp.Estatus.equals("E") || objTemp.Estatus.equals("F")|| objTemp.Estatus.equals("R"))
+                        if (objTemp.Estatus != null) {
+                            if (objTemp.Estatus.equals("G") || objTemp.Estatus.equals("E") || objTemp.Estatus.equals("F") || objTemp.Estatus.equals("R"))
                                 iniciarRutaInspeccion(objItem);
                             else
                                 confirmDialogStart(objItem);
-                        }
-                        else
+                        } else
                             confirmDialogStart(objItem);
                     } catch (Exception e) {
-                        _objComunBP.Mensaje(e.toString(), Administrador.this);
+                        e.printStackTrace();
                     }
                 }
             });
         } catch (Exception e) {
-            _objComunBP.Mensaje(e.toString(), Administrador.this);
+            e.printStackTrace();
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_administrador, menu);
         return true;
     }
@@ -151,11 +152,20 @@ public class Administrador extends ActionBarActivity {
             case R.id.menu_administrador_actualizar:
                 getPlaneacionRuta();
                 return true;
+            case R.id.menu_administrador_respaldo:
+                try {
+                    _objEntLibDBTools.exportDataBase();
+                    _objComunBP.Mensaje("Se ha realizado el respaldo correctamente", Administrador.this);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return true;
             case R.id.menu_administrador_salir:
                 confirmDialogExit();
                 return true;
             case R.id.search:
                 showDialog(DATE_DIALOG_ID);
+                flagDate = true;
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -202,13 +212,12 @@ public class Administrador extends ActionBarActivity {
                 getPlaneacionRuta jobGetPlaneacionRuta = new getPlaneacionRuta();
                 jobGetPlaneacionRuta.execute();
             } else {
-                formatFecha = new SimpleDateFormat("yyyy-MM-dd");
-                currentDate = formatFecha.format(new Date());
-                refresh(currentDate);
+                refresh();
                 _objComunBP.Mensaje("Se debe contar con una conexi\u00F3n a Internet", Administrador.this);
             }
+            flagDate = false;
         } catch (Exception e) {
-            _objComunBP.Mensaje(e.toString(), Administrador.this);
+            e.printStackTrace();
         }
     }
 
@@ -237,9 +246,7 @@ public class Administrador extends ActionBarActivity {
             if (!result) {
                 _objComunBP.Mensaje("Error: La informaci\u00F3n no se pudo actualizar. Favor de revisar la hora de su dispositivo", Administrador.this);
             } else {
-                formatFecha = new SimpleDateFormat("yyyy-MM-dd");
-                currentDate = formatFecha.format(new Date());
-                refresh(currentDate);
+                refresh();
             }
             loadProgressDialog.dismiss();
         }
@@ -259,8 +266,14 @@ public class Administrador extends ActionBarActivity {
         return isConnected;
     }
 
-    public void refresh(String fecha) {
+    public void refresh() {
         try {
+            String fecha;
+            if (flagDate == false) {
+                SimpleDateFormat formatFecha = new SimpleDateFormat("yyyy-MM-dd");
+                fecha = formatFecha.format(new Date());
+            } else
+                fecha = mYear + "-" + (mMonth) + "-" + mDay;
             listaRutaInspeccion = _objRutaInspeccionBP.GetAllPlaneacionRutaImage(_objUsuario.Clave, fecha);
             customGridAdapter = new CustomGridViewAdapter(this, R.layout.activity_gridrow, listaRutaInspeccion);
             gridView = (GridView) findViewById(R.id.gridView);
@@ -287,9 +300,7 @@ public class Administrador extends ActionBarActivity {
 
     class UpdateUI implements Runnable {
         public UpdateUI() {
-            formatFecha = new SimpleDateFormat("yyyy-MM-dd");
-            currentDate = formatFecha.format(new Date());
-            refresh(currentDate);
+            refresh();
         }
 
         public void run() {
@@ -316,7 +327,7 @@ public class Administrador extends ActionBarActivity {
     }
 
     private void updateDisplay() {
-        refresh(mYear + "-" + (mMonth) + "-" + mDay);
+        refresh();
     }
 
     private DatePickerDialog.OnDateSetListener mDateSetListener =
@@ -359,11 +370,11 @@ public class Administrador extends ActionBarActivity {
         alert.setCanceledOnTouchOutside(false);
         alert.setButton(DialogInterface.BUTTON_POSITIVE, "Si",
                 new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(final DialogInterface dialog, int which) {
                         alert.dismiss();
                         try {
                             //Obtener localizacion
-                            GPSTracker gpsTracker = new GPSTracker(Administrador.this);
+                            gpsTracker = new GPSTracker(Administrador.this);
                             if (gpsTracker.getIsGPSTrackingEnabled()) {
                                 //Llenar objeto filtro
                                 PlaneacionRuta objFiltro = new PlaneacionRuta();
@@ -377,7 +388,11 @@ public class Administrador extends ActionBarActivity {
                                     RutaInspeccion objRutaInspeccion = creaObjeto(objItem);
                                     RutaInspeccion objTemp = _objRutaInspeccionBP.GetRutaInspeccionCabecero(objRutaInspeccion);
                                     if (objTemp.Folio == 0) {
-                                        _objRutaInspeccionBP.InsertRutaInspeccion(objRutaInspeccion);
+                                        try {
+                                            _objRutaInspeccionBP.InsertRutaInspeccion(objRutaInspeccion);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
                                         iniciarRutaInspeccion(objItem);
                                     } else if (objTemp.Estatus.equals("O")) {
                                         confirmInicio(objItem);
@@ -385,9 +400,34 @@ public class Administrador extends ActionBarActivity {
                                 } else {
                                     _objComunBP.Mensaje("Error: Su localizacion para registrar la ruta de inspeccion no es correcta", Administrador.this);
                                 }
+                                gpsTracker.stopUsingGPS();
                             } else {
-                                _objComunBP.Mensaje("Error: Favor de habilitar GPS", Administrador.this);
+                                final AlertDialog alert = new AlertDialog.Builder(
+                                        new ContextThemeWrapper(Administrador.this, android.R.style.Theme_Dialog))
+                                        .create();
+                                alert.setTitle("Mensaje");
+                                alert.setMessage("El GPS no esta activado. \u00BFDesea activarlo?");
+                                alert.setCancelable(false);
+                                alert.setIcon(R.drawable.info);
+                                alert.setCanceledOnTouchOutside(false);
+                                alert.setButton(DialogInterface.BUTTON_POSITIVE, "Si",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                alert.dismiss();
+                                                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                Administrador.this.startActivity(intent);
+                                            }
+                                        });
+                                alert.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                alert.dismiss();
+                                            }
+                                        });
+                                alert.show();
                             }
+                            loadProgressDialog.dismiss();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

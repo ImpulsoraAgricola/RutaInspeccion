@@ -32,6 +32,7 @@ public class MalezaDA {
             while (objCursor.moveToNext()) {
                 listMaleza.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }
+            listMaleza.add(new Combo("Ninguna", -1));
             return listMaleza;
         } catch (SQLException e) {
             throw e;

@@ -217,6 +217,10 @@
                 android:text="@string/activity_rutainspeccion_rNo" />
         </RadioGroup>
 
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="30dp"/>
+
         <TextView
             style="?android:attr/listSeparatorTextViewStyle"
             android:layout_width="match_parent"
@@ -660,7 +664,7 @@
                 <EditText
                     android:id="@+id/rutainspeccion_txtRecomendacionOtro"
                     style="@style/EditTextRespuesta"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:inputType="text"
@@ -1287,6 +1291,7 @@
 
             <Spinner
                 android:id="@+id/rutainspeccion_sEstadoEnfermedad"
+                style="@style/Spinner"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:typeface="sans" />
@@ -1315,6 +1320,32 @@
                 android:typeface="sans" />
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/EditTextNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/activity_ruta_inspeccion_comentario"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/rutainspeccion_txtComentario"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top|left"
+                android:inputType="textMultiLine"
+                android:lines="4"
+                android:maxLines="10"
+                android:minLines="4"
+                android:scrollbars="vertical" />
+        </LinearLayout>
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="30dp"/>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -1324,16 +1355,16 @@
 
             <ImageButton
                 android:id="@+id/rutainspeccion_btnGuardar"
-                android:layout_width="78dp"
-                android:layout_height="78dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:background="@drawable/save"
                 android:text="@string/activity_ruta_inspeccion_btnGuardar"
                 android:typeface="sans" />
 
             <ImageButton
                 android:id="@+id/rutainspeccion_btnFotografia"
-                android:layout_width="78dp"
-                android:layout_height="78dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:background="@drawable/camera"
                 android:text="@string/activity_ruta_inspeccion_btnFotografia"
                 android:typeface="sans"
@@ -1341,13 +1372,17 @@
 
             <ImageButton
                 android:id="@+id/rutainspeccion_btnEnviar"
-                android:layout_width="78dp"
-                android:layout_height="78dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:background="@drawable/send"
                 android:text="@string/activity_ruta_inspeccion_btnEnviar"
                 android:typeface="sans"
                 android:visibility="invisible" />
         </LinearLayout>
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="30dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -1358,6 +1393,7 @@
             <ImageView
                 android:id="@+id/imageView1"
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="match_parent"></ImageView>
 
         </LinearLayout>

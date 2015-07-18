@@ -47,9 +47,9 @@ public class WebServicePlaneacion extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
-            _objWebServiceBP = new WebServiceBP(this);
-            _objRutaInspeccionDA = new RutaInspeccionDA(this);
-            _objEntLibDBTools = new EntLibDBTools(this);
+            _objWebServiceBP = new WebServiceBP(WebServicePlaneacion.this);
+            _objRutaInspeccionDA = new RutaInspeccionDA(WebServicePlaneacion.this);
+            _objEntLibDBTools = new EntLibDBTools(WebServicePlaneacion.this);
             resultReceiver = intent.getParcelableExtra("receiver");
             getValues(intent);
             timerTask = new MyTimerTask();

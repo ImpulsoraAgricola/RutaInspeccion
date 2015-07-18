@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.iasacv.impulsora.rutainspeccion" >
+    package="com.iasacv.impulsora.rutainspeccion">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -16,11 +16,13 @@
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".Login"
-            android:noHistory="true"
-            android:label="@string/title_activity_login" >
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/app_name"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -35,6 +37,7 @@
         </activity>
         <activity
             android:name=".DiagnosticoCultivo"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/title_activity_diagnostico_cultivo">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -42,11 +45,13 @@
         </activity>
         <activity
             android:name=".InspeccionCampo"
-            android:label="@string/title_activity_diagnostico_cultivo">
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/title_activity_inspeccion_campo">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <service android:name=".Servicios.WebServicePlaneacion"></service>
     </application>
 

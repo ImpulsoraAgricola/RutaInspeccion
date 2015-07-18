@@ -68,6 +68,7 @@ public class RutaInspeccion implements KvmSerializable{
     public int RecomendacionClave;
     public String RecomendacionNombre;
     public String RecomendacionOtro;
+    public String Comentario;
     public String Estatus;
     public String Uso;
 
@@ -192,8 +193,10 @@ public class RutaInspeccion implements KvmSerializable{
             case 57:
                 return RecomendacionOtro;
             case 58:
-                return Estatus;
+                return Comentario;
             case 59:
+                return Estatus;
+            case 60:
                 return Uso;
         }
         return null;
@@ -201,7 +204,7 @@ public class RutaInspeccion implements KvmSerializable{
 
     @Override
     public int getPropertyCount() {
-        return 60;
+        return 61;
     }
 
     @Override
@@ -442,9 +445,13 @@ public class RutaInspeccion implements KvmSerializable{
                 break;
             case 58:
                 info.type = PropertyInfo.STRING_CLASS;
-                info.name = "Estatus";
+                info.name = "Comentario";
                 break;
             case 59:
+                info.type = PropertyInfo.STRING_CLASS;
+                info.name = "Estatus";
+                break;
+            case 60:
                 info.type = PropertyInfo.STRING_CLASS;
                 info.name = "Uso";
                 break;
@@ -460,135 +467,180 @@ public class RutaInspeccion implements KvmSerializable{
                 UsuarioClave = Integer.parseInt(val.toString());
                 break;
             case 1:
-                CicloClave = Integer.parseInt(val.toString());
+                UsuarioNombre = val.toString();
                 break;
             case 2:
-                Fecha = val.toString();
+                CicloClave = Integer.parseInt(val.toString());
                 break;
             case 3:
-                Folio = Integer.parseInt(val.toString());
+                CicloNombre = val.toString();
                 break;
             case 4:
-                FechaInicio = val.toString();
+                Fecha = val.toString();
                 break;
             case 5:
-                HoraInicio = val.toString();
+                Folio = Integer.parseInt(val.toString());
                 break;
             case 6:
-                FechaFin = val.toString();
+                FechaInicio = val.toString();
                 break;
             case 7:
-                HoraFin = val.toString();
+                HoraInicio = val.toString();
                 break;
             case 8:
-                Tiempo = val.toString();
+                FechaFin = val.toString();
                 break;
             case 9:
-                RecomendacionTecnica = val.toString();
+                HoraFin = val.toString();
                 break;
             case 10:
-                SistemaProduccionClave = Integer.parseInt(val.toString());
+                Tiempo = val.toString();
                 break;
             case 11:
-                ArregloTopologicoClave = Integer.parseInt(val.toString());
+                RecomendacionTecnica = val.toString();
                 break;
             case 12:
-                ProfundidadSiembra = val.toString();
+                SistemaProduccionClave = Integer.parseInt(val.toString());
                 break;
             case 13:
-                ProfundidadSurco = val.toString();
-                break;
+                SistemaProduccionNombre = val.toString();
             case 14:
-                ManejoAdecuado = val.toString();
+                ArregloTopologicoClave = Integer.parseInt(val.toString());
                 break;
             case 15:
-                EtapaFenologicaClave = Integer.parseInt(val.toString());
-                break;
+                ArregloTopologicoNombre = val.toString();
             case 16:
-                Exposicion = val.toString();
+                ProfundidadSiembra = val.toString();
                 break;
             case 17:
-                CondicionDesarrolloClave = Integer.parseInt(val.toString());
+                ProfundidadSurco = val.toString();
                 break;
             case 18:
-                OrdenCorrecto = val.toString();
+                ManejoAdecuado = val.toString();
                 break;
             case 19:
-                RegulaPh = val.toString();
+                EtapaFenologicaClave = Integer.parseInt(val.toString());
                 break;
             case 20:
-                UsoAdecuado = val.toString();
+                EtapaFenologicaNombre = val.toString();
                 break;
             case 21:
-                HoraAplicacion = val.toString();
+                Exposicion = val.toString();
                 break;
             case 22:
-                AguaCanal = val.toString();
+                CondicionDesarrolloClave = Integer.parseInt(val.toString());
                 break;
             case 23:
-                Inundacion = val.toString();
+                CondicionDesarrolloNombre = val.toString();
                 break;
             case 24:
-                BajaPoblacion = val.toString();
+                OrdenCorrecto = val.toString();
                 break;
             case 25:
-                AplicacionNutrientes = val.toString();
+                RegulaPh = val.toString();
                 break;
             case 26:
-                AlteracionCiclo = val.toString();
+                UsoAdecuado = val.toString();
                 break;
             case 27:
-                AplicacionAgroquimicos = val.toString();
+                HoraAplicacion = val.toString();
                 break;
             case 28:
-                AltasTemperaturas = val.toString();
+                AguaCanal = val.toString();
                 break;
             case 29:
-                Fito = val.toString();
+                Inundacion = val.toString();
                 break;
             case 30:
-                PlagasMalControladas = val.toString();
+                BajaPoblacion = val.toString();
                 break;
             case 31:
-                MalezaClave = Integer.parseInt(val.toString());
+                AplicacionNutrientes = val.toString();
                 break;
             case 32:
-                EstadoMalezaClave = Integer.parseInt(val.toString());
+                AlteracionCiclo = val.toString();
                 break;
             case 33:
-                PlagaClave = Integer.parseInt(val.toString());
+                AplicacionAgroquimicos = val.toString();
                 break;
             case 34:
-                EstadoPlagaClave = Integer.parseInt(val.toString());
+                AltasTemperaturas = val.toString();
                 break;
             case 35:
-                EnfermedadClave = Integer.parseInt(val.toString());
+                Fito = val.toString();
                 break;
             case 36:
-                EstadoEnfermedadClave = Integer.parseInt(val.toString());
+                PlagasMalControladas = val.toString();
                 break;
             case 37:
-                PotencialRendimientoClave = Integer.parseInt(val.toString());
+                MalezaClave = Integer.parseInt(val.toString());
                 break;
             case 38:
-                TipoRiegoClave = Integer.parseInt(val.toString());
+                MalezaNombre = val.toString();
                 break;
             case 39:
-                Capacidad = Integer.parseInt(val.toString());
+                EstadoMalezaClave = Integer.parseInt(val.toString());
                 break;
             case 40:
-                TipoRiegoOtro = val.toString();
+                EstadoMalezaNombre = val.toString();
                 break;
             case 41:
-                RecomendacionClave = Integer.parseInt(val.toString());
+                PlagaClave = Integer.parseInt(val.toString());
                 break;
             case 42:
-                RecomendacionOtro = val.toString();
+                PlagaNombre = val.toString();
                 break;
             case 43:
-                Estatus = val.toString();
+                EstadoPlagaClave = Integer.parseInt(val.toString());
                 break;
             case 44:
+                EstadoPlagaNombre = val.toString();
+                break;
+            case 45:
+                EnfermedadClave = Integer.parseInt(val.toString());
+                break;
+            case 46:
+                EnfermedadNombre = val.toString();
+                break;
+            case 47:
+                EstadoEnfermedadClave = Integer.parseInt(val.toString());
+                break;
+            case 48:
+                EstadoEnfermedadNombre = val.toString();
+                break;
+            case 49:
+                PotencialRendimientoClave = Integer.parseInt(val.toString());
+                break;
+            case 50:
+                PotencialRendimientoNombre = val.toString();
+                break;
+            case 51:
+                TipoRiegoClave = Integer.parseInt(val.toString());
+                break;
+            case 52:
+                TipoRiegoNombre = val.toString();
+                break;
+            case 53:
+                Capacidad = Integer.parseInt(val.toString());
+                break;
+            case 54:
+                TipoRiegoOtro = val.toString();
+                break;
+            case 55:
+                RecomendacionClave = Integer.parseInt(val.toString());
+                break;
+            case 56:
+                RecomendacionNombre = val.toString();
+                break;
+            case 57:
+                RecomendacionOtro = val.toString();
+                break;
+            case 58:
+                Comentario = val.toString();
+            case 59:
+                Estatus = val.toString();
+                break;
+            case 60:
                 Uso = val.toString();
                 break;
             default:

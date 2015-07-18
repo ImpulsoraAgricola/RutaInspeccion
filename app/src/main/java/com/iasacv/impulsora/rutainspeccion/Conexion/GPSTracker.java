@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -28,9 +29,6 @@ public class GPSTracker extends Service implements LocationListener {
 
     // flag for GPS Status
     boolean isGPSEnabled = false;
-
-    // flag for network status
-    boolean isNetworkEnabled = false;
 
     // flag for GPS Tracking is enabled
     boolean isGPSTrackingEnabled = false;
@@ -63,15 +61,11 @@ public class GPSTracker extends Service implements LocationListener {
      * Try to get my current location by GPS or Network Provider
      */
     public void getLocation() {
-
         try {
             locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
 
             //getting GPS status
             isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-            //getting network status
-            isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
             // Try to get location if you GPS Service is enabled
             if (isGPSEnabled) {
@@ -87,18 +81,6 @@ public class GPSTracker extends Service implements LocationListener {
 
                 provider_info = LocationManager.GPS_PROVIDER;
 
-            } else if (isNetworkEnabled) { // Try to get location if you Network Service is enabled
-                this.isGPSTrackingEnabled = true;
-
-                Log.d(TAG, "Application use Network State to get GPS coordinates");
-
-                /*
-                 * This provider determines location based on
-                 * availability of cell tower and WiFi access points. Results are retrieved
-                 * by means of a network lookup.
-                 */
-                provider_info = LocationManager.NETWORK_PROVIDER;
-
             }
 
             // Application can use GPS or Network Provider
@@ -113,7 +95,7 @@ public class GPSTracker extends Service implements LocationListener {
                 if (locationManager != null) {
                     while (location == null) {
                         location = locationManager.getLastKnownLocation(provider_info);
-                        Thread.sleep(5000);
+                        Thread.sleep(1000);
                     }
                     updateGPSCoordinates();
                 }
@@ -287,6 +269,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public void onProviderDisabled(String provider) {
+        stopUsingGPS();
     }
 
     @Override

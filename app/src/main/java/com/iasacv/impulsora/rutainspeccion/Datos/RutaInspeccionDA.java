@@ -89,7 +89,7 @@ public class RutaInspeccionDA {
                     "RUINSREC,A.SIPROCVE,SIPRONOM,A.ARTOPCVE,ARTOPNOM,RUINSSIA,RUINSSUA,RUINSMAN,A.ETAFECVE,ETAFENOM," +
                     "RUINSEXP,A.CONDICVE,CONDINOM,RUINSORD,RUINSREG,RUINSUSA,RUINSHOR,RUINSAGU,RUINSINU,RUINSPOB,RUINSPRO,RUINSALT," +
                     "RUINSAPL,RUINSTEM,RUINSFIT,RUINSPLA,A.MALEZCVE,MALEZNOM,A.ESTMACVE,ESTMANOM,A.PLAGACVE,PLAGANOM,A.ESTPLCVE," +
-                    "ESTPLNOM,A.ENFERCVE,ENFERNOM,A.ESTENCVE,ESTENNOM,A.POTRECVE,POTRENOM,RUINSSTS,RUINSUSO\n" +
+                    "ESTPLNOM,A.ENFERCVE,ENFERNOM,A.ESTENCVE,ESTENNOM,A.POTRECVE,POTRENOM,RUINSCOM,RUINSSTS,RUINSUSO\n" +
                     "FROM BATRUINS A LEFT JOIN BACSIPRO B ON (A.SIPROCVE=B.SIPROCVE)\n" +
                     "LEFT JOIN BACARTOP C ON (A.ARTOPCVE=C.ARTOPCVE)\n" +
                     "LEFT JOIN BACETAFE D ON (A.ETAFECVE=D.ETAFECVE)\n" +
@@ -147,8 +147,9 @@ public class RutaInspeccionDA {
                 objRutaInspeccion.EstadoEnfermedadNombre = objCursor.getString(41);
                 objRutaInspeccion.PotencialRendimientoClave = objCursor.getInt(42);
                 objRutaInspeccion.PotencialRendimientoNombre = objCursor.getString(43);
-                objRutaInspeccion.Estatus = objCursor.getString(44);
-                objRutaInspeccion.Uso = objCursor.getString(45);
+                objRutaInspeccion.Comentario = objCursor.getString(44);
+                objRutaInspeccion.Estatus = objCursor.getString(45);
+                objRutaInspeccion.Uso = objCursor.getString(46);
             }
             objCursor.close();
             return objRutaInspeccion;
@@ -160,12 +161,12 @@ public class RutaInspeccionDA {
     public List<RutaInspeccion> GetAllRutaInspeccion() {
         try {
             Cursor objCursor = objEntLibTools.executeCursor("SELECT USUARCVE,CICLOCVE,PLANEFEC,PLADEFOL,RUINSFEI,RUINSFEF," +
-                    "IFNULL(RUINSREC,'V') RUINSREC,A.SIPROCVE,SIPRONOM,A.ARTOPCVE,ARTOPNOM,RUINSSIA,RUINSSUA,RUINSMAN,A.ETAFECVE,ETAFENOM," +
-                    "IFNULL(RUINSEXP,\"V\") RUINSEXP,A.CONDICVE,CONDINOM,IFNULL(RUINSORD,\"V\") RUINSORD,IFNULL(RUINSREG,\"V\") RUINSREG,IFNULL(RUINSUSA,\"V\") RUINSUSA," +
-                    "IFNULL(RUINSHOR,\"V\") RUINSHOR,IFNULL(RUINSAGU,\"V\") RUINSAGU,RUINSINU,RUINSPOB,IFNULL(RUINSPRO,\"V\") RUINSPRO,IFNULL(RUINSALT,\"V\") RUINSALT," +
-                    "IFNULL(RUINSAPL,\"V\") RUINSAPL,IFNULL(RUINSTEM,\"V\") RUINSTEM,IFNULL(RUINSFIT,\"V\") RUINSFIT,IFNULL(RUINSPLA,\"V\") RUINSPLA,A.MALEZCVE,MALEZNOM," +
+                    "RUINSREC,A.SIPROCVE,SIPRONOM,A.ARTOPCVE,ARTOPNOM,RUINSSIA,RUINSSUA,RUINSMAN,A.ETAFECVE,ETAFENOM," +
+                    "RUINSEXP,A.CONDICVE,CONDINOM,RUINSORD,RUINSREG,RUINSUSA," +
+                    "RUINSHOR,RUINSAGU,RUINSINU,RUINSPOB,RUINSPRO,RUINSALT," +
+                    "RUINSAPL,RUINSTEM,RUINSFIT,RUINSPLA,A.MALEZCVE,MALEZNOM," +
                     "A.ESTMACVE,ESTMANOM,A.PLAGACVE,PLAGANOM,A.ESTPLCVE," +
-                    "ESTPLNOM,A.ENFERCVE,ENFERNOM,A.ESTENCVE,ESTENNOM,A.POTRECVE,POTRENOM,RUINSSTS,RUINSUSO\n" +
+                    "ESTPLNOM,A.ENFERCVE,ENFERNOM,A.ESTENCVE,ESTENNOM,A.POTRECVE,POTRENOM,RUINSCOM,RUINSSTS,RUINSUSO\n" +
                     "FROM BATRUINS A LEFT JOIN BACSIPRO B ON (A.SIPROCVE=B.SIPROCVE)\n" +
                     "LEFT JOIN BACARTOP C ON (A.ARTOPCVE=C.ARTOPCVE)\n" +
                     "LEFT JOIN BACETAFE D ON (A.ETAFECVE=D.ETAFECVE)\n" +
@@ -227,8 +228,9 @@ public class RutaInspeccionDA {
                 objRutaInspeccion.EstadoEnfermedadNombre = objCursor.getString(43);
                 objRutaInspeccion.PotencialRendimientoClave = objCursor.getInt(44);
                 objRutaInspeccion.PotencialRendimientoNombre = objCursor.getString(45);
-                objRutaInspeccion.Estatus = objCursor.getString(46);
-                objRutaInspeccion.Uso = objCursor.getString(47);
+                objRutaInspeccion.Comentario = objCursor.getString(46);
+                objRutaInspeccion.Estatus = objCursor.getString(47);
+                objRutaInspeccion.Uso = objCursor.getString(48);
                 listRutaInspeccion.add(objRutaInspeccion);
             }
             objCursor.close();
@@ -288,6 +290,7 @@ public class RutaInspeccionDA {
                     "ENFERCVE="+ objRutaInspeccion.EnfermedadClave + "," +
                     "ESTENCVE="+ objRutaInspeccion.EstadoEnfermedadClave + "," +
                     "POTRECVE="+ objRutaInspeccion.PotencialRendimientoClave + "," +
+                    "RUINSCOM='" + objRutaInspeccion.Comentario + "'," +
                     "RUINSSTS='" + objRutaInspeccion.Estatus + "'," +
                     "RUINSUSO='" + objRutaInspeccion.Uso + "'" +
                     "WHERE USUARCVE="+objRutaInspeccion.UsuarioClave+

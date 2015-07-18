@@ -144,7 +144,7 @@ public class Login extends ActionBarActivity {
                 startActivity(i);
                 finish();
             } else {
-                _objComunBP.Mensaje("Error: Usuario y/o contraseña incorrecto",Login.this);
+                _objComunBP.Mensaje("Error: Usuario y/o contrasena incorrecto",Login.this);
             }
             loadProgressDialog.dismiss();
         }

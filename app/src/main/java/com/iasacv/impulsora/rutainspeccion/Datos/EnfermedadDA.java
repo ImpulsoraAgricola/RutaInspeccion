@@ -32,6 +32,7 @@ public class EnfermedadDA {
             while (objCursor.moveToNext()) {
                 listEnfermedad.add(new Combo(objCursor.getString(1), Integer.parseInt(objCursor.getString(0))));
             }
+            listEnfermedad.add(new Combo("Ninguna", -1));
             return listEnfermedad;
         } catch (SQLException e) {
             throw e;

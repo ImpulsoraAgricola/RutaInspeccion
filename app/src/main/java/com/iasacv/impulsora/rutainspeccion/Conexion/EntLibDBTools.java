@@ -176,28 +176,28 @@ public class EntLibDBTools extends SQLiteOpenHelper {
             "[PLADEFOL] INTEGER  NOT NULL,\n" +
             "[RUINSFEI] DATETIME  NOT NULL,\n" +
             "[RUINSFEF] DATETIME  NULL,\n" +
-            "[RUINSREC] VARCHAR(1)  NULL,\n" +
+            "[RUINSREC] VARCHAR(1) NULL,\n" +
             "[SIPROCVE] INTEGER  NULL,\n" +
             "[ARTOPCVE] INTEGER  NULL,\n" +
             "[RUINSSIA] VARCHAR(1)  NULL,\n" +
             "[RUINSSUA] VARCHAR(1)  NULL,\n" +
             "[RUINSMAN] VARCHAR(1)  NULL,\n" +
             "[ETAFECVE] INTEGER  NULL,\n" +
-            "[RUINSEXP] VARCHAR(1)  NULL,\n" +
+            "[RUINSEXP] VARCHAR(1) NULL,\n" +
             "[CONDICVE] INTEGER  NULL,\n" +
-            "[RUINSORD] VARCHAR(1)  NULL,\n" +
-            "[RUINSREG] VARCHAR(1)  NULL,\n" +
-            "[RUINSUSA] VARCHAR(1)  NULL,\n" +
-            "[RUINSHOR] VARCHAR(1)  NULL,\n" +
-            "[RUINSAGU] VARCHAR(1)  NULL,\n" +
+            "[RUINSORD] VARCHAR(1) NULL,\n" +
+            "[RUINSREG] VARCHAR(1) NULL,\n" +
+            "[RUINSUSA] VARCHAR(1) NULL,\n" +
+            "[RUINSHOR] VARCHAR(1) NULL,\n" +
+            "[RUINSAGU] VARCHAR(1) NULL,\n" +
             "[RUINSINU] VARCHAR(1)  NULL,\n" +
             "[RUINSPOB] VARCHAR(1)  NULL,\n" +
-            "[RUINSPRO] VARCHAR(1)  NULL,\n" +
-            "[RUINSALT] VARCHAR(1)  NULL,\n" +
-            "[RUINSAPL] VARCHAR(1)  NULL,\n" +
-            "[RUINSTEM] VARCHAR(1)  NULL,\n" +
-            "[RUINSFIT] VARCHAR(1)  NULL,\n" +
-            "[RUINSPLA] VARCHAR(1)  NULL,\n" +
+            "[RUINSPRO] VARCHAR(1) NULL,\n" +
+            "[RUINSALT] VARCHAR(1) NULL,\n" +
+            "[RUINSAPL] VARCHAR(1) NULL,\n" +
+            "[RUINSTEM] VARCHAR(1) NULL,\n" +
+            "[RUINSFIT] VARCHAR(1) NULL,\n" +
+            "[RUINSPLA] VARCHAR(1) NULL,\n" +
             "[MALEZCVE] INTEGER  NULL,\n" +
             "[ESTMACVE] INTEGER  NULL,\n" +
             "[PLAGACVE] INTEGER  NULL,\n" +
@@ -205,6 +205,7 @@ public class EntLibDBTools extends SQLiteOpenHelper {
             "[ENFERCVE] INTEGER  NULL,\n" +
             "[ESTENCVE] INTEGER  NULL,\n" +
             "[POTRECVE] INTEGER  NULL,\n" +
+            "[RUINSCOM] VARCHAR(250)  NULL,\n" +
             "[RUINSSTS] VARCHAR(1)  NULL,\n" +
             "[RUINSUSO] VARCHAR(1)  NULL,\n" +
             "PRIMARY KEY ([USUARCVE],[CICLOCVE],[PLANEFEC],[PLADEFOL]));";
