@@ -545,7 +545,7 @@
                 <EditText
                     android:id="@+id/rutainspeccion_txtRecomendacionOtro"
                     style="@style/EditTextRespuesta"
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:inputType="text"

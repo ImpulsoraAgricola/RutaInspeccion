@@ -116,6 +116,7 @@ public class DiagnosticoCultivo extends ActionBarActivity {
 
     //Variables objetos
     Usuario _objUsuario;
+    PlaneacionRuta _objPlaneacionFiltro;
     RutaInspeccion _objRutaInspeccion = new RutaInspeccion();
     PlaneacionRuta _objPlaneacionRuta = new PlaneacionRuta();
 
@@ -244,12 +245,12 @@ public class DiagnosticoCultivo extends ActionBarActivity {
                             wallpaperDirectory = new File(str_SaveFolderName);
                             if (!wallpaperDirectory.exists())
                                 wallpaperDirectory.mkdirs();
-                            str_Camera_Photo_ImageName = String.format("%05d", _objRutaInspeccion.UsuarioClave) + String.format("%05d",_objRutaInspeccion.CicloClave) +
-                                    _objRutaInspeccion.Fecha + String.format("%07d",_objRutaInspeccion.Folio) + str_randomnumber
+                            str_Camera_Photo_ImageName = String.format("%-15s", _objPlaneacionFiltro.LoteNombre) + String.format("%07d", _objRutaInspeccion.Folio) + _objRutaInspeccion.Fecha +
+                                    String.format("%05d", _objRutaInspeccion.UsuarioClave) + String.format("%05d", _objRutaInspeccion.CicloClave) + str_randomnumber
                                     + ".jpg";
                             str_Camera_Photo_ImagePath = str_SaveFolderName
-                                    + "/" + String.format("%05d", _objRutaInspeccion.UsuarioClave) + String.format("%05d",_objRutaInspeccion.CicloClave) +
-                                    _objRutaInspeccion.Fecha + String.format("%07d",_objRutaInspeccion.Folio) + str_randomnumber + ".jpg";
+                                    + "/" + String.format("%-15s", _objPlaneacionFiltro.LoteNombre) + String.format("%07d", _objRutaInspeccion.Folio) + _objRutaInspeccion.Fecha +
+                                    String.format("%05d", _objRutaInspeccion.UsuarioClave) + String.format("%05d", _objRutaInspeccion.CicloClave) + str_randomnumber + ".jpg";
                             System.err.println(" str_Camera_Photo_ImagePath  "
                                     + str_Camera_Photo_ImagePath);
                             f = new File(str_Camera_Photo_ImagePath);
@@ -635,7 +636,7 @@ public class DiagnosticoCultivo extends ActionBarActivity {
     }
 
     private void cargarCabecero() {
-        PlaneacionRuta _objPlaneacionFiltro = _objRutaInspeccionBP.GetPlaneacionRuta(_objPlaneacionRuta);
+        _objPlaneacionFiltro = _objRutaInspeccionBP.GetPlaneacionRuta(_objPlaneacionRuta);
         rutainspeccion_txtFolio.setText(String.valueOf(_objPlaneacionFiltro.Folio));
         seleccionarValorSpinner(rutainspeccion_sCiclo, _objPlaneacionFiltro.CicloClave);
         rutainspeccion_txtCliente.setText(_objPlaneacionFiltro.ClienteNombre);
@@ -966,9 +967,6 @@ public class DiagnosticoCultivo extends ActionBarActivity {
                 String filePath = null;
                 filePath = str_Camera_Photo_ImagePath;
                 if (filePath != null) {
-                    if (gpsTracker.getIsGPSTrackingEnabled()) {
-                        addGeo(gpsTracker.getLatitude(), gpsTracker.getLongitude(), filePath);
-                    }
                     Bitmap faceView = (new_decode(new File(filePath)));
                     imageView.setImageBitmap(faceView);
                     RutaInspeccion objRutaInspeccion = null;
@@ -978,6 +976,9 @@ public class DiagnosticoCultivo extends ActionBarActivity {
                     getPreferences();
                     _objPlaneacionRuta.Estatus = "F";
                     resul = _objRutaInspeccionBP.UpdatePlaneacionRutaEstatus(_objPlaneacionRuta);
+                    if (gpsTracker.getIsGPSTrackingEnabled()) {
+                        addGeo(gpsTracker.getLatitude(), gpsTracker.getLongitude(), filePath);
+                    }
                     rutainspeccion_btnEnviar.setVisibility(View.VISIBLE);
                 } else {
                     bitmap = null;

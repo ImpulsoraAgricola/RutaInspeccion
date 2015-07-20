@@ -58,7 +58,9 @@ public class Login extends ActionBarActivity {
         if (prefs.getString("Clave", "") != "") {
             //Creamos el nuevo formulario
             Intent i = new Intent(Login.this, Administrador.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
+            finish();
         } else {
 
             //Pasar contexto a las demas instancias
@@ -141,10 +143,11 @@ public class Login extends ActionBarActivity {
                 editor.commit();
                 //Creamos el nuevo formulario
                 Intent i = new Intent(Login.this, Administrador.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
                 finish();
             } else {
-                _objComunBP.Mensaje("Error: Usuario y/o contrasena incorrecto",Login.this);
+                _objComunBP.Mensaje("Error: Usuario y/o contrase\u0148a incorrecto",Login.this);
             }
             loadProgressDialog.dismiss();
         }
@@ -197,7 +200,7 @@ public class Login extends ActionBarActivity {
                 new ContextThemeWrapper(this,android.R.style.Theme_Dialog))
                 .create();
         alert.setTitle("Rutas de Inspecci\u00F3n");
-        alert.setMessage("\u00BFDeseas salir de la aplicaci\u00d1n?");
+        alert.setMessage("\u00BFDeseas salir de la aplicaci\u00F3n?");
         alert.setCancelable(false);
         alert.setIcon(R.drawable.shutdown);
         alert.setCanceledOnTouchOutside(false);
@@ -241,7 +244,7 @@ public class Login extends ActionBarActivity {
                 new ContextThemeWrapper(this, android.R.style.Theme_Dialog))
                 .create();
         alert.setTitle("Rutas de Inspecci\u00F3n");
-        alert.setMessage("\u00BFDeseas salir de la captura de la ruta de inpecci\u00F3n?");
+        alert.setMessage("\u00BFDeseas salir de la aplicaci\u00F3n?");
         alert.setCancelable(false);
         alert.setIcon(R.drawable.info);
         alert.setCanceledOnTouchOutside(false);

@@ -63,12 +63,12 @@ public class Administrador extends ActionBarActivity {
     MyResultReceiver resultReceiver;
     ProgressDialog loadProgressDialog;
 
+    Calendar c;
     private String mYear;
     private String mMonth;
     private String mDay;
     static final int DATE_DIALOG_ID = 0;
     public static boolean flagStart = false;
-    public static boolean flagDate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +78,12 @@ public class Administrador extends ActionBarActivity {
             _objComunBP = new ComunBP(Administrador.this);
             _objRutaInspeccionBP = new RutaInspeccionBP(Administrador.this);
             gridView = (GridView) findViewById(R.id.gridView);
+
+            //Inicializar fecha
+            c = Calendar.getInstance();
+            mYear = String.valueOf(c.get(Calendar.YEAR));
+            mMonth = String.format("%02d", c.get(Calendar.MONTH)+ 1);
+            mDay = String.format("%02d", c.get(Calendar.DAY_OF_MONTH));
 
             //Obtener usuario
             getPreferences();
@@ -100,10 +106,6 @@ public class Administrador extends ActionBarActivity {
                 @Override
                 public void onRefresh() {
                     try {
-                        Calendar c = Calendar.getInstance();
-                        mYear = String.valueOf(c.get(Calendar.YEAR));
-                        mMonth = String.valueOf(c.get(Calendar.MONTH));
-                        mDay = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
                         getPlaneacionRuta();
                         mSwipeRefreshLayout.setRefreshing(false);
                     } catch (Exception e) {
@@ -163,7 +165,6 @@ public class Administrador extends ActionBarActivity {
                 return true;
             case R.id.search:
                 showDialog(DATE_DIALOG_ID);
-                flagDate = true;
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -192,7 +193,8 @@ public class Administrador extends ActionBarActivity {
                         //Creamos el nuevo formulario
                         Intent i = new Intent(Administrador.this, Login.class);
                         startActivity(i);
-                        finish();
+                        int pid = android.os.Process.myPid();
+                        android.os.Process.killProcess(pid);
                     }
                 });
         alert.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
@@ -213,7 +215,6 @@ public class Administrador extends ActionBarActivity {
                 refresh();
                 _objComunBP.Mensaje("Se debe contar con una conexi\u00F3n a Internet", Administrador.this);
             }
-            flagDate = false;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -266,12 +267,7 @@ public class Administrador extends ActionBarActivity {
 
     public void refresh() {
         try {
-            String fecha;
-            if (flagDate == false) {
-                SimpleDateFormat formatFecha = new SimpleDateFormat("yyyy-MM-dd");
-                fecha = formatFecha.format(new Date());
-            } else
-                fecha = mYear + "-" + (mMonth) + "-" + mDay;
+            String fecha = mYear + "-" + (mMonth) + "-" + mDay;
             listaRutaInspeccion = _objRutaInspeccionBP.GetAllPlaneacionRutaImage(_objUsuario.Clave, fecha);
             customGridAdapter = new CustomGridViewAdapter(this, R.layout.activity_gridrow, listaRutaInspeccion);
             gridView = (GridView) findViewById(R.id.gridView);
@@ -343,11 +339,7 @@ public class Administrador extends ActionBarActivity {
     protected Dialog onCreateDialog(int id) {
         switch (id) {
             case DATE_DIALOG_ID:
-                final Calendar c = Calendar.getInstance();
-                mYear = String.valueOf(c.get(Calendar.YEAR));
-                mMonth = String.valueOf(c.get(Calendar.MONTH));
-                mDay = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
-                DatePickerDialog dialog = new DatePickerDialog(this, mDateSetListener, Integer.parseInt(mYear), Integer.parseInt(mMonth), Integer.parseInt(mDay));
+                DatePickerDialog dialog = new DatePickerDialog(this, mDateSetListener, Integer.parseInt(mYear), Integer.parseInt(mMonth)-1, Integer.parseInt(mDay));
                 DatePicker datePicker = dialog.getDatePicker();
                 datePicker.setMinDate(c.getTimeInMillis());
                 c.add(Calendar.DAY_OF_YEAR, 1);
@@ -495,7 +487,7 @@ public class Administrador extends ActionBarActivity {
                 new ContextThemeWrapper(this, android.R.style.Theme_Dialog))
                 .create();
         alert.setTitle("Mensaje");
-        alert.setMessage("\u00BFDeseas salir de la captura de la ruta de inpecci\u00F3n?");
+        alert.setMessage("\u00BFDeseas salir de la aplicaci\u00F3n?");
         alert.setCancelable(false);
         alert.setIcon(R.drawable.info);
         alert.setCanceledOnTouchOutside(false);

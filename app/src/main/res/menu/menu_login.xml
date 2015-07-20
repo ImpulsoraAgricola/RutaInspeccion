@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Login" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Login">
     <item
         android:id="@+id/menu_login_salir"
         android:showAsAction="ifRoom"
-        android:title="@string/menu_administrador_salir"
-        android:icon="@mipmap/cancel" />
+        android:title="@string/menu_login_salir"
+        android:icon="@mipmap/exit" />
 </menu>

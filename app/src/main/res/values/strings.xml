@@ -3,8 +3,8 @@
 
     <!-- Menu administrador. -->
     <string name="menu_administrador_actualizar">Actualizar</string>
-    <string name="menu_administrador_respaldo">Realizar respaldo</string>
-    <string name="menu_administrador_salir">Salir</string>
+    <string name="menu_administrador_respaldo">Respaldo</string>
+    <string name="menu_administrador_salir">Cerrar sesión</string>
 
     <!-- Menu Login. -->
     <string name="menu_login_salir">Salir</string>

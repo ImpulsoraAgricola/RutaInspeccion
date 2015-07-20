@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Administrador" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Administrador">
     <item
         android:id="@+id/search"
-        android:title="Buscar"
         android:showAsAction="ifRoom"
-        android:actionViewClass="android.widget.SearchView"/>
+        app:showAsAction="ifRoom"
+        android:title="Buscar"
+        android:icon="@mipmap/search"/>
     <item
         android:id="@+id/menu_administrador_actualizar"
         android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"
         android:title="@string/menu_administrador_actualizar"
-        android:icon="@mipmap/cancel" />
+        android:icon="@mipmap/synchronize" />
     <item
         android:id="@+id/menu_administrador_respaldo"
         android:showAsAction="ifRoom"
         android:title="@string/menu_administrador_respaldo"
-        android:icon="@mipmap/cancel" />
+        android:icon="@mipmap/backup" />
     <item
         android:id="@+id/menu_administrador_salir"
         android:showAsAction="ifRoom"

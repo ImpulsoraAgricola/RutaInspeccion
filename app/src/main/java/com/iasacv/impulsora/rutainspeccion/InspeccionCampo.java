@@ -133,6 +133,7 @@ public class InspeccionCampo extends ActionBarActivity {
 
     //Variables objetos
     Usuario _objUsuario;
+    PlaneacionRuta _objPlaneacionFiltro;
     RutaInspeccion _objRutaInspeccion = new RutaInspeccion();
     PlaneacionRuta _objPlaneacionRuta = new PlaneacionRuta();
 
@@ -261,12 +262,12 @@ public class InspeccionCampo extends ActionBarActivity {
                             wallpaperDirectory = new File(str_SaveFolderName);
                             if (!wallpaperDirectory.exists())
                                 wallpaperDirectory.mkdirs();
-                            str_Camera_Photo_ImageName = String.format("%05d", _objRutaInspeccion.UsuarioClave) + String.format("%05d",_objRutaInspeccion.CicloClave) +
-                                    _objRutaInspeccion.Fecha + String.format("%07d",_objRutaInspeccion.Folio) + str_randomnumber
+                            str_Camera_Photo_ImageName = String.format("%-15s", _objPlaneacionFiltro.LoteNombre) + String.format("%07d", _objRutaInspeccion.Folio) + _objRutaInspeccion.Fecha +
+                                    String.format("%05d", _objRutaInspeccion.UsuarioClave) + String.format("%05d", _objRutaInspeccion.CicloClave) + str_randomnumber
                                     + ".jpg";
                             str_Camera_Photo_ImagePath = str_SaveFolderName
-                                    + "/" + String.format("%05d", _objRutaInspeccion.UsuarioClave) + String.format("%05d",_objRutaInspeccion.CicloClave) +
-                                    _objRutaInspeccion.Fecha + String.format("%07d",_objRutaInspeccion.Folio) + str_randomnumber + ".jpg";
+                                    + "/" + String.format("%-15s", _objPlaneacionFiltro.LoteNombre) + String.format("%07d", _objRutaInspeccion.Folio) + _objRutaInspeccion.Fecha +
+                                    String.format("%05d", _objRutaInspeccion.UsuarioClave) + String.format("%05d", _objRutaInspeccion.CicloClave) + str_randomnumber + ".jpg";
                             System.err.println(" str_Camera_Photo_ImagePath  "
                                     + str_Camera_Photo_ImagePath);
                             f = new File(str_Camera_Photo_ImagePath);
@@ -684,7 +685,7 @@ public class InspeccionCampo extends ActionBarActivity {
     }
 
     private void cargarCabecero() {
-        PlaneacionRuta _objPlaneacionFiltro = _objRutaInspeccionBP.GetPlaneacionRuta(_objPlaneacionRuta);
+        _objPlaneacionFiltro = _objRutaInspeccionBP.GetPlaneacionRuta(_objPlaneacionRuta);
         rutainspeccion_txtFolio.setText(String.valueOf(_objPlaneacionFiltro.Folio));
         seleccionarValorSpinner(rutainspeccion_sCiclo, _objPlaneacionFiltro.CicloClave);
         rutainspeccion_txtCliente.setText(_objPlaneacionFiltro.ClienteNombre);
@@ -846,7 +847,7 @@ public class InspeccionCampo extends ActionBarActivity {
                         Combo objCombo;
                         if (!(rutainspeccion_sMaleza.getSelectedItem() == null)) {
                             objCombo = (Combo) rutainspeccion_sMaleza.getSelectedItem();
-                            if(objCombo.getClave()==-1)
+                            if (objCombo.getClave() == -1)
                                 seleccionarValorSpinner(rutainspeccion_sEstadoMaleza, 1);
                         }
                     }
@@ -864,7 +865,7 @@ public class InspeccionCampo extends ActionBarActivity {
                         Combo objCombo;
                         if (!(rutainspeccion_sPlaga.getSelectedItem() == null)) {
                             objCombo = (Combo) rutainspeccion_sPlaga.getSelectedItem();
-                            if(objCombo.getClave()==-1)
+                            if (objCombo.getClave() == -1)
                                 seleccionarValorSpinner(rutainspeccion_sEstadoPlaga, 1);
                         }
                     }
@@ -882,7 +883,7 @@ public class InspeccionCampo extends ActionBarActivity {
                         Combo objCombo;
                         if (!(rutainspeccion_sEnfermedad.getSelectedItem() == null)) {
                             objCombo = (Combo) rutainspeccion_sEnfermedad.getSelectedItem();
-                            if(objCombo.getClave()==-1)
+                            if (objCombo.getClave() == -1)
                                 seleccionarValorSpinner(rutainspeccion_sEstadoEnfermedad, 1);
                         }
                     }
