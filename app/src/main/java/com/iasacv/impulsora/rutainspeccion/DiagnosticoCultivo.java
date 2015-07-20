@@ -109,7 +109,6 @@ public class DiagnosticoCultivo extends ActionBarActivity {
     private ImageButton rutainspeccion_btnEnviar;
 
     //Variables clases
-    WebServiceBP _objWebServiceBP;
     CatalogosBP _objCatalogosBP;
     RutaInspeccionBP _objRutaInspeccionBP;
     ComunBP _objComunBP;
@@ -117,7 +116,6 @@ public class DiagnosticoCultivo extends ActionBarActivity {
 
     //Variables objetos
     Usuario _objUsuario;
-    Ciclo _objCiclo;
     RutaInspeccion _objRutaInspeccion = new RutaInspeccion();
     PlaneacionRuta _objPlaneacionRuta = new PlaneacionRuta();
 
@@ -151,13 +149,9 @@ public class DiagnosticoCultivo extends ActionBarActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         //Pasar contexto a las demas instancias
-        _objWebServiceBP = new WebServiceBP(this);
         _objCatalogosBP = new CatalogosBP(this);
         _objRutaInspeccionBP = new RutaInspeccionBP(this);
-        gpsTracker = new GPSTracker(DiagnosticoCultivo.this);
         _objComunBP = new ComunBP(this);
-        _objUsuario = new Usuario();
-        _objCiclo = new Ciclo();
 
         try {
             //Recuperar valores
@@ -239,6 +233,7 @@ public class DiagnosticoCultivo extends ActionBarActivity {
             rutainspeccion_btnFotografia.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    gpsTracker = new GPSTracker(DiagnosticoCultivo.this);
                     if (gpsTracker.getIsGPSTrackingEnabled()) {
                         if (validar()) {
                             str_SaveFolderName = Environment
@@ -494,6 +489,7 @@ public class DiagnosticoCultivo extends ActionBarActivity {
 
     private void getPreferences() {
         SharedPreferences prefs = getSharedPreferences("RutaInspeccion", Context.MODE_PRIVATE);
+        _objUsuario = new Usuario();
         _objUsuario = new Usuario();
         _objUsuario.RFC = prefs.getString("RFC", "");
         _objUsuario.Clave = Integer.valueOf(prefs.getString("Clave", ""));
@@ -1145,7 +1141,6 @@ public class DiagnosticoCultivo extends ActionBarActivity {
 
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
-                        _objCiclo = null;
                     }
                 });
 
@@ -1164,7 +1159,6 @@ public class DiagnosticoCultivo extends ActionBarActivity {
 
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
-                        _objCiclo = null;
                     }
                 });
 
@@ -1183,7 +1177,6 @@ public class DiagnosticoCultivo extends ActionBarActivity {
 
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
-                        _objCiclo = null;
                     }
                 });
     }

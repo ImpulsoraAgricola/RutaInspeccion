@@ -47,7 +47,6 @@ import java.util.Date;
 public class Administrador extends ActionBarActivity {
 
     //Variables
-    CatalogosBP _objCatalogosBP;
     ComunBP _objComunBP;
     RutaInspeccionBP _objRutaInspeccionBP;
     WebServiceBP _objWebServiceBP;
@@ -76,11 +75,8 @@ public class Administrador extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_administrador);
         try {
-            _objCatalogosBP = new CatalogosBP(Administrador.this);
             _objComunBP = new ComunBP(Administrador.this);
             _objRutaInspeccionBP = new RutaInspeccionBP(Administrador.this);
-            _objWebServiceBP = new WebServiceBP(Administrador.this);
-            _objEntLibDBTools = new EntLibDBTools(Administrador.this);
             gridView = (GridView) findViewById(R.id.gridView);
 
             //Obtener usuario
@@ -89,6 +85,7 @@ public class Administrador extends ActionBarActivity {
             if (!flagStart) {
                 flagStart = true;
                 //Llenar grid
+                _objWebServiceBP = new WebServiceBP(Administrador.this);
                 getPlaneacionRuta();
             }
             else
@@ -154,6 +151,7 @@ public class Administrador extends ActionBarActivity {
                 return true;
             case R.id.menu_administrador_respaldo:
                 try {
+                    _objEntLibDBTools = new EntLibDBTools(Administrador.this);
                     _objEntLibDBTools.exportDataBase();
                     _objComunBP.Mensaje("Se ha realizado el respaldo correctamente", Administrador.this);
                 } catch (Exception e) {

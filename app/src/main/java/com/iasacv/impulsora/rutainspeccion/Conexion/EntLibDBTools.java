@@ -325,10 +325,6 @@ public class EntLibDBTools extends SQLiteOpenHelper {
         myDataBase.execSQL("DROP TABLE IF EXISTS BLCPLAGA");
         myDataBase.execSQL("DROP TABLE IF EXISTS BPCMALEZ");
         myDataBase.execSQL("DROP TABLE IF EXISTS BECENFER");
-        myDataBase.execSQL("DROP TABLE IF EXISTS BATPLADE");
-        myDataBase.execSQL("DROP TABLE IF EXISTS BATRUINS");
-        myDataBase.execSQL("DROP TABLE IF EXISTS BARRIEGO");
-        myDataBase.execSQL("DROP TABLE IF EXISTS BARRECOM");
 
         //Se crea la nueva version de las tabla
         myDataBase.execSQL(sqlIGMCICLO);
@@ -347,10 +343,6 @@ public class EntLibDBTools extends SQLiteOpenHelper {
         myDataBase.execSQL(sqlBLCPLAGA);
         myDataBase.execSQL(sqlBPCMALEZ);
         myDataBase.execSQL(sqlBECENFER);
-        myDataBase.execSQL(sqlBATPLADE);
-        myDataBase.execSQL(sqlBATRUINS);
-        myDataBase.execSQL(sqlBARRIEGO);
-        myDataBase.execSQL(sqlBARRECOM);
     }
 
     public Cursor executeCursor(String query) {
