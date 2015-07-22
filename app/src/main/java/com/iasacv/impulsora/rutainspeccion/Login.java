@@ -58,7 +58,6 @@ public class Login extends ActionBarActivity {
         if (prefs.getString("Clave", "") != "") {
             //Creamos el nuevo formulario
             Intent i = new Intent(Login.this, Administrador.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
             finish();
         } else {
@@ -143,7 +142,6 @@ public class Login extends ActionBarActivity {
                 editor.commit();
                 //Creamos el nuevo formulario
                 Intent i = new Intent(Login.this, Administrador.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
                 finish();
             } else {

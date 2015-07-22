@@ -127,9 +127,9 @@ public class RutaInspeccionDA {
                 objRutaInspeccion.AguaCanal = objCursor.getString(21);
                 objRutaInspeccion.Inundacion = objCursor.getString(22);
                 objRutaInspeccion.BajaPoblacion = objCursor.getString(23);
-                objRutaInspeccion.AplicacionNutrientes = objCursor.getString(23);
-                objRutaInspeccion.AlteracionCiclo = objCursor.getString(24);
-                objRutaInspeccion.AplicacionAgroquimicos = objCursor.getString(25);
+                objRutaInspeccion.AplicacionNutrientes = objCursor.getString(24);
+                objRutaInspeccion.AlteracionCiclo = objCursor.getString(25);
+                objRutaInspeccion.AplicacionAgroquimicos = objCursor.getString(26);
                 objRutaInspeccion.AltasTemperaturas = objCursor.getString(27);
                 objRutaInspeccion.Fito = objCursor.getString(28);
                 objRutaInspeccion.PlagasMalControladas = objCursor.getString(29);

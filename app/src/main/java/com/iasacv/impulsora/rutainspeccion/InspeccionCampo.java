@@ -188,17 +188,17 @@ public class InspeccionCampo extends ActionBarActivity {
                     try {
                         if (validar()) {
                             RutaInspeccion objRutaInspeccion = creaObjeto();
-                            objRutaInspeccion.Estatus = "G";
+                            if (objRutaInspeccion.Estatus.equals("O")) {
+                                objRutaInspeccion.Estatus = "G";
+                                _objPlaneacionRuta.Estatus = "G";
+                            }
                             boolean resul = _objRutaInspeccionBP.UpdateRutaInspeccion(objRutaInspeccion);
-                            _objPlaneacionRuta.Estatus = "G";
                             resul = _objRutaInspeccionBP.UpdatePlaneacionRutaEstatus(_objPlaneacionRuta);
                             guardarRecomendacion();
                             guardarRiego();
-                            if (resul) {
-                                _objComunBP.Mensaje("La informaci\u00F3n se guardo correctamente", InspeccionCampo.this);
-                                rutainspeccion_btnFotografia.setVisibility(View.VISIBLE);
-                            }
+                            rutainspeccion_btnFotografia.setVisibility(View.VISIBLE);
                             imageView.setVisibility(View.VISIBLE);
+                            _objComunBP.Mensaje("La informaci\u00F3n se guardo correctamente", InspeccionCampo.this);
                         }
                     } catch (IOException e) {
                         _objComunBP.Mensaje(e.toString(), InspeccionCampo.this);

@@ -30,6 +30,9 @@ public class GPSTracker extends Service implements LocationListener {
     // flag for GPS Status
     boolean isGPSEnabled = false;
 
+    // flag for network status
+    boolean isNetworkEnabled = false;
+
     // flag for GPS Tracking is enabled
     boolean isGPSTrackingEnabled = false;
 
@@ -61,11 +64,15 @@ public class GPSTracker extends Service implements LocationListener {
      * Try to get my current location by GPS or Network Provider
      */
     public void getLocation() {
+
         try {
             locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
 
             //getting GPS status
             isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+            //getting network status
+            isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
             // Try to get location if you GPS Service is enabled
             if (isGPSEnabled) {
@@ -80,6 +87,18 @@ public class GPSTracker extends Service implements LocationListener {
                  */
 
                 provider_info = LocationManager.GPS_PROVIDER;
+
+            } else if (isNetworkEnabled) { // Try to get location if you Network Service is enabled
+                this.isGPSTrackingEnabled = true;
+
+                Log.d(TAG, "Application use Network State to get GPS coordinates");
+
+                /*
+                 * This provider determines location based on
+                 * availability of cell tower and WiFi access points. Results are retrieved
+                 * by means of a network lookup.
+                 */
+                provider_info = LocationManager.NETWORK_PROVIDER;
 
             }
 
