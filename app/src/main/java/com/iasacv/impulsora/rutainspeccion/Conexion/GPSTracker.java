@@ -276,6 +276,10 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
+        if (location != null) {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        }
     }
 
     @Override
@@ -288,7 +292,6 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public void onProviderDisabled(String provider) {
-        stopUsingGPS();
     }
 
     @Override

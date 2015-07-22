@@ -390,7 +390,6 @@ public class Administrador extends ActionBarActivity {
                                 } else {
                                     _objComunBP.Mensaje("Error: Su localizacion para registrar la ruta de inspeccion no es correcta", Administrador.this);
                                 }
-                                gpsTracker.stopUsingGPS();
                             } else {
                                 final AlertDialog alert = new AlertDialog.Builder(
                                         new ContextThemeWrapper(Administrador.this, android.R.style.Theme_Dialog))

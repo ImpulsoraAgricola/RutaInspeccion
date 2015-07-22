@@ -984,7 +984,6 @@ public class DiagnosticoCultivo extends ActionBarActivity {
                     bitmap = null;
                 }
             }
-            gpsTracker.stopUsingGPS();
         } catch (Exception e) {
             e.printStackTrace();
         }

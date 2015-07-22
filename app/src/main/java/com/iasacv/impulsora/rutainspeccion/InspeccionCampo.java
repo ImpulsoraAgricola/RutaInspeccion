@@ -1201,7 +1201,6 @@ public class InspeccionCampo extends ActionBarActivity {
                     bitmap = null;
                 }
             }
-            gpsTracker.stopUsingGPS();
         } catch (Exception e) {
             e.printStackTrace();
         }
