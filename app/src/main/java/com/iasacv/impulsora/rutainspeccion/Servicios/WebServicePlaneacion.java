@@ -18,6 +18,7 @@ import android.os.IBinder;
 import android.os.ResultReceiver;
 
 import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
+import com.iasacv.impulsora.rutainspeccion.Datos.PlaneacionRutaDA;
 import com.iasacv.impulsora.rutainspeccion.Datos.RutaInspeccionDA;
 import com.iasacv.impulsora.rutainspeccion.Modelo.PlaneacionRuta;
 import com.iasacv.impulsora.rutainspeccion.Modelo.RutaInspeccion;
@@ -42,6 +43,7 @@ public class WebServicePlaneacion extends Service {
 
     WebServiceBP _objWebServiceBP;
     RutaInspeccionDA _objRutaInspeccionDA;
+    PlaneacionRutaDA _objPlaneacionRutaDA;
     EntLibDBTools _objEntLibDBTools;
 
     @Override
@@ -49,6 +51,7 @@ public class WebServicePlaneacion extends Service {
         try {
             _objWebServiceBP = new WebServiceBP(WebServicePlaneacion.this);
             _objRutaInspeccionDA = new RutaInspeccionDA(WebServicePlaneacion.this);
+            _objPlaneacionRutaDA = new PlaneacionRutaDA(WebServicePlaneacion.this);
             _objEntLibDBTools = new EntLibDBTools(WebServicePlaneacion.this);
             resultReceiver = intent.getParcelableExtra("receiver");
             getValues(intent);
@@ -135,6 +138,13 @@ public class WebServicePlaneacion extends Service {
                             RutaInspeccion objRutaInspeccion = (RutaInspeccion) listRutaInspeccion.get(i);
                             objRutaInspeccion.Estatus = "R";
                             boolean resul = _objRutaInspeccionDA.UpdateRutaInspeccion(objRutaInspeccion);
+                            PlaneacionRuta objPlaneacionRuta = new PlaneacionRuta();
+                            objPlaneacionRuta.UsuarioClave = objRutaInspeccion.UsuarioClave;
+                            objPlaneacionRuta.CicloClave = objRutaInspeccion.CicloClave;
+                            objPlaneacionRuta.Fecha = objRutaInspeccion.Fecha;
+                            objPlaneacionRuta.Folio = objRutaInspeccion.Folio;
+                            objPlaneacionRuta.Estatus = "R";
+                            _objPlaneacionRutaDA.UpdatePlaneacionRutaEstatus(objPlaneacionRuta);
                         }
                     }
                     resultReceiver.send(0, null);

@@ -64,6 +64,7 @@ public class InspeccionCampo extends ActionBarActivity {
     private EditText rutainspeccion_txtPredio;
     private EditText rutainspeccion_txtLote;
     private EditText rutainspeccion_txtFecha;
+    private EditText rutainspeccion_txtEstatus;
     //Ruta de inspeccion
     private RadioGroup rutainspeccion_rdRecomendacion;
     //Siembra
@@ -194,6 +195,7 @@ public class InspeccionCampo extends ActionBarActivity {
                             }
                             boolean resul = _objRutaInspeccionBP.UpdateRutaInspeccion(objRutaInspeccion);
                             resul = _objRutaInspeccionBP.UpdatePlaneacionRutaEstatus(_objPlaneacionRuta);
+                            rutainspeccion_txtEstatus.setText("Registrado");
                             guardarRecomendacion();
                             guardarRiego();
                             rutainspeccion_btnFotografia.setVisibility(View.VISIBLE);
@@ -531,6 +533,7 @@ public class InspeccionCampo extends ActionBarActivity {
         rutainspeccion_txtPredio = (EditText) findViewById(R.id.rutainspeccion_txtPredio);
         rutainspeccion_txtLote = (EditText) findViewById(R.id.rutainspeccion_txtLote);
         rutainspeccion_txtFecha = (EditText) findViewById(R.id.rutainspeccion_txtFecha);
+        rutainspeccion_txtEstatus = (EditText) findViewById(R.id.rutainspeccion_txtEstatus);
         //Ruta de inspeccion
         rutainspeccion_rdRecomendacion = (RadioGroup) findViewById(R.id.rutainspeccion_rdRecomendacion);
         //Siembra
@@ -700,13 +703,20 @@ public class InspeccionCampo extends ActionBarActivity {
         if (_objPlaneacionFiltro.Estatus.equals("G")) {
             rutainspeccion_btnFotografia.setVisibility(View.VISIBLE);
             rutainspeccion_btnEnviar.setVisibility(View.GONE);
+            rutainspeccion_txtEstatus.setText("Registrado");
         }
         if (_objPlaneacionFiltro.Estatus.equals("F")) {
             rutainspeccion_btnFotografia.setVisibility(View.VISIBLE);
             rutainspeccion_btnEnviar.setVisibility(View.VISIBLE);
+            rutainspeccion_txtEstatus.setText("Registrado");
         }
-        if (_objPlaneacionFiltro.Estatus.equals("E") || _objPlaneacionFiltro.Estatus.equals("R")) {
+        if (_objPlaneacionFiltro.Estatus.equals("E")) {
             bloquearControles();
+            rutainspeccion_txtEstatus.setText("Pendiente de enviar");
+        }
+        if (_objPlaneacionFiltro.Estatus.equals("R")) {
+            bloquearControles();
+            rutainspeccion_txtEstatus.setText("Enviado");
         }
     }
 
@@ -1193,6 +1203,7 @@ public class InspeccionCampo extends ActionBarActivity {
                     getPreferences();
                     _objPlaneacionRuta.Estatus = "F";
                     resul = _objRutaInspeccionBP.UpdatePlaneacionRutaEstatus(_objPlaneacionRuta);
+                    rutainspeccion_txtEstatus.setText("Registrado");
                     if (gpsTracker.getIsGPSTrackingEnabled()) {
                         addGeo(gpsTracker.getLatitude(), gpsTracker.getLongitude(), filePath);
                     }
@@ -1334,6 +1345,7 @@ public class InspeccionCampo extends ActionBarActivity {
         _objPlaneacionRuta.Estatus = "E";
         _objRutaInspeccionBP.UpdatePlaneacionRutaEstatus(_objPlaneacionRuta);
         boolean resul = _objRutaInspeccionBP.UpdateRutaInspeccion(objRutaInspeccion);
+        rutainspeccion_txtEstatus.setText("Pendiente de enviar");
         _objComunBP.Mensaje("La informaci\u00F3n se enviara a IASA", InspeccionCampo.this);
         rutainspeccion_btnEnviar.setVisibility(View.GONE);
         rutainspeccion_btnFotografia.setVisibility(View.GONE);

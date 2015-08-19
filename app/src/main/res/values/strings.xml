@@ -30,6 +30,7 @@
     <string name="activity_ruta_inspeccion_txtPredio">Predio:</string>
     <string name="activity_ruta_inspeccion_txtLote">Lote:</string>
     <string name="activity_ruta_inspeccion_txtFecha">Fecha:</string>
+    <string name="activity_ruta_inspeccion_txtEstatus">Estatus:</string>
     <!-- Radio button recomendaciones. -->
     <string name="activity_rutainspeccion_rSi">Si</string>
     <string name="activity_rutainspeccion_rNo">No</string>
@@ -100,4 +101,7 @@
     <!-- Diagnostico de cultivo. -->
     <string name="title_activity_diagnostico_cultivo">Diagnostico de cultivo</string>
     <string name="title_activity_inspeccion_campo">Inspección de campo</string>
+
+    <!-- Localizacion. -->
+    <string name="title_activity_localizacion">Localización</string>
 </resources>

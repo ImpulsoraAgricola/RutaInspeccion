@@ -478,30 +478,4 @@ public class Administrador extends ActionBarActivity {
             startActivity(i);
         }
     }
-
-    @Override
-    public void onBackPressed() {
-        final AlertDialog alert = new AlertDialog.Builder(
-                new ContextThemeWrapper(this, android.R.style.Theme_Dialog))
-                .create();
-        alert.setTitle("Mensaje");
-        alert.setMessage("\u00BFDeseas salir de la aplicaci\u00F3n?");
-        alert.setCancelable(false);
-        alert.setIcon(R.drawable.info);
-        alert.setCanceledOnTouchOutside(false);
-        alert.setButton(DialogInterface.BUTTON_POSITIVE, "Si",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        alert.dismiss();
-                        finish();
-                    }
-                });
-        alert.setButton(DialogInterface.BUTTON_NEGATIVE, "No",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        alert.dismiss();
-                    }
-                });
-        alert.show();
-    }
 }
