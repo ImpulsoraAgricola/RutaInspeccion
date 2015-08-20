@@ -25,15 +25,6 @@
             android:layout_marginLeft="10dp"
             android:layout_gravity="center_vertical" />
 
-        <ImageButton
-            android:id="@+id/btnLocalizacion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:background="@null"
-            android:gravity="center"
-            android:src="@drawable/location" >
-        </ImageButton>
     </FrameLayout>
 
 </LinearLayout>

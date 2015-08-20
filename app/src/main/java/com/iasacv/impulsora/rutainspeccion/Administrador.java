@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
+import android.widget.ExpandableListView;
 import android.widget.GridView;
 
 import com.iasacv.impulsora.rutainspeccion.Adaptador.CustomGridViewAdapter;
@@ -132,6 +133,15 @@ public class Administrador extends ActionBarActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
+            });
+
+            gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+                public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                               int position, long arg3) {
+                    Item objItem = listaRutaInspeccion.get(position);
+                    return true;
                 }
             });
         } catch (Exception e) {
