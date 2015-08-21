@@ -114,7 +114,7 @@ public class GPSTracker extends Service implements LocationListener {
                 if (locationManager != null) {
                     while (location == null) {
                         location = locationManager.getLastKnownLocation(provider_info);
-                        Thread.sleep(10000);
+                        Thread.sleep(1000);
                     }
                     updateGPSCoordinates();
                 }

@@ -56,7 +56,7 @@ public class WebServicePlaneacion extends Service {
             resultReceiver = intent.getParcelableExtra("receiver");
             getValues(intent);
             timerTask = new MyTimerTask();
-            timer.scheduleAtFixedRate(timerTask, 1 * 60 * 1000, 10 * 60 * 1000);
+            timer.scheduleAtFixedRate(timerTask, 1 * 60 * 1000, 1 * 60 * 15000);
         } catch (Exception e) {
             e.printStackTrace();
         }

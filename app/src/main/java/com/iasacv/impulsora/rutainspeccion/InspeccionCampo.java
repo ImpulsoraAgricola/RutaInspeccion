@@ -264,11 +264,11 @@ public class InspeccionCampo extends ActionBarActivity {
                             wallpaperDirectory = new File(str_SaveFolderName);
                             if (!wallpaperDirectory.exists())
                                 wallpaperDirectory.mkdirs();
-                            str_Camera_Photo_ImageName = _objPlaneacionFiltro.LoteNombre.toString().substring(0, 15) + String.format("%07d", _objRutaInspeccion.Folio) + _objRutaInspeccion.Fecha +
+                            str_Camera_Photo_ImageName = _objComunBP.parametro(_objPlaneacionFiltro.LoteNombre, 15) + String.format("%07d", _objRutaInspeccion.Folio) + _objRutaInspeccion.Fecha +
                                     String.format("%05d", _objRutaInspeccion.UsuarioClave) + String.format("%05d", _objRutaInspeccion.CicloClave) + str_randomnumber
                                     + ".jpg";
                             str_Camera_Photo_ImagePath = str_SaveFolderName
-                                    + "/" + _objPlaneacionFiltro.LoteNombre.toString().substring(0,15) + String.format("%07d", _objRutaInspeccion.Folio) + _objRutaInspeccion.Fecha +
+                                    + "/" + _objComunBP.parametro(_objPlaneacionFiltro.LoteNombre,15) + String.format("%07d", _objRutaInspeccion.Folio) + _objRutaInspeccion.Fecha +
                                     String.format("%05d", _objRutaInspeccion.UsuarioClave) + String.format("%05d", _objRutaInspeccion.CicloClave) + str_randomnumber + ".jpg";
                             System.err.println(" str_Camera_Photo_ImagePath  "
                                     + str_Camera_Photo_ImagePath);

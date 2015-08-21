@@ -18,6 +18,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -35,9 +36,9 @@ public class ComunBP {
         _objComunDA = new ComunDA(context);
     }
 
-    public boolean CheckDataBase(){
-        try{
-        boolean resul = _objComunDA.CheckDataBase();
+    public boolean CheckDataBase() {
+        try {
+            boolean resul = _objComunDA.CheckDataBase();
             return resul;
         } catch (SQLException e) {
             throw e;
@@ -56,12 +57,7 @@ public class ComunBP {
         return _objComunDA.Encrypt(plainText);
     }
 
-    //public void Mensaje(String mensaje, Context context) {
-      //  Toast toastCorrecto = Toast.makeText(context,mensaje, Toast.LENGTH_LONG);
-       // toastCorrecto.show();
-    //}
-
-    public void Mensaje(String mensaje,Context context) {
+    public void Mensaje(String mensaje, Context context) {
         final AlertDialog alert = new AlertDialog.Builder(
                 new ContextThemeWrapper(context, android.R.style.Theme_Dialog))
                 .create();
@@ -77,5 +73,13 @@ public class ComunBP {
                     }
                 });
         alert.show();
+    }
+
+    public static String parametro(String palabra, int length) {
+        if (length <= palabra.length()) {
+            return palabra.substring(0, length);
+        } else {
+            return String.format("%-15s", palabra);
+        }
     }
 }
