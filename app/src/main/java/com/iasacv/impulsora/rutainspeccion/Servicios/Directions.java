@@ -55,8 +55,6 @@ public class Directions {
             e.printStackTrace();
         }catch (Exception e){
         }
-
-
         return routes;
     }
 

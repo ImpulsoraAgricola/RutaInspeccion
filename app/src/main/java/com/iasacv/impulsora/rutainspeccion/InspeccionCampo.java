@@ -264,11 +264,11 @@ public class InspeccionCampo extends ActionBarActivity {
                             wallpaperDirectory = new File(str_SaveFolderName);
                             if (!wallpaperDirectory.exists())
                                 wallpaperDirectory.mkdirs();
-                            str_Camera_Photo_ImageName = String.format("%-15s", _objPlaneacionFiltro.LoteNombre) + String.format("%07d", _objRutaInspeccion.Folio) + _objRutaInspeccion.Fecha +
+                            str_Camera_Photo_ImageName = _objPlaneacionFiltro.LoteNombre.toString().substring(0, 15) + String.format("%07d", _objRutaInspeccion.Folio) + _objRutaInspeccion.Fecha +
                                     String.format("%05d", _objRutaInspeccion.UsuarioClave) + String.format("%05d", _objRutaInspeccion.CicloClave) + str_randomnumber
                                     + ".jpg";
                             str_Camera_Photo_ImagePath = str_SaveFolderName
-                                    + "/" + String.format("%-15s", _objPlaneacionFiltro.LoteNombre) + String.format("%07d", _objRutaInspeccion.Folio) + _objRutaInspeccion.Fecha +
+                                    + "/" + _objPlaneacionFiltro.LoteNombre.toString().substring(0,15) + String.format("%07d", _objRutaInspeccion.Folio) + _objRutaInspeccion.Fecha +
                                     String.format("%05d", _objRutaInspeccion.UsuarioClave) + String.format("%05d", _objRutaInspeccion.CicloClave) + str_randomnumber + ".jpg";
                             System.err.println(" str_Camera_Photo_ImagePath  "
                                     + str_Camera_Photo_ImagePath);
@@ -718,6 +718,8 @@ public class InspeccionCampo extends ActionBarActivity {
             bloquearControles();
             rutainspeccion_txtEstatus.setText("Enviado");
         }
+        if (_objPlaneacionFiltro.Estatus.equals("A"))
+            rutainspeccion_txtEstatus.setText("Abierto");
     }
 
     private void cargarInspeccionCampo() {
