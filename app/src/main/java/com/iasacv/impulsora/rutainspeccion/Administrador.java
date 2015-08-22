@@ -1,6 +1,5 @@
 package com.iasacv.impulsora.rutainspeccion;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -11,8 +10,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -24,31 +21,23 @@ import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.view.ContextMenu;
 import android.view.ContextThemeWrapper;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
-import android.widget.ExpandableListView;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.iasacv.impulsora.rutainspeccion.Adaptador.CustomGridViewAdapter;
 import com.iasacv.impulsora.rutainspeccion.Conexion.EntLibDBTools;
 import com.iasacv.impulsora.rutainspeccion.Conexion.GPSTracker;
 import com.iasacv.impulsora.rutainspeccion.Modelo.*;
-import com.iasacv.impulsora.rutainspeccion.Negocios.CatalogosBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.ComunBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.RutaInspeccionBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.WebServiceBP;
-import com.iasacv.impulsora.rutainspeccion.Servicios.WebServicePlaneacion;
+import com.iasacv.impulsora.rutainspeccion.Servicios.WebServiceUpdate;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -82,7 +71,6 @@ public class Administrador extends ActionBarActivity {
     private String mMonth;
     private String mDay;
     static final int DATE_DIALOG_ID = 0;
-    private static final int NOTIF_ALERTA_ID = 1;
     public static boolean flagStart = false;
 
     @Override
@@ -315,7 +303,7 @@ public class Administrador extends ActionBarActivity {
 
     public void callService() {
         resultReceiver = new MyResultReceiver(new Handler());
-        intent = new Intent(Administrador.this, WebServicePlaneacion.class);
+        intent = new Intent(Administrador.this, WebServiceUpdate.class);
         intent.putExtra("receiver", resultReceiver);
         intent.putExtra("Clave", _objUsuario.Clave);
         intent.putExtra("RFC", _objUsuario.RFC);
@@ -346,30 +334,6 @@ public class Administrador extends ActionBarActivity {
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             if (resultCode == 0) {
                 runOnUiThread(new UpdateUI());
-                NotificationCompat.Builder mBuilder =
-                        new NotificationCompat.Builder(Administrador.this)
-                                .setSmallIcon(android.R.drawable.ic_dialog_map)
-                                .setContentTitle("Rutas de Inspecci\u00F3n")
-                                .setContentText("La informaci\u00F3n fue actualizada correctamente.")
-                                .setTicker("La informacion fue actualizada correctamente.");
-                Intent notIntent = new Intent(Administrador.this, Administrador.class);
-                PendingIntent contIntent = PendingIntent.getActivity(Administrador.this, 0, notIntent, 0);
-                mBuilder.setContentIntent(contIntent);
-                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotificationManager.notify(NOTIF_ALERTA_ID, mBuilder.build());
-            }
-            if (resultCode == 1) {
-                NotificationCompat.Builder mBuilder =
-                        new NotificationCompat.Builder(Administrador.this)
-                                .setSmallIcon(android.R.drawable.ic_dialog_map)
-                                .setContentTitle("Rutas de Inspecci\u00F3n")
-                                .setContentText("La informaci\u00F3n fue enviada correctamente.")
-                                .setTicker("La informacion fue enviada correctamente.");
-                Intent notIntent = new Intent(Administrador.this, Administrador.class);
-                PendingIntent contIntent = PendingIntent.getActivity(Administrador.this, 0, notIntent, 0);
-                mBuilder.setContentIntent(contIntent);
-                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotificationManager.notify(NOTIF_ALERTA_ID, mBuilder.build());
             }
         }
     }

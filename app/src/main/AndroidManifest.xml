@@ -65,7 +65,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".Servicios.WebServicePlaneacion"></service>
+        <service android:name=".Servicios.WebServiceUpdate"></service>
+        <service android:name=".Servicios.WebServiceSend"></service>
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyCxDEU68YHiby432Z9BpWz-hgwZ6eghV8o" />

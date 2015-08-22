@@ -11,7 +11,7 @@ import com.google.android.gms.maps.model.LatLng;
 /**
  * Created by Administrator on 19/08/2015.
  */
-public class Directions {
+public class WebServiceDirections {
     /** Receives a JSONObject and returns a list of lists containing latitude and longitude */
     public List<List<HashMap<String,String>>> parse(JSONObject jObject){
 

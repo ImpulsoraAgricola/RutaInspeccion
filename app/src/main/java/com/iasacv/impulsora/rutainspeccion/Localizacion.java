@@ -24,21 +24,16 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
-import android.view.View;
-import android.widget.EditText;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.iasacv.impulsora.rutainspeccion.Conexion.GPSTracker;
-import com.iasacv.impulsora.rutainspeccion.Modelo.PlaneacionRuta;
-import com.iasacv.impulsora.rutainspeccion.Negocios.RutaInspeccionBP;
-import com.iasacv.impulsora.rutainspeccion.Servicios.Directions;
+import com.iasacv.impulsora.rutainspeccion.Servicios.WebServiceDirections;
 
 /**
  * Created by Administrator on 19/08/2015.
@@ -219,7 +214,7 @@ public class Localizacion extends android.support.v4.app.FragmentActivity {
             List<List<HashMap<String, String>>> routes = null;
             try {
                 jObject = new JSONObject(jsonData[0]);
-                Directions parser = new Directions();
+                WebServiceDirections parser = new WebServiceDirections();
                 routes = parser.parse(jObject);
             } catch (Exception e) {
                 e.printStackTrace();
