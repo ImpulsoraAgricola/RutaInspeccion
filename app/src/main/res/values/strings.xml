@@ -107,7 +107,7 @@
 
     <!-- Menu administrador. -->
     <string-array name="menu">
-        <item>Iniciar captura de la ruta de inpección</item>
+        <item>Iniciar captura de la ruta de inspección</item>
         <item>Ubicación del lote</item>
     </string-array>
 </resources>

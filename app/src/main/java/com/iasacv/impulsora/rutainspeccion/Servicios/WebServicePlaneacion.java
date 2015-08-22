@@ -56,7 +56,7 @@ public class WebServicePlaneacion extends Service {
             resultReceiver = intent.getParcelableExtra("receiver");
             getValues(intent);
             timerTask = new MyTimerTask();
-            timer.scheduleAtFixedRate(timerTask, 1 * 60 * 1000, 1 * 60 * 15000);
+            timer.scheduleAtFixedRate(timerTask, 60 * 1000, 60 * 5000);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -102,32 +102,34 @@ public class WebServicePlaneacion extends Service {
             List<RutaInspeccion> listRelacionRecomendacion;
 
             protected Boolean doInBackground(String... params) {
-                boolean result = true;
+                boolean resultSend = true;
+                boolean resultUpdate = true;
                 try {
-                    result = _objWebServiceBP.getPlaneacionRuta(_objUsuario.RFC, _objUsuario.Clave, currentDateandTime);
+                    resultUpdate = _objWebServiceBP.getPlaneacionRuta(_objUsuario.RFC, _objUsuario.Clave, currentDateandTime);
                     listRutaInspeccion = _objRutaInspeccionDA.GetAllRutaInspeccion();
                     listRelacionRiego = _objRutaInspeccionDA.GetAllRelacionRiego();
                     listRelacionRecomendacion = _objRutaInspeccionDA.GetAllRelacionRecomendacion();
                     if (listRutaInspeccion.size() > 0) {
                         for (int i = 0; i < listRutaInspeccion.size(); i++) {
                             RutaInspeccion objRutaInspeccion = (RutaInspeccion) listRutaInspeccion.get(i);
-                            result = _objWebServiceBP.insertRutaInspeccion(_objUsuario.RFC, objRutaInspeccion);
+                            _objWebServiceBP.insertRutaInspeccion(_objUsuario.RFC, objRutaInspeccion);
                         }
                         for (int i = 0; i < listRelacionRiego.size(); i++) {
                             RutaInspeccion objRutaInspeccion = (RutaInspeccion) listRelacionRiego.get(i);
-                            result = _objWebServiceBP.insertRelacionTipoRiego(_objUsuario.RFC, objRutaInspeccion);
+                            _objWebServiceBP.insertRelacionTipoRiego(_objUsuario.RFC, objRutaInspeccion);
                         }
                         for (int i = 0; i < listRelacionRecomendacion.size(); i++) {
                             RutaInspeccion objRutaInspeccion = (RutaInspeccion) listRelacionRecomendacion.get(i);
-                            result = _objWebServiceBP.insertRelacionRecomendacion(_objUsuario.RFC, objRutaInspeccion);
+                            _objWebServiceBP.insertRelacionRecomendacion(_objUsuario.RFC, objRutaInspeccion);
                         }
                     } else
-                        result = false;
+                        resultSend = false;
                 } catch (Exception e) {
-                    result = false;
+                    resultSend = false;
+                    resultUpdate = false;
                     e.printStackTrace();
                 }
-                return result;
+                return resultSend;
             }
 
             protected void onPostExecute(Boolean result) {
@@ -147,8 +149,10 @@ public class WebServicePlaneacion extends Service {
                             _objPlaneacionRutaDA.UpdatePlaneacionRutaEstatus(objPlaneacionRuta);
                         }
                     }
-                    resultReceiver.send(0, null);
+                    resultReceiver.send(1, null);
                 }
+                else
+                    resultReceiver.send(0, null);
             }
         }
     }

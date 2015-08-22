@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -18,10 +21,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.ContextMenu;
 import android.view.ContextThemeWrapper;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -77,6 +82,7 @@ public class Administrador extends ActionBarActivity {
     private String mMonth;
     private String mDay;
     static final int DATE_DIALOG_ID = 0;
+    private static final int NOTIF_ALERTA_ID = 1;
     public static boolean flagStart = false;
 
     @Override
@@ -340,6 +346,30 @@ public class Administrador extends ActionBarActivity {
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             if (resultCode == 0) {
                 runOnUiThread(new UpdateUI());
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(Administrador.this)
+                                .setSmallIcon(android.R.drawable.ic_dialog_map)
+                                .setContentTitle("Rutas de Inspecci\u00F3n")
+                                .setContentText("La informaci\u00F3n fue actualizada correctamente.")
+                                .setTicker("La informacion fue actualizada correctamente.");
+                Intent notIntent = new Intent(Administrador.this, Administrador.class);
+                PendingIntent contIntent = PendingIntent.getActivity(Administrador.this, 0, notIntent, 0);
+                mBuilder.setContentIntent(contIntent);
+                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.notify(NOTIF_ALERTA_ID, mBuilder.build());
+            }
+            if (resultCode == 1) {
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(Administrador.this)
+                                .setSmallIcon(android.R.drawable.ic_dialog_map)
+                                .setContentTitle("Rutas de Inspecci\u00F3n")
+                                .setContentText("La informaci\u00F3n fue enviada correctamente.")
+                                .setTicker("La informacion fue enviada correctamente.");
+                Intent notIntent = new Intent(Administrador.this, Administrador.class);
+                PendingIntent contIntent = PendingIntent.getActivity(Administrador.this, 0, notIntent, 0);
+                mBuilder.setContentIntent(contIntent);
+                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.notify(NOTIF_ALERTA_ID, mBuilder.build());
             }
         }
     }
@@ -586,5 +616,14 @@ public class Administrador extends ActionBarActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            moveTaskToBack(true);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
