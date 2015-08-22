@@ -142,19 +142,19 @@ public class WebServiceSend extends Service {
                             objPlaneacionRuta.Estatus = "R";
                             _objPlaneacionRutaDA.UpdatePlaneacionRutaEstatus(objPlaneacionRuta);
                         }
-                        NotificationCompat.Builder mBuilder =
-                                new NotificationCompat.Builder(WebServiceSend.this)
-                                        .setSmallIcon(android.R.drawable.ic_dialog_map)
-                                        .setContentTitle("Rutas de Inspecci\u00F3n")
-                                        .setContentText("La informaci\u00F3n fue enviada correctamente.")
-                                        .setTicker("La informacion fue enviada correctamente.");
-                        Intent notIntent = new Intent(WebServiceSend.this, WebServiceSend.class);
-                        PendingIntent contIntent = PendingIntent.getActivity(WebServiceSend.this, 0, notIntent, 0);
-                        mBuilder.setContentIntent(contIntent);
-                        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                        mNotificationManager.notify(NOTIF_ALERTA_ID, mBuilder.build());
                     }
                 }
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(WebServiceSend.this)
+                                .setSmallIcon(android.R.drawable.ic_dialog_map)
+                                .setContentTitle("Rutas de Inspecci\u00F3n")
+                                .setContentText("La informaci\u00F3n fue enviada correctamente.")
+                                .setTicker("La informacion fue enviada correctamente.");
+                Intent notIntent = new Intent(WebServiceSend.this, WebServiceSend.class);
+                PendingIntent contIntent = PendingIntent.getActivity(WebServiceSend.this, 0, notIntent, 0);
+                mBuilder.setContentIntent(contIntent);
+                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.notify(NOTIF_ALERTA_ID, mBuilder.build());
             }
         }
     }
