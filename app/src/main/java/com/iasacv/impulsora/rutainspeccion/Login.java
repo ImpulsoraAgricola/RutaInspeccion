@@ -61,13 +61,6 @@ public class Login extends ActionBarActivity {
         SharedPreferences prefs = getSharedPreferences("RutaInspeccion", Context.MODE_PRIVATE);
 
         if (prefs.getString("Clave", "") != "") {
-
-            //Iniciar Servicio para enviar informacion
-            intent = new Intent(Login.this, WebServiceSend.class);
-            intent.putExtra("Clave", prefs.getString("Clave", ""));
-            intent.putExtra("RFC", prefs.getString("RFC", ""));
-            startService(intent);
-
             //Creamos el nuevo formulario
             Intent i = new Intent(Login.this, Administrador.class);
             startActivity(i);
@@ -152,12 +145,6 @@ public class Login extends ActionBarActivity {
                 editor.putString("RFC", objUsuario.RFC);
                 editor.putString("Email", String.valueOf(objUsuario.Email));
                 editor.commit();
-
-                //Iniciar Servicio para enviar informacion
-                intent = new Intent(Login.this, WebServiceSend.class);
-                intent.putExtra("Clave", objUsuario.Clave);
-                intent.putExtra("RFC", objUsuario.RFC);
-                startService(intent);
 
                 //Creamos el nuevo formulario
                 Intent i = new Intent(Login.this, Administrador.class);

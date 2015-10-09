@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -51,7 +52,7 @@ public class WebServiceSend extends Service {
             _objRutaInspeccionDA = new RutaInspeccionDA(WebServiceSend.this);
             _objPlaneacionRutaDA = new PlaneacionRutaDA(WebServiceSend.this);
             _objEntLibDBTools = new EntLibDBTools(WebServiceSend.this);
-            getValues(intent);
+            getValues();
             timerTask = new MyTimerTask();
             timer.scheduleAtFixedRate(timerTask, 60 * 1000, 60 * 2000);
         } catch (Exception e) {
@@ -71,11 +72,11 @@ public class WebServiceSend extends Service {
         timer.cancel();
     }
 
-    private void getValues(Intent intent) {
-        Bundle b = intent.getExtras();
+    private void getValues() {
+        SharedPreferences prefs = getSharedPreferences("RutaInspeccion", Context.MODE_PRIVATE);
         _objUsuario = new Usuario();
-        _objUsuario.Clave = b.getInt("Clave");
-        _objUsuario.RFC = b.getString("RFC");
+        _objUsuario.RFC = prefs.getString("RFC", "");
+        _objUsuario.Clave = Integer.valueOf(prefs.getString("Clave", ""));
     }
 
     class MyTimerTask extends TimerTask {
@@ -130,7 +131,7 @@ public class WebServiceSend extends Service {
                 if (result) {
                     _objEntLibDBTools.exportDataBase();
                     if (listRutaInspeccion.size() > 0) {
-                        for (int i = 0; i < listRutaInspeccion.size(); i++) {
+                        /*for (int i = 0; i < listRutaInspeccion.size(); i++) {
                             RutaInspeccion objRutaInspeccion = (RutaInspeccion) listRutaInspeccion.get(i);
                             objRutaInspeccion.Estatus = "R";
                             boolean resul = _objRutaInspeccionDA.UpdateRutaInspeccion(objRutaInspeccion);
@@ -141,20 +142,20 @@ public class WebServiceSend extends Service {
                             objPlaneacionRuta.Folio = objRutaInspeccion.Folio;
                             objPlaneacionRuta.Estatus = "R";
                             _objPlaneacionRutaDA.UpdatePlaneacionRutaEstatus(objPlaneacionRuta);
-                        }
+                        }*/
+                        NotificationCompat.Builder mBuilder =
+                                new NotificationCompat.Builder(WebServiceSend.this)
+                                        .setSmallIcon(android.R.drawable.ic_dialog_map)
+                                        .setContentTitle("Rutas de Inspecci\u00F3n")
+                                        .setContentText("La informaci\u00F3n fue enviada correctamente.")
+                                        .setTicker("La informacion fue enviada correctamente.");
+                        Intent notIntent = new Intent(WebServiceSend.this, WebServiceSend.class);
+                        PendingIntent contIntent = PendingIntent.getActivity(WebServiceSend.this, 0, notIntent, 0);
+                        mBuilder.setContentIntent(contIntent);
+                        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        mNotificationManager.notify(NOTIF_ALERTA_ID, mBuilder.build());
                     }
                 }
-                NotificationCompat.Builder mBuilder =
-                        new NotificationCompat.Builder(WebServiceSend.this)
-                                .setSmallIcon(android.R.drawable.ic_dialog_map)
-                                .setContentTitle("Rutas de Inspecci\u00F3n")
-                                .setContentText("La informaci\u00F3n fue enviada correctamente.")
-                                .setTicker("La informacion fue enviada correctamente.");
-                Intent notIntent = new Intent(WebServiceSend.this, WebServiceSend.class);
-                PendingIntent contIntent = PendingIntent.getActivity(WebServiceSend.this, 0, notIntent, 0);
-                mBuilder.setContentIntent(contIntent);
-                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotificationManager.notify(NOTIF_ALERTA_ID, mBuilder.build());
             }
         }
     }

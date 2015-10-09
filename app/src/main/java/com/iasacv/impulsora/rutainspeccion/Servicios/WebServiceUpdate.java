@@ -49,7 +49,7 @@ public class WebServiceUpdate extends Service {
             resultReceiver = intent.getParcelableExtra("receiver");
             getValues(intent);
             timerTask = new MyTimerTask();
-            timer.scheduleAtFixedRate(timerTask, 60 * 1000, 60 * 5000);
+            timer.scheduleAtFixedRate(timerTask, 60 * 1000, 60 * 2000);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -90,9 +90,6 @@ public class WebServiceUpdate extends Service {
             //Variables
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String currentDateandTime = sdf.format(new Date());
-            List<RutaInspeccion> listRutaInspeccion;
-            List<RutaInspeccion> listRelacionRiego;
-            List<RutaInspeccion> listRelacionRecomendacion;
 
             protected Boolean doInBackground(String... params) {
                 boolean resultUpdate = true;

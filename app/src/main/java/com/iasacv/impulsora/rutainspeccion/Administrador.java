@@ -3,8 +3,6 @@ package com.iasacv.impulsora.rutainspeccion;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,7 +16,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.provider.Settings;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.ContextThemeWrapper;
@@ -37,6 +34,7 @@ import com.iasacv.impulsora.rutainspeccion.Modelo.*;
 import com.iasacv.impulsora.rutainspeccion.Negocios.ComunBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.RutaInspeccionBP;
 import com.iasacv.impulsora.rutainspeccion.Negocios.WebServiceBP;
+import com.iasacv.impulsora.rutainspeccion.Servicios.WebServiceSend;
 import com.iasacv.impulsora.rutainspeccion.Servicios.WebServiceUpdate;
 
 import java.text.SimpleDateFormat;
@@ -62,7 +60,8 @@ public class Administrador extends ActionBarActivity {
     CustomGridViewAdapter customGridAdapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    Intent intent;
+    Intent intentUpdate;
+    Intent intentSend;
     MyResultReceiver resultReceiver;
     ProgressDialog loadProgressDialog;
 
@@ -303,17 +302,19 @@ public class Administrador extends ActionBarActivity {
 
     public void callService() {
         resultReceiver = new MyResultReceiver(new Handler());
-        intent = new Intent(Administrador.this, WebServiceUpdate.class);
-        intent.putExtra("receiver", resultReceiver);
-        intent.putExtra("Clave", _objUsuario.Clave);
-        intent.putExtra("RFC", _objUsuario.RFC);
-        startService(intent);
+        intentUpdate = new Intent(Administrador.this, WebServiceUpdate.class);
+        intentUpdate.putExtra("receiver", resultReceiver);
+        intentUpdate.putExtra("Clave", _objUsuario.Clave);
+        intentUpdate.putExtra("RFC", _objUsuario.RFC);
+        startService(intentUpdate);
+        intentSend = new Intent(Administrador.this, WebServiceSend.class);
+        startService(intentSend);
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        stopService(intent);
     }
 
     class UpdateUI implements Runnable {
@@ -580,14 +581,5 @@ public class Administrador extends ActionBarActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            moveTaskToBack(true);
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 }
